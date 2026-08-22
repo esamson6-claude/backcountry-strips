@@ -131,6 +131,12 @@ def _detail_html(strip, name, subtitle, spec_rows, notes_full, source_label, sou
         if aerial_url
         else ""
     )
+    lat, lon = strip.get("latitude"), strip.get("longitude")
+    sectional_cta = (
+        f'<a class="cta cta-secondary" href="../?sectional={lat},{lon}">View on VFR sectional →</a>'
+        if lat is not None and lon is not None
+        else ""
+    )
 
     return f"""<!doctype html>
 <html lang="en">
@@ -153,9 +159,12 @@ def _detail_html(strip, name, subtitle, spec_rows, notes_full, source_label, sou
   main {{ max-width: 720px; margin: 0 auto; padding: 20px; }}
   h1 {{ margin:0 0 4px 0; font-size:24px; font-weight:600; }}
   .subtitle {{ color:var(--muted); font-size:14px; margin-bottom:16px; }}
+  .cta-row {{ display:flex; gap:10px; flex-wrap:wrap; margin-bottom:20px; }}
   .cta {{ display:inline-block; background:var(--accent); color:#fff !important; padding:10px 20px;
-          border-radius:8px; font-weight:600; text-decoration:none; margin-bottom:20px; }}
+          border-radius:8px; font-weight:600; text-decoration:none; margin-bottom:0; }}
   .cta:hover {{ opacity:0.9; }}
+  .cta-secondary {{ background:transparent; color:var(--accent) !important; border:1px solid var(--border);
+                    padding:9px 20px; }}
   table.specs {{ width:100%; border-collapse:collapse; background:var(--card);
                  border:1px solid var(--border); border-radius:8px; overflow:hidden; }}
   table.specs th, table.specs td {{ padding:8px 12px; text-align:left;
@@ -185,9 +194,12 @@ def _detail_html(strip, name, subtitle, spec_rows, notes_full, source_label, sou
   <div class="subtitle">{subtitle}</div>
   {aerial_block}
   {aerial_credit}
-  <p><a class="cta" href="{source_url}" target="_blank" rel="noopener">
-    View original source ({source_label}) →
-  </a></p>
+  <div class="cta-row">
+    <a class="cta" href="{source_url}" target="_blank" rel="noopener">
+      View original source ({source_label}) →
+    </a>
+    {sectional_cta}
+  </div>
   <table class="specs">{spec_rows}</table>
   {notes_block}
   <footer>
@@ -317,6 +329,13 @@ def _build_cards(strips, have_aerial):
         lat_attr = f' data-lat="{lat}"' if lat is not None else ""
         lon_attr = f' data-lng="{lon}"' if lon is not None else ""
 
+        sectional_link = (
+            f'<span class="sectional-link" role="button" tabindex="0" '
+            f'data-lat="{lat}" data-lng="{lon}">View on VFR sectional →</span>'
+            if lat is not None and lon is not None
+            else ""
+        )
+
         cards_html.append(
             f"""<a class="card" href="{detail_url}"
    data-state="{state}" data-surface="{surface_key}" data-ownership="{html.escape(ownership_key, quote=True)}"
@@ -332,6 +351,7 @@ def _build_cards(strips, have_aerial):
     <div class="subtitle">{subtitle}</div>
     <div class="specs">{''.join(spec_rows)}</div>
     {'<div class="notes">' + notes_preview + '</div>' if notes_preview else ''}
+    {sectional_link}
     <div class="footer">
       <span class="source">{source_label}</span>
       {'<span class="attribution">' + attribution + '</span>' if attribution else ''}
@@ -474,7 +494,7 @@ def render():
               transition: transform .1s, color .15s; }}
   .fav-btn:hover {{ transform:scale(1.15); }}
   .fav-btn.faved {{ color:#ff4d6d; }}
-  #map {{ height: calc(100vh - 220px); min-height: 500px; margin:0 20px 20px 20px;
+  #map {{ height: 70vh; min-height: 500px; margin:20px; margin-top:0;
           border-radius: 10px; border:1px solid var(--border); display:none; }}
   body.map-view #grid, body.map-view #empty {{ display:none; }}
   body.map-view #map {{ display:block; }}
@@ -482,6 +502,11 @@ def render():
   .leaflet-popup-content .popup-title {{ font-weight:600; font-size:13px; margin-bottom:2px; }}
   .leaflet-popup-content .popup-sub {{ font-size:11px; color:#666; margin-bottom:4px; }}
   .leaflet-popup-content a {{ color:#0366d6; text-decoration:none; font-size:11px; }}
+  .sectional-notice {{ background:rgba(20,20,22,0.85); color:#fff; padding:8px 14px;
+                       border-radius:6px; font-size:12px; max-width:280px; margin:0 0 10px 10px;
+                       box-shadow:0 2px 8px rgba(0,0,0,0.3); }}
+  .sectional-link {{ font-size:11px; color:var(--accent); text-decoration:none; cursor:pointer; }}
+  .sectional-link:hover {{ text-decoration:underline; }}
 </style>
 </head>
 <body>
@@ -595,6 +620,19 @@ def render():
   document.addEventListener('click', heartHandler);
   document.addEventListener('keydown', heartHandler);
 
+  function sectionalLinkHandler(e) {{
+    const link = e.target.closest('.sectional-link');
+    if (!link) return;
+    if (e.type === 'keydown' && e.key !== 'Enter' && e.key !== ' ') return;
+    e.preventDefault();
+    e.stopPropagation();
+    const lat = parseFloat(link.dataset.lat);
+    const lng = parseFloat(link.dataset.lng);
+    if (Number.isFinite(lat) && Number.isFinite(lng)) showOnSectional(lat, lng);
+  }}
+  document.addEventListener('click', sectionalLinkHandler);
+  document.addEventListener('keydown', sectionalLinkHandler);
+
   // Mobile filter-panel toggle
   const filterPanel = document.getElementById('filter-panel');
   const filterToggle = document.getElementById('filter-toggle');
@@ -624,6 +662,18 @@ def render():
   }}
 
   function num(v) {{ const n = parseInt(v, 10); return Number.isFinite(n) ? n : null; }}
+
+  // Whether any real filter narrows the result set -- used to decide whether
+  // Map view should fit-to-results (filtered) or just show the default
+  // continental-US view (unfiltered; fitting ~9,900 strips spanning Guam to
+  // Puerto Rico zooms out to a near-useless world view).
+  function isFilteredNow() {{
+    return !!(searchEl.value.trim() || lengthMinEl.value || lengthMaxEl.value
+      || elevationMinEl.value || elevationMaxEl.value
+      || activeChips('.state-chip').size > 0 || activeChips('.surface-chip').size > 0
+      || activeChips('.ownership-chip').size > 0
+      || document.body.classList.contains('fav-view'));
+  }}
 
   function apply() {{
     const q = searchEl.value.trim().toLowerCase();
@@ -667,7 +717,7 @@ def render():
     }} else {{
       emptyEl.style.display = 'none';
     }}
-    if (document.body.classList.contains('map-view')) renderMarkers();
+    if (document.body.classList.contains('map-view') && !suppressMapRefresh) renderMarkers(isFilteredNow());
   }}
 
   function wireChipRow(rowSelector) {{
@@ -698,27 +748,63 @@ def render():
   }}
 
   // ---- Map view (Leaflet) ----
+  const SECTIONAL_HARD_MIN_ZOOM = 8;   // floor the FAA tile service accepts at all
+  const SECTIONAL_READABLE_ZOOM = 10;  // below this, chart detail is too small to read
+  const SECTIONAL_MAX_ZOOM = 12;
+  const SECTIONAL_DEFAULT_ZOOM = 11;   // readable single-strip zoom when auto-jumping in
+  // Fallback center when the sectional is toggled on from the default
+  // whole-country view: the geometric center of the US ([39.8, -98.5]) sits
+  // in a coverage gap between sectional chart tiles at usable zoom levels,
+  // so jump to a real backcountry hub (McCall, ID) with confirmed coverage
+  // instead of leaving the user staring at blank grey tiles.
+  const SECTIONAL_FALLBACK_CENTER = [45.0, -115.0];
+  const DEFAULT_MAP_CENTER = [39.8, -98.5];
+  const DEFAULT_MAP_ZOOM = 4;
+
   let map = null;
   let markerLayer = null;
+  let streetLayer = null;
+  let sectionalLayer = null;
+  let sectionalNotice = null;
+
+  function updateSectionalNoticeRef() {{
+    if (!sectionalNotice) return;
+    const showingSectional = map.hasLayer(sectionalLayer);
+    const el = sectionalNotice.getContainer();
+    el.style.display = (showingSectional && map.getZoom() < SECTIONAL_READABLE_ZOOM) ? 'block' : 'none';
+  }}
+
+  // Leaflet has a quirk where setView(latlng, zoom) to a zoom above the
+  // map's zoom just before/during a base layer swap can silently settle
+  // back to the new layer's minZoom once its own 'zoomend' fires, even
+  // though getZoom() briefly reports the requested zoom right after the
+  // call. Reasserting the zoom once that settle-zoomend fires corrects it.
+  function forceView(latlng, zoom) {{
+    map.setView(latlng, zoom, {{ animate: false }});
+    map.once('zoomend', () => {{
+      const target = L.latLng(latlng);
+      const driftedZoom = map.getZoom() !== zoom;
+      const driftedCenter = map.getCenter().distanceTo(target) > 1000;
+      if (driftedZoom || driftedCenter) map.setView(target, zoom, {{ animate: false }});
+    }});
+  }}
+
   function initMap() {{
     if (map) return;
-    map = L.map('map', {{ scrollWheelZoom: true }}).setView([39.8, -98.5], 4);
+    map = L.map('map', {{ scrollWheelZoom: true }}).setView(DEFAULT_MAP_CENTER, DEFAULT_MAP_ZOOM);
 
-    const streetLayer = L.tileLayer('https://{{s}}.tile.openstreetmap.org/{{z}}/{{x}}/{{y}}.png', {{
+    streetLayer = L.tileLayer('https://{{s}}.tile.openstreetmap.org/{{z}}/{{x}}/{{y}}.png', {{
       attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',
       maxZoom: 18,
     }});
-    // FAA's official VFR sectional tile cache only renders zoom 8-12; Leaflet
-    // clamps requests to that range automatically via minZoom/maxZoom, but
-    // panning/zooming past it needs a fallback layer, so this is offered as
-    // an alternate base layer rather than the default.
-    const sectionalLayer = L.tileLayer(
+    // FAA's official VFR sectional tile cache only renders zoom 8-12.
+    sectionalLayer = L.tileLayer(
       'https://tiles.arcgis.com/tiles/ssFJjBXIUyZDrSYZ/arcgis/rest/services/VFR_Sectional/MapServer/tile/{{z}}/{{y}}/{{x}}',
       {{
         attribution: 'FAA Aeronautical Information Services (VFR Sectional)',
-        minZoom: 5,
-        maxZoom: 12,
-        maxNativeZoom: 12,
+        minZoom: SECTIONAL_HARD_MIN_ZOOM,
+        maxZoom: SECTIONAL_MAX_ZOOM,
+        maxNativeZoom: SECTIONAL_MAX_ZOOM,
       }}
     );
 
@@ -729,9 +815,54 @@ def render():
       {{ position: 'topright' }}
     ).addTo(map);
 
+    sectionalNotice = L.control({{ position: 'bottomleft' }});
+    sectionalNotice.onAdd = function() {{
+      const div = L.DomUtil.create('div', 'sectional-notice');
+      div.textContent = 'VFR sectional charts only render when zoomed in — zoom in to see chart detail.';
+      div.style.display = 'none';
+      return div;
+    }};
+    sectionalNotice.addTo(map);
+
+    // Auto-zoom to a readable level the moment the sectional layer is turned
+    // on, instead of leaving the user looking at a blank/grey map and
+    // guessing they need to zoom in themselves.
+    map.on('baselayerchange', (e) => {{
+      if (e.layer !== sectionalLayer) {{ updateSectionalNoticeRef(); return; }}
+      if (map.getZoom() < SECTIONAL_READABLE_ZOOM) {{
+        // Starting from the default whole-country view has no meaningful
+        // "current location" to zoom in on -- recenter on a spot with known
+        // sectional coverage instead of the geometric center of the US,
+        // which can land on a gap between chart tiles.
+        const atDefaultView = map.getCenter().distanceTo(L.latLng(DEFAULT_MAP_CENTER)) < 50000;
+        forceView(atDefaultView ? SECTIONAL_FALLBACK_CENTER : map.getCenter(), SECTIONAL_DEFAULT_ZOOM);
+      }}
+      updateSectionalNoticeRef();
+    }});
+    map.on('zoomend', updateSectionalNoticeRef);
+
     markerLayer = L.markerClusterGroup({{ maxClusterRadius: 50 }}).addTo(map);
   }}
-  function renderMarkers() {{
+
+  // Switch to Map view showing the VFR sectional, zoomed in on one strip.
+  // Used by each card/detail page's "View on sectional" control.
+  function showOnSectional(lat, lng) {{
+    setView('map', /* focusStrip */ true);
+    initMap();
+    // setView('map', true) already scheduled its own invalidateSize() +
+    // renderMarkers(false) in a setTimeout -- run this centering after that
+    // same delay so it isn't racing (and losing to) that callback.
+    setTimeout(() => {{
+      map.invalidateSize();
+      if (!map.hasLayer(sectionalLayer)) {{
+        map.removeLayer(streetLayer);
+        sectionalLayer.addTo(map);
+      }}
+      forceView([lat, lng], SECTIONAL_DEFAULT_ZOOM);
+      updateSectionalNoticeRef();
+    }}, 60);
+  }}
+  function renderMarkers(fitToBounds) {{
     if (!markerLayer) return;
     markerLayer.clearLayers();
     const visibleCards = cards.filter(c => !c.classList.contains('hidden'));
@@ -746,27 +877,64 @@ def render():
       L.marker([lat, lng]).bindPopup(popupHtml, {{minWidth: 200}}).addTo(markerLayer);
       bounds.push([lat, lng]);
     }}
-    if (bounds.length > 0) map.fitBounds(bounds, {{padding: [30, 30], maxZoom: 10}});
+    // fitBounds only when explicitly asked (initial Grid->Map switch, or a
+    // filter change while already in Map view) -- NOT after a deliberate
+    // setView (sectional toggle auto-zoom, "View on sectional" deep link),
+    // or it immediately overrides that intentional center/zoom.
+    if (fitToBounds && bounds.length > 0) map.fitBounds(bounds, {{padding: [30, 30], maxZoom: 10}});
   }}
   const viewGrid = document.getElementById('view-grid');
   const viewFav = document.getElementById('view-favorites');
   const viewMap = document.getElementById('view-map');
-  function setView(view) {{
+  let mapShownOnce = false;
+  // While true, apply()'s own renderMarkers() call is skipped -- used during
+  // a focusStrip transition (showOnSectional) so apply()'s call inside
+  // setView doesn't fit-bounds/recenter the map out from under the
+  // intentional single-strip view that's about to be set.
+  let suppressMapRefresh = false;
+  // `focusStrip`: when set, the caller (showOnSectional) is about to center
+  // on one specific strip -- skip the "fit everything in view" behavior
+  // that a plain nav-bar click into Map view should still do.
+  function setView(view, focusStrip) {{
     document.body.classList.toggle('map-view', view === 'map');
     document.body.classList.toggle('fav-view', view === 'favorites');
     viewGrid.classList.toggle('active', view === 'grid');
     viewFav.classList.toggle('active', view === 'favorites');
     viewMap.classList.toggle('active', view === 'map');
+    suppressMapRefresh = !!focusStrip;
     apply();
+    suppressMapRefresh = false;
     if (view === 'map') {{
       initMap();
-      setTimeout(() => {{ map.invalidateSize(); renderMarkers(); }}, 50);
+      // #map has display:none until map-view is active, so Leaflet computed
+      // its initial center/zoom against a zero-size container -- that drifts
+      // the center. invalidateSize() fixes the container's measured size,
+      // and (unless the caller is about to set its own focused view) the
+      // drifted center/zoom is reset to the default view (or fit to
+      // results, if filters are active) -- the expected first look.
+      const needsRecenter = !mapShownOnce && !focusStrip;
+      mapShownOnce = true;
+      if (!focusStrip) {{
+        setTimeout(() => {{
+          map.invalidateSize();
+          if (needsRecenter) map.setView(DEFAULT_MAP_CENTER, DEFAULT_MAP_ZOOM);
+          renderMarkers(isFilteredNow());
+        }}, 50);
+      }}
     }}
   }}
   viewGrid.addEventListener('click', () => setView('grid'));
   viewFav.addEventListener('click', () => setView('favorites'));
   viewMap.addEventListener('click', () => setView('map'));
   apply();
+
+  // Deep link from a detail page's "View on VFR sectional" button:
+  // ?sectional=lat,lng jumps straight to Map view, sectional layer, zoomed in.
+  const sectionalParam = new URLSearchParams(location.search).get('sectional');
+  if (sectionalParam) {{
+    const [lat, lng] = sectionalParam.split(',').map(Number);
+    if (Number.isFinite(lat) && Number.isFinite(lng)) showOnSectional(lat, lng);
+  }}
 </script>
 </body>
 </html>

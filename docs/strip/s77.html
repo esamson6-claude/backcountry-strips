@@ -19,9 +19,12 @@
   main { max-width: 720px; margin: 0 auto; padding: 20px; }
   h1 { margin:0 0 4px 0; font-size:24px; font-weight:600; }
   .subtitle { color:var(--muted); font-size:14px; margin-bottom:16px; }
+  .cta-row { display:flex; gap:10px; flex-wrap:wrap; margin-bottom:20px; }
   .cta { display:inline-block; background:var(--accent); color:#fff !important; padding:10px 20px;
-          border-radius:8px; font-weight:600; text-decoration:none; margin-bottom:20px; }
+          border-radius:8px; font-weight:600; text-decoration:none; margin-bottom:0; }
   .cta:hover { opacity:0.9; }
+  .cta-secondary { background:transparent; color:var(--accent) !important; border:1px solid var(--border);
+                    padding:9px 20px; }
   table.specs { width:100%; border-collapse:collapse; background:var(--card);
                  border:1px solid var(--border); border-radius:8px; overflow:hidden; }
   table.specs th, table.specs td { padding:8px 12px; text-align:left;
@@ -51,9 +54,12 @@
   <div class="subtitle">S77 · ID</div>
   <img class="aerial" src="../aerial/s77.jpg" alt="Aerial view of MAGEE" loading="lazy">
   <p class="aerial-credit">Aerial imagery source: Esri, Vantor, Earthstar Geographics, and the GIS User Community</p>
-  <p><a class="cta" href="https://www.shortfield.com/listing/magee-id/" target="_blank" rel="noopener">
-    View original source (FAA + Idaho ITD + Shortfield) →
-  </a></p>
+  <div class="cta-row">
+    <a class="cta" href="https://www.shortfield.com/listing/magee-id/" target="_blank" rel="noopener">
+      View original source (FAA + Idaho ITD + Shortfield) →
+    </a>
+    <a class="cta cta-secondary" href="../?sectional=47.84155833,-116.25199444">View on VFR sectional →</a>
+  </div>
   <table class="specs"><tr><th>Identifier</th><td>S77</td></tr><tr><th>State</th><td>ID</td></tr><tr><th>Runway length</th><td>2,200 ft</td></tr><tr><th>Runway width</th><td>150 ft</td></tr><tr><th>Surface</th><td>TURF</td></tr><tr><th>Runway</th><td>01/19</td></tr><tr><th>Elevation</th><td>3,002 ft</td></tr><tr><th>Ownership</th><td>public</td></tr><tr><th>CTAF</th><td>122.9</td></tr><tr><th>Coordinates</th><td>47.84155833, -116.25199444</td></tr></table>
   <div class="description"><h2>Notes</h2><div class="description-text">[idaho_itd] State Airfield [shortfield] Location Overview Magee sits at the confluence of Trail Creek and Teepee Creek in Northern Idaho&#x27;s Panhandle National Forest, about 23 miles NE of Coeur d&#x27;Alene, Idaho, on 20 acres of land, near Pritchard in Shoshone County. The field sits at an elevation of 3,002 feet and has a single turf runway oriented 1/19, 2,200 feet long. Camping &amp; Recreation The strip has tie downs, a campground, and potable water during summer months, along with a windsock and segmented circle. More specifically, there are two camping sites at the Magee Airstrip Campground with a pit toilet, tables, fire pits, and stoves, plus another site on the south end near the creek, and an old Forest Service Ranger cabin near the strip is available for rent. Both nearby creeks attract seasonal fishing, and a trail leads from the southwest end of the airfield to bridges across both waters. Notes &amp; Warnings The strip gets no winter maintenance, and sees snowmobile activity in winter; the surface can be uneven and soft in the spring. Official guidance recommends landing on runway 19 and taking off on runway 01 when wind conditions permit. Because it sits within a Wilderness area, no roads or mechanized equipment can be used for maintenance, making runway logistics a challenge — a spring flooding problem has been eroding part of the field for years, and a volunteer-engineered restoration effort is underway with the Forest Service to recover about 700 feet of runway. History The site&#x27;s story predates aviation entirely: Charles Magee built a homestead at the Trail Creek–Tepee Creek confluence in September 1905, and by 1908 the Forest Service had appropriated part of it as the Magee Ranger Station. In the 1930s it became a Civilian Conservation Corps base camp housing up to 400 men who built roads, maintained trails, and fought white-pine blister rust. The airstrip itself dates to WWII, when the Army Corps of Engineers created it in the 1940s as a hidden fighter base in case of a Japanese attack on the West Coast — though locals reported fighter aircraft never actually visited during the war. Today the historic ranger cabin still stands, the site is listed on the National Register of Historic Places, and the airstrip lives on as a beloved backcountry destination for Idaho pilots.</div></div>
   <footer>

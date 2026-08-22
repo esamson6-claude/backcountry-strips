@@ -19,9 +19,12 @@
   main { max-width: 720px; margin: 0 auto; padding: 20px; }
   h1 { margin:0 0 4px 0; font-size:24px; font-weight:600; }
   .subtitle { color:var(--muted); font-size:14px; margin-bottom:16px; }
+  .cta-row { display:flex; gap:10px; flex-wrap:wrap; margin-bottom:20px; }
   .cta { display:inline-block; background:var(--accent); color:#fff !important; padding:10px 20px;
-          border-radius:8px; font-weight:600; text-decoration:none; margin-bottom:20px; }
+          border-radius:8px; font-weight:600; text-decoration:none; margin-bottom:0; }
   .cta:hover { opacity:0.9; }
+  .cta-secondary { background:transparent; color:var(--accent) !important; border:1px solid var(--border);
+                    padding:9px 20px; }
   table.specs { width:100%; border-collapse:collapse; background:var(--card);
                  border:1px solid var(--border); border-radius:8px; overflow:hidden; }
   table.specs th, table.specs td { padding:8px 12px; text-align:left;
@@ -51,9 +54,12 @@
   <div class="subtitle">UT25 · UT</div>
   <img class="aerial" src="../aerial/ut25.jpg" alt="Aerial view of Monument Valley" loading="lazy">
   <p class="aerial-credit">Aerial imagery source: Esri, Vantor, Earthstar Geographics, and the GIS User Community</p>
-  <p><a class="cta" href="https://utahbackcountrypilots.org/airstrips/MONUMENTVALLEY" target="_blank" rel="noopener">
-    View original source (UBCP) →
-  </a></p>
+  <div class="cta-row">
+    <a class="cta" href="https://utahbackcountrypilots.org/airstrips/MONUMENTVALLEY" target="_blank" rel="noopener">
+      View original source (UBCP) →
+    </a>
+    <a class="cta cta-secondary" href="../?sectional=37.0116,-110.2017">View on VFR sectional →</a>
+  </div>
   <table class="specs"><tr><th>Identifier</th><td>UT25</td></tr><tr><th>State</th><td>UT</td></tr><tr><th>Runway length</th><td>3,800 ft</td></tr><tr><th>Runway width</th><td>45 ft</td></tr><tr><th>Surface</th><td>Asphalt</td></tr><tr><th>Runway</th><td>16/34</td></tr><tr><th>Elevation</th><td>5,208 ft</td></tr><tr><th>Ownership</th><td>private</td></tr><tr><th>CTAF</th><td>122.9</td></tr><tr><th>Coordinates</th><td>37.0116, -110.2017</td></tr></table>
   <div class="description"><h2>Notes</h2><div class="description-text">[ubcp] Description : Airstrip sits on private land surrounded by Navajo tribal lands and provides a gateway to the scenic Monument Valley. Permission is required prior to landing by calling 435-727-3225. Additional information can be found at https://gouldings.com/amenities/airstrip/ . Runway : The runway is 3800&#x27; x 45&#x27;, asphalt. Approach Considerations : A 2640&#x27; AGL cliff immediately south of the airstrip makes a go-around unlikely in most aircraft. Recommend landing runway 16 (left traffic) and depart runway 34. Amenities : Historic Gouldings Lodge is a short walk from the airstrip with food, lodging, convenience/grocery store, gas station, and museum. They also provide a variety of tours of Monument Valley. Windsock : Yes</div></div>
   <footer>

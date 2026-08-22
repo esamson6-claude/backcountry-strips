@@ -19,9 +19,12 @@
   main { max-width: 720px; margin: 0 auto; padding: 20px; }
   h1 { margin:0 0 4px 0; font-size:24px; font-weight:600; }
   .subtitle { color:var(--muted); font-size:14px; margin-bottom:16px; }
+  .cta-row { display:flex; gap:10px; flex-wrap:wrap; margin-bottom:20px; }
   .cta { display:inline-block; background:var(--accent); color:#fff !important; padding:10px 20px;
-          border-radius:8px; font-weight:600; text-decoration:none; margin-bottom:20px; }
+          border-radius:8px; font-weight:600; text-decoration:none; margin-bottom:0; }
   .cta:hover { opacity:0.9; }
+  .cta-secondary { background:transparent; color:var(--accent) !important; border:1px solid var(--border);
+                    padding:9px 20px; }
   table.specs { width:100%; border-collapse:collapse; background:var(--card);
                  border:1px solid var(--border); border-radius:8px; overflow:hidden; }
   table.specs th, table.specs td { padding:8px 12px; text-align:left;
@@ -51,9 +54,12 @@
   <div class="subtitle">ANGELPOINT · UT</div>
   <img class="aerial" src="../aerial/angelpoint.jpg" alt="Aerial view of Angel Point" loading="lazy">
   <p class="aerial-credit">Aerial imagery source: Esri, Vantor, Earthstar Geographics, and the GIS User Community</p>
-  <p><a class="cta" href="https://utahbackcountrypilots.org/airstrips/ANGELPOINT" target="_blank" rel="noopener">
-    View original source (UBCP) →
-  </a></p>
+  <div class="cta-row">
+    <a class="cta" href="https://utahbackcountrypilots.org/airstrips/ANGELPOINT" target="_blank" rel="noopener">
+      View original source (UBCP) →
+    </a>
+    <a class="cta cta-secondary" href="../?sectional=38.3255,-110.4353">View on VFR sectional →</a>
+  </div>
   <table class="specs"><tr><th>Identifier</th><td>ANGELPOINT</td></tr><tr><th>State</th><td>UT</td></tr><tr><th>Runway length</th><td>3,500 ft</td></tr><tr><th>Runway width</th><td>30 ft</td></tr><tr><th>Surface</th><td>Dirt</td></tr><tr><th>Runway</th><td>11/29</td></tr><tr><th>Elevation</th><td>5,287 ft</td></tr><tr><th>Ownership</th><td>sitla (nw) / blm (se)</td></tr><tr><th>CTAF</th><td>122.9</td></tr><tr><th>Coordinates</th><td>38.3255, -110.4353</td></tr></table>
   <div class="description"><h2>Notes</h2><div class="description-text">[ubcp] Description: Angel Point is a widened county road that&#x27;s hilly surface prevents you from being able to see one end from the other. Angel Point is one of the three back country airstrips included in the State&#x27;s &quot;FLY UTAH Passport Program&quot;. To learn more, head to their website . Rudimentary parking area at south end of north/south runway. Runway: 3500 ft long x 30 ft wide hard dirt runway with rolling hills along the length of the landing surface. Additional Runway: 1800 ft long x 30 ft wide running 03/21. Crosswind runway suitable for high performance STOL aircraft only. Approach Considerations: Due to its nature, recommend pilots be cautious of vehicle traffic. Typically land to the north, depart to the south. Strongly suggest that on arrival an inspection of the landing surface plus a view for any vehicle traffic approaching from the east as sloped runway can hide distant traffic travelling on landing surface. Amenities: No Windsock: Yes</div></div>
   <footer>

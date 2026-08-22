@@ -19,9 +19,12 @@
   main { max-width: 720px; margin: 0 auto; padding: 20px; }
   h1 { margin:0 0 4px 0; font-size:24px; font-weight:600; }
   .subtitle { color:var(--muted); font-size:14px; margin-bottom:16px; }
+  .cta-row { display:flex; gap:10px; flex-wrap:wrap; margin-bottom:20px; }
   .cta { display:inline-block; background:var(--accent); color:#fff !important; padding:10px 20px;
-          border-radius:8px; font-weight:600; text-decoration:none; margin-bottom:20px; }
+          border-radius:8px; font-weight:600; text-decoration:none; margin-bottom:0; }
   .cta:hover { opacity:0.9; }
+  .cta-secondary { background:transparent; color:var(--accent) !important; border:1px solid var(--border);
+                    padding:9px 20px; }
   table.specs { width:100%; border-collapse:collapse; background:var(--card);
                  border:1px solid var(--border); border-radius:8px; overflow:hidden; }
   table.specs th, table.specs td { padding:8px 12px; text-align:left;
@@ -51,9 +54,12 @@
   <div class="subtitle">7OR0 · OR</div>
   <img class="aerial" src="../aerial/7or0.jpg" alt="Aerial view of MINAM LODGE" loading="lazy">
   <p class="aerial-credit">Aerial imagery source: Esri, Vantor, Earthstar Geographics, and the GIS User Community</p>
-  <p><a class="cta" href="https://www.shortfield.com/listing/minam-lodge-or/" target="_blank" rel="noopener">
-    View original source (FAA + Shortfield) →
-  </a></p>
+  <div class="cta-row">
+    <a class="cta" href="https://www.shortfield.com/listing/minam-lodge-or/" target="_blank" rel="noopener">
+      View original source (FAA + Shortfield) →
+    </a>
+    <a class="cta cta-secondary" href="../?sectional=45.3581975,-117.63436805">View on VFR sectional →</a>
+  </div>
   <table class="specs"><tr><th>Identifier</th><td>7OR0</td></tr><tr><th>State</th><td>OR</td></tr><tr><th>Runway length</th><td>2,000 ft</td></tr><tr><th>Runway width</th><td>40 ft</td></tr><tr><th>Surface</th><td>TURF</td></tr><tr><th>Runway</th><td>N/S</td></tr><tr><th>Elevation</th><td>3,589 ft</td></tr><tr><th>Ownership</th><td>private</td></tr><tr><th>CTAF</th><td>122.9</td></tr><tr><th>Coordinates</th><td>45.3581975, -117.63436805</td></tr></table>
   <div class="description"><h2>Notes</h2><div class="description-text">[shortfield] Minam River Lodge is an oasis in the wilderness. Adjacent to the historic Reds Horse Ranch, the lodge is accessible only by horseback, foot, or small bush plane. Situated outside of La Grande, Oregon, in the midst of the Eagle Cap Wilderness, it is a true escape from the everyday world. The wild and scenic Minam River flows a short distance away, offering guests a chance to get away from urban activities and slow down the pace. Time can be spent fishing, hiking, swimming, horseback riding, hunting, or simply relaxing and wildlife watching. A wide range of accommodations is available, from rustic wall tents to a luxurious deluxe suite in the Lodge. Guests can experience fresh air, beautiful scenery, pristine water, great food, and warm, friendly company while enjoying the large rock fireplaces in the lodge or relaxing outside on the deck. Animals regularly seen around Minam Lodge include elk, mountain goat, raccoon, deer, and the occasional bear. Grouse, turkey, several species of raptors, hummingbirds, and innumerable resident and migratory songbirds also frequent the area.</div></div>
   <footer>

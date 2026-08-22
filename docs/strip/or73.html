@@ -19,9 +19,12 @@
   main { max-width: 720px; margin: 0 auto; padding: 20px; }
   h1 { margin:0 0 4px 0; font-size:24px; font-weight:600; }
   .subtitle { color:var(--muted); font-size:14px; margin-bottom:16px; }
+  .cta-row { display:flex; gap:10px; flex-wrap:wrap; margin-bottom:20px; }
   .cta { display:inline-block; background:var(--accent); color:#fff !important; padding:10px 20px;
-          border-radius:8px; font-weight:600; text-decoration:none; margin-bottom:20px; }
+          border-radius:8px; font-weight:600; text-decoration:none; margin-bottom:0; }
   .cta:hover { opacity:0.9; }
+  .cta-secondary { background:transparent; color:var(--accent) !important; border:1px solid var(--border);
+                    padding:9px 20px; }
   table.specs { width:100%; border-collapse:collapse; background:var(--card);
                  border:1px solid var(--border); border-radius:8px; overflow:hidden; }
   table.specs th, table.specs td { padding:8px 12px; text-align:left;
@@ -51,9 +54,12 @@
   <div class="subtitle">OR73</div>
   <img class="aerial" src="../aerial/or73.jpg" alt="Aerial view of Calvert Peak, OR" loading="lazy">
   <p class="aerial-credit">Aerial imagery source: Esri, Vantor, Earthstar Geographics, and the GIS User Community</p>
-  <p><a class="cta" href="https://www.shortfield.com/listing/calvert-peak-or/" target="_blank" rel="noopener">
-    View original source (Shortfield) →
-  </a></p>
+  <div class="cta-row">
+    <a class="cta" href="https://www.shortfield.com/listing/calvert-peak-or/" target="_blank" rel="noopener">
+      View original source (Shortfield) →
+    </a>
+    <a class="cta cta-secondary" href="../?sectional=42.778765,-123.734557">View on VFR sectional →</a>
+  </div>
   <table class="specs"><tr><th>Identifier</th><td>OR73</td></tr><tr><th>Elevation</th><td>3,808 ft</td></tr><tr><th>CTAF</th><td>122.9</td></tr><tr><th>Coordinates</th><td>42.778765, -123.734557</td></tr></table>
   <div class="description"><h2>Notes</h2><div class="description-text">[shortfield] Location Overview: Calvert Peak Airport (OR73) sits atop a mountain ridge about 14 miles west of Glendale, Oregon, in the Klamath Mountains region of the state&#x27;s southwest. At roughly 3,808 feet in elevation, the strip occupies a narrow, exposed perch with a single paved runway oriented northeast-southwest and only about 1,627 feet long—short, high, and surrounded by steep terrain on most sides. Camping &amp; Recreation: There are no developed camping facilities, lodging, or amenities at the airstrip itself, and no fuel is available on site. The surrounding area is remote national forest land in Oregon&#x27;s Coast Range/Klamath Mountains, offering opportunities for backcountry hiking and dispersed camping nearby, though visitors should be prepared for primitive, undeveloped conditions and should check current land-access status before planning a trip. Notes &amp; Warnings: This is a serious, high-risk airstrip not suited for casual or low-experience pilots. The short runway sits on a ridge top with a cliff drop-off at one end, and the field gained notoriety after a series of fatal accidents involving pilots who landed too long and went off the end of the runway. Historically the strip was restricted to emergency and fire-suppression use, limited to BLM aircraft and private use under VFR daylight-only conditions. The runway has since become overgrown with trees, likely rendering it unusable without significant clearing, and the airport is officially listed as closed, having been removed from FAA records. History: Calvert Peak Airport was activated around July 1969, originally built and maintained as a U.S. Forest Service (USFS) airstrip intended primarily for emergency response and wildfire suppression access in this rugged, remote part of Oregon. Its unusual paved mountaintop-ridge construction made it a distinctive backcountry strip, but the same terrain that made it useful for quick fire-crew access also made it treacherous, and multiple fatal accidents occurred over the years when pilots overshot the short runway and crashed off the cliff at its far end. These repeated tragedies, combined with the airstrip&#x27;s isolation and specialized use, eventually led to its closure—officially marked around 2026—after which the runway began reverting to wilderness, with vegetation reclaiming the pavement.</div></div>
   <footer>

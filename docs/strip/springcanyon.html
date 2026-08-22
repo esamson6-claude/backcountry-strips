@@ -19,9 +19,12 @@
   main { max-width: 720px; margin: 0 auto; padding: 20px; }
   h1 { margin:0 0 4px 0; font-size:24px; font-weight:600; }
   .subtitle { color:var(--muted); font-size:14px; margin-bottom:16px; }
+  .cta-row { display:flex; gap:10px; flex-wrap:wrap; margin-bottom:20px; }
   .cta { display:inline-block; background:var(--accent); color:#fff !important; padding:10px 20px;
-          border-radius:8px; font-weight:600; text-decoration:none; margin-bottom:20px; }
+          border-radius:8px; font-weight:600; text-decoration:none; margin-bottom:0; }
   .cta:hover { opacity:0.9; }
+  .cta-secondary { background:transparent; color:var(--accent) !important; border:1px solid var(--border);
+                    padding:9px 20px; }
   table.specs { width:100%; border-collapse:collapse; background:var(--card);
                  border:1px solid var(--border); border-radius:8px; overflow:hidden; }
   table.specs th, table.specs td { padding:8px 12px; text-align:left;
@@ -51,9 +54,12 @@
   <div class="subtitle">SPRINGCANYON · UT</div>
   <img class="aerial" src="../aerial/springcanyon.jpg" alt="Aerial view of Spring Canyon" loading="lazy">
   <p class="aerial-credit">Aerial imagery source: Esri, Vantor, Earthstar Geographics, and the GIS User Community</p>
-  <p><a class="cta" href="https://utahbackcountrypilots.org/airstrips/SPRINGCANYON" target="_blank" rel="noopener">
-    View original source (UBCP) →
-  </a></p>
+  <div class="cta-row">
+    <a class="cta" href="https://utahbackcountrypilots.org/airstrips/SPRINGCANYON" target="_blank" rel="noopener">
+      View original source (UBCP) →
+    </a>
+    <a class="cta cta-secondary" href="../?sectional=38.6397,-109.9692">View on VFR sectional →</a>
+  </div>
   <table class="specs"><tr><th>Identifier</th><td>SPRINGCANYON</td></tr><tr><th>State</th><td>UT</td></tr><tr><th>Runway length</th><td>1,540 ft</td></tr><tr><th>Surface</th><td>Dirt with vegetation overgrowth</td></tr><tr><th>Runway</th><td>10/28</td></tr><tr><th>Elevation</th><td>4,897 ft</td></tr><tr><th>Ownership</th><td>blm</td></tr><tr><th>CTAF</th><td>122.9</td></tr><tr><th>Coordinates</th><td>38.6397, -109.9692</td></tr></table>
   <div class="description"><h2>Notes</h2><div class="description-text">[ubcp] Airstrip is visible. Overgrown. 2-mile hike to Green River that overlooks Bowknot Bend and the Labyrinth Canyon Wilderness Area (on the other side of the river) Spring Canyon is only a half mile away to the west</div></div>
   <footer>

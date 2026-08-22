@@ -19,9 +19,12 @@
   main { max-width: 720px; margin: 0 auto; padding: 20px; }
   h1 { margin:0 0 4px 0; font-size:24px; font-weight:600; }
   .subtitle { color:var(--muted); font-size:14px; margin-bottom:16px; }
+  .cta-row { display:flex; gap:10px; flex-wrap:wrap; margin-bottom:20px; }
   .cta { display:inline-block; background:var(--accent); color:#fff !important; padding:10px 20px;
-          border-radius:8px; font-weight:600; text-decoration:none; margin-bottom:20px; }
+          border-radius:8px; font-weight:600; text-decoration:none; margin-bottom:0; }
   .cta:hover { opacity:0.9; }
+  .cta-secondary { background:transparent; color:var(--accent) !important; border:1px solid var(--border);
+                    padding:9px 20px; }
   table.specs { width:100%; border-collapse:collapse; background:var(--card);
                  border:1px solid var(--border); border-radius:8px; overflow:hidden; }
   table.specs th, table.specs td { padding:8px 12px; text-align:left;
@@ -51,9 +54,12 @@
   <div class="subtitle">69V · UT</div>
   <img class="aerial" src="../aerial/69v.jpg" alt="Aerial view of HUNTINGTON MUNI" loading="lazy">
   <p class="aerial-credit">Aerial imagery source: Esri, Vantor, Earthstar Geographics, and the GIS User Community</p>
-  <p><a class="cta" href="https://utahbackcountrypilots.org/airstrips/HUNTINGTONMUNI" target="_blank" rel="noopener">
-    View original source (FAA + UBCP) →
-  </a></p>
+  <div class="cta-row">
+    <a class="cta" href="https://utahbackcountrypilots.org/airstrips/HUNTINGTONMUNI" target="_blank" rel="noopener">
+      View original source (FAA + UBCP) →
+    </a>
+    <a class="cta cta-secondary" href="../?sectional=39.36122472,-110.91698055">View on VFR sectional →</a>
+  </div>
   <table class="specs"><tr><th>Identifier</th><td>69V</td></tr><tr><th>State</th><td>UT</td></tr><tr><th>Runway length</th><td>3,640 ft</td></tr><tr><th>Runway width</th><td>70 ft</td></tr><tr><th>Surface</th><td>DIRT</td></tr><tr><th>Runway</th><td>12/30</td></tr><tr><th>Elevation</th><td>5,915 ft</td></tr><tr><th>Ownership</th><td>public</td></tr><tr><th>CTAF</th><td>122.8</td></tr><tr><th>Coordinates</th><td>39.36122472, -110.91698055</td></tr></table>
   <div class="description"><h2>Notes</h2><div class="description-text">[ubcp] Description: Huntington is a great place to start your backcountry adventures. 100LL available, along with a pilot lounge with bathrooms and showers, as well as an improved campground and some cabins that we hope are completed soon. Runway: 4,048&#x27; x 75&#x27; good asphalt runway 08/26. Additional Runways: 3,640&#x27; x 70&#x27; fair dirt runway 12/30, as well as 2,079&#x27; x 56&#x27; fair dirt runway 18/36. Approach Considerations: Dirt / asphalt runway crossings are actually quite smooth. Amenities: Yes, all of them! Windsock: Yes</div></div>
   <footer>

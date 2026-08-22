@@ -19,9 +19,12 @@
   main { max-width: 720px; margin: 0 auto; padding: 20px; }
   h1 { margin:0 0 4px 0; font-size:24px; font-weight:600; }
   .subtitle { color:var(--muted); font-size:14px; margin-bottom:16px; }
+  .cta-row { display:flex; gap:10px; flex-wrap:wrap; margin-bottom:20px; }
   .cta { display:inline-block; background:var(--accent); color:#fff !important; padding:10px 20px;
-          border-radius:8px; font-weight:600; text-decoration:none; margin-bottom:20px; }
+          border-radius:8px; font-weight:600; text-decoration:none; margin-bottom:0; }
   .cta:hover { opacity:0.9; }
+  .cta-secondary { background:transparent; color:var(--accent) !important; border:1px solid var(--border);
+                    padding:9px 20px; }
   table.specs { width:100%; border-collapse:collapse; background:var(--card);
                  border:1px solid var(--border); border-radius:8px; overflow:hidden; }
   table.specs th, table.specs td { padding:8px 12px; text-align:left;
@@ -51,9 +54,12 @@
   <div class="subtitle">DIRTYDEVIL · UT</div>
   <img class="aerial" src="../aerial/dirtydevil.jpg" alt="Aerial view of Dirty Devil" loading="lazy">
   <p class="aerial-credit">Aerial imagery source: Esri, Vantor, Earthstar Geographics, and the GIS User Community</p>
-  <p><a class="cta" href="https://utahbackcountrypilots.org/airstrips/DIRTYDEVIL" target="_blank" rel="noopener">
-    View original source (UBCP) →
-  </a></p>
+  <div class="cta-row">
+    <a class="cta" href="https://utahbackcountrypilots.org/airstrips/DIRTYDEVIL" target="_blank" rel="noopener">
+      View original source (UBCP) →
+    </a>
+    <a class="cta cta-secondary" href="../?sectional=38.1734,-110.4454">View on VFR sectional →</a>
+  </div>
   <table class="specs"><tr><th>Identifier</th><td>DIRTYDEVIL</td></tr><tr><th>State</th><td>UT</td></tr><tr><th>Runway length</th><td>1,200 ft</td></tr><tr><th>Runway width</th><td>18 ft</td></tr><tr><th>Surface</th><td>Sand</td></tr><tr><th>Runway</th><td>18/36</td></tr><tr><th>Elevation</th><td>4,153 ft</td></tr><tr><th>Ownership</th><td>blm</td></tr><tr><th>CTAF</th><td>122.9</td></tr><tr><th>Coordinates</th><td>38.1734, -110.4454</td></tr></table>
   <div class="description"><h2>Notes</h2><div class="description-text">[ubcp] Description: Dirty Devil sits on a raised flat-top mesa immediately east of the Dirty Devil River. Runway: 1200 ft long x 18 ft wide runs the entire length of the mesa. Airstrip can be soft at certain times of the year. Approach Considerations: Short runway with no safety overruns on either end. Recommend landing north and departing south due to slight uphill grade. First hundred feet of landing distance has in the past been softer than the majority of the landing surface. Amenities: None. Parking area at the northwest end of the landing surface can only accommodate 2-3 airplanes. Windsock: Yes, but watch out for cacti around the windsock!</div></div>
   <footer>

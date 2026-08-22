@@ -19,9 +19,12 @@
   main { max-width: 720px; margin: 0 auto; padding: 20px; }
   h1 { margin:0 0 4px 0; font-size:24px; font-weight:600; }
   .subtitle { color:var(--muted); font-size:14px; margin-bottom:16px; }
+  .cta-row { display:flex; gap:10px; flex-wrap:wrap; margin-bottom:20px; }
   .cta { display:inline-block; background:var(--accent); color:#fff !important; padding:10px 20px;
-          border-radius:8px; font-weight:600; text-decoration:none; margin-bottom:20px; }
+          border-radius:8px; font-weight:600; text-decoration:none; margin-bottom:0; }
   .cta:hover { opacity:0.9; }
+  .cta-secondary { background:transparent; color:var(--accent) !important; border:1px solid var(--border);
+                    padding:9px 20px; }
   table.specs { width:100%; border-collapse:collapse; background:var(--card);
                  border:1px solid var(--border); border-radius:8px; overflow:hidden; }
   table.specs th, table.specs td { padding:8px 12px; text-align:left;
@@ -51,9 +54,12 @@
   <div class="subtitle">55H · ID</div>
   <img class="aerial" src="../aerial/55h.jpg" alt="Aerial view of ATLANTA" loading="lazy">
   <p class="aerial-credit">Aerial imagery source: Esri, Vantor, Earthstar Geographics, and the GIS User Community</p>
-  <p><a class="cta" href="https://www.shortfield.com/listing/atlanta-id/" target="_blank" rel="noopener">
-    View original source (FAA + Idaho ITD + Shortfield) →
-  </a></p>
+  <div class="cta-row">
+    <a class="cta" href="https://www.shortfield.com/listing/atlanta-id/" target="_blank" rel="noopener">
+      View original source (FAA + Idaho ITD + Shortfield) →
+    </a>
+    <a class="cta cta-secondary" href="../?sectional=43.81351083,-115.13508166">View on VFR sectional →</a>
+  </div>
   <table class="specs"><tr><th>Identifier</th><td>55H</td></tr><tr><th>State</th><td>ID</td></tr><tr><th>Runway length</th><td>2,460 ft</td></tr><tr><th>Runway width</th><td>75 ft</td></tr><tr><th>Surface</th><td>TURF-DIRT</td></tr><tr><th>Runway</th><td>16/34</td></tr><tr><th>Elevation</th><td>5,500 ft</td></tr><tr><th>Ownership</th><td>public</td></tr><tr><th>CTAF</th><td>122.9</td></tr><tr><th>Coordinates</th><td>43.81351083, -115.13508166</td></tr></table>
   <div class="description"><h2>Notes</h2><div class="description-text">[idaho_itd] State Airfield [shortfield] This strip is located an easy 1 mile walk from the town of Atlanta, Idaho and directly adjacent the Middle Fork of the Boise River. The town of Atlanta is an historic mining town with a colorful past. With the airstrip being nearly a half mile long and the parking on the north end, it is closer to 1.5 miles into town. Follow the road to the east, cross the bridge, go past the USFS camp ground, and up the hill to reach town. Camping &amp; Recreation: The USFS Riverside Campground is located between the airport and the town of Atlanta and has 7 improved campsites located along the banks of the river. There are a couple hot springs located within 2 miles of Atlanta. Ask locals for directions. Lodging and Supplies: The Beaver Lodge is located in town, on Main Street, and offer lodging as well as meals. A general store is also located in town. We visited Atlanta on 07/21/2010. There are currently no facilities open to the public for lodging, food, or anything. From talking to the locals, there are no plans to re-open any of the facilites. They all closed some years ago due, in large part, to the increased cost of power by the local power company.</div></div>
   <footer>

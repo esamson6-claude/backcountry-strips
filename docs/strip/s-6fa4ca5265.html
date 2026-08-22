@@ -19,9 +19,12 @@
   main { max-width: 720px; margin: 0 auto; padding: 20px; }
   h1 { margin:0 0 4px 0; font-size:24px; font-weight:600; }
   .subtitle { color:var(--muted); font-size:14px; margin-bottom:16px; }
+  .cta-row { display:flex; gap:10px; flex-wrap:wrap; margin-bottom:20px; }
   .cta { display:inline-block; background:var(--accent); color:#fff !important; padding:10px 20px;
-          border-radius:8px; font-weight:600; text-decoration:none; margin-bottom:20px; }
+          border-radius:8px; font-weight:600; text-decoration:none; margin-bottom:0; }
   .cta:hover { opacity:0.9; }
+  .cta-secondary { background:transparent; color:var(--accent) !important; border:1px solid var(--border);
+                    padding:9px 20px; }
   table.specs { width:100%; border-collapse:collapse; background:var(--card);
                  border:1px solid var(--border); border-radius:8px; overflow:hidden; }
   table.specs th, table.specs td { padding:8px 12px; text-align:left;
@@ -51,9 +54,12 @@
   <div class="subtitle">ID</div>
   <img class="aerial" src="../aerial/s-6fa4ca5265.jpg" alt="Aerial view of ALLISON RANCH, ID" loading="lazy">
   <p class="aerial-credit">Aerial imagery source: Esri, Vantor, Earthstar Geographics, and the GIS User Community</p>
-  <p><a class="cta" href="https://www.shortfield.com/listing/allison-ranch-id/" target="_blank" rel="noopener">
-    View original source (Shortfield) →
-  </a></p>
+  <div class="cta-row">
+    <a class="cta" href="https://www.shortfield.com/listing/allison-ranch-id/" target="_blank" rel="noopener">
+      View original source (Shortfield) →
+    </a>
+    <a class="cta cta-secondary" href="../?sectional=45.564605,-115.225639">View on VFR sectional →</a>
+  </div>
   <table class="specs"><tr><th>State</th><td>ID</td></tr><tr><th>Elevation</th><td>2,700 ft</td></tr><tr><th>CTAF</th><td>122.9</td></tr><tr><th>Coordinates</th><td>45.564605, -115.225639</td></tr></table>
   <div class="description"><h2>Notes</h2><div class="description-text">[shortfield] Allison Ranch is a beautiful wilderness retreat on the Salmon River. It is however private. The ranch is a Christian Retreat and has guests staying there all summer. MAF uses the accommodations to base out of for some of their training. Runway 15/33 is about 1400ft. Long at an elevation of 2700ft. The approach is a bit of a challenge as the strip is not visible until the short turn on final. The runway is constantly watered providing a lush and sometimes slippery surface.</div></div>
   <footer>

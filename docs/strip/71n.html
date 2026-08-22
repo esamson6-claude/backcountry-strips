@@ -19,9 +19,12 @@
   main { max-width: 720px; margin: 0 auto; padding: 20px; }
   h1 { margin:0 0 4px 0; font-size:24px; font-weight:600; }
   .subtitle { color:var(--muted); font-size:14px; margin-bottom:16px; }
+  .cta-row { display:flex; gap:10px; flex-wrap:wrap; margin-bottom:20px; }
   .cta { display:inline-block; background:var(--accent); color:#fff !important; padding:10px 20px;
-          border-radius:8px; font-weight:600; text-decoration:none; margin-bottom:20px; }
+          border-radius:8px; font-weight:600; text-decoration:none; margin-bottom:0; }
   .cta:hover { opacity:0.9; }
+  .cta-secondary { background:transparent; color:var(--accent) !important; border:1px solid var(--border);
+                    padding:9px 20px; }
   table.specs { width:100%; border-collapse:collapse; background:var(--card);
                  border:1px solid var(--border); border-radius:8px; overflow:hidden; }
   table.specs th, table.specs td { padding:8px 12px; text-align:left;
@@ -51,9 +54,12 @@
   <div class="subtitle">71N · PA</div>
   <img class="aerial" src="../aerial/71n.jpg" alt="Aerial view of SUNBURY" loading="lazy">
   <p class="aerial-credit">Aerial imagery source: Esri, Vantor, Earthstar Geographics, and the GIS User Community</p>
-  <p><a class="cta" href="#" target="_blank" rel="noopener">
-    View original source (FAA) →
-  </a></p>
+  <div class="cta-row">
+    <a class="cta" href="#" target="_blank" rel="noopener">
+      View original source (FAA) →
+    </a>
+    <a class="cta cta-secondary" href="../?sectional=40.89175194,-76.77885333">View on VFR sectional →</a>
+  </div>
   <table class="specs"><tr><th>Identifier</th><td>71N</td></tr><tr><th>State</th><td>PA</td></tr><tr><th>Runway length</th><td>3,250 ft</td></tr><tr><th>Runway width</th><td>250 ft</td></tr><tr><th>Surface</th><td>TURF</td></tr><tr><th>Runway</th><td>05/23</td></tr><tr><th>Elevation</th><td>450 ft</td></tr><tr><th>Ownership</th><td>private</td></tr><tr><th>Coordinates</th><td>40.89175194, -76.77885333</td></tr></table>
   
   <footer>
