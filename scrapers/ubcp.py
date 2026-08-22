@@ -79,9 +79,11 @@ def _to_float(value):
 def _strip_html(value):
     if not value:
         return None
+    import html
     import re
 
     text = re.sub(r"<[^>]+>", " ", value)
+    text = html.unescape(text)
     return re.sub(r"\s+", " ", text).strip() or None
 
 

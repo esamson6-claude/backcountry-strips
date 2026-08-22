@@ -3,7 +3,9 @@ grid/map views and sort/filter UI. Pattern mirrors the sibling project
 backcountry-aircraft's generate_html.py.
 """
 
+import hashlib
 import html
+import re
 from datetime import date
 from pathlib import Path
 
@@ -13,6 +15,8 @@ from fetch_all import fetch_all
 PROJECT_ROOT = Path(__file__).resolve().parent
 DOCS_DIR = PROJECT_ROOT / "docs"
 DOCS_DIR.mkdir(exist_ok=True)
+STRIP_DIR = DOCS_DIR / "strip"
+STRIP_DIR.mkdir(exist_ok=True)
 DOCS_HTML_PATH = DOCS_DIR / "index.html"
 
 SOURCE_LABELS = {
@@ -51,6 +55,29 @@ def _source_label(source_key):
     return " + ".join(parts)
 
 
+def _slug_for(strip):
+    """Stable filename slug per strip: identifier when present, else a
+    short hash of name+coordinates (both are near-always present, unlike
+    identifier, which many Shortfield/UBCP records lack)."""
+    identifier = (strip.get("identifier") or "").strip()
+    if identifier:
+        slug = re.sub(r"[^A-Za-z0-9]+", "-", identifier).strip("-").lower()
+        # Windows reserves these device names -- unusable as filenames even
+        # with an extension (e.g. FAA identifier "NUL" for Nulato, AK).
+        if slug.upper() not in _RESERVED_WINDOWS_NAMES:
+            return slug
+
+    basis = f"{strip.get('name') or ''}|{strip.get('latitude')}|{strip.get('longitude')}"
+    return "s-" + hashlib.md5(basis.encode("utf-8")).hexdigest()[:10]
+
+
+_RESERVED_WINDOWS_NAMES = {
+    "CON", "PRN", "AUX", "NUL",
+    *{f"COM{i}" for i in range(1, 10)},
+    *{f"LPT{i}" for i in range(1, 10)},
+}
+
+
 def _fmt_number(value, suffix=""):
     if value is None:
         return ""
@@ -60,10 +87,81 @@ def _fmt_number(value, suffix=""):
         return str(value)
 
 
+def _detail_html(strip, name, subtitle, spec_rows, notes_full, source_label, source_url, attribution):
+    notes_block = (
+        f'<div class="description"><h2>Notes</h2><div class="description-text">{notes_full}</div></div>'
+        if notes_full
+        else ""
+    )
+    attribution_block = f'<p class="attribution">{attribution}</p>' if attribution else ""
+
+    return f"""<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>{name}</title>
+<style>
+  :root {{ color-scheme: light dark; --bg:#f5f5f7; --card:#fff; --fg:#222; --muted:#666;
+           --border:#e2e2e6; --accent:#0366d6; }}
+  @media (prefers-color-scheme: dark) {{
+    :root {{ --bg:#1a1a1c; --card:#26262a; --fg:#eee; --muted:#aaa; --border:#3a3a40;
+             --accent:#58a6ff; }}
+  }}
+  * {{ box-sizing: border-box; }}
+  body {{ margin:0; font: 14px/1.4 -apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
+          background:var(--bg); color:var(--fg); }}
+  header {{ padding:14px 20px; border-bottom:1px solid var(--border); background:var(--card); }}
+  .back {{ color:var(--accent); text-decoration:none; font-size:13px; }}
+  main {{ max-width: 720px; margin: 0 auto; padding: 20px; }}
+  h1 {{ margin:0 0 4px 0; font-size:24px; font-weight:600; }}
+  .subtitle {{ color:var(--muted); font-size:14px; margin-bottom:16px; }}
+  .cta {{ display:inline-block; background:var(--accent); color:#fff !important; padding:10px 20px;
+          border-radius:8px; font-weight:600; text-decoration:none; margin-bottom:20px; }}
+  .cta:hover {{ opacity:0.9; }}
+  table.specs {{ width:100%; border-collapse:collapse; background:var(--card);
+                 border:1px solid var(--border); border-radius:8px; overflow:hidden; }}
+  table.specs th, table.specs td {{ padding:8px 12px; text-align:left;
+                                    border-bottom:1px solid var(--border); font-size:13px; }}
+  table.specs tr:last-child th, table.specs tr:last-child td {{ border-bottom:0; }}
+  table.specs th {{ width:140px; color:var(--muted); font-weight:500; text-transform:uppercase;
+                    letter-spacing:0.4px; font-size:11px; vertical-align:top; }}
+  .description {{ margin-top:24px; padding:18px; background:var(--card);
+                  border:1px solid var(--border); border-radius:8px; }}
+  .description h2 {{ margin:0 0 10px 0; font-size:15px; color:var(--muted);
+                     text-transform:uppercase; letter-spacing:0.5px; font-weight:600; }}
+  .description-text {{ font-size:14px; line-height:1.55; color:var(--fg); white-space:pre-wrap; }}
+  footer {{ margin-top:30px; padding-top:12px; border-top:1px solid var(--border);
+            font-size:12px; color:var(--muted); }}
+  .attribution {{ font-style:italic; }}
+</style>
+</head>
+<body>
+<header>
+  <a class="back" href="../">← All strips</a>
+</header>
+<main>
+  <h1>{name}</h1>
+  <div class="subtitle">{subtitle}</div>
+  <p><a class="cta" href="{source_url}" target="_blank" rel="noopener">
+    View original source ({source_label}) →
+  </a></p>
+  <table class="specs">{spec_rows}</table>
+  {notes_block}
+  <footer>
+    Aggregated from {source_label}. {attribution_block}
+  </footer>
+</main>
+</body>
+</html>
+"""
+
+
 def _build_cards(strips):
     cards_html = []
     states = set()
     surfaces = set()
+    keep_slugs = set()
 
     for strip in strips:
         name = html.escape(strip.get("name") or "Unnamed strip")
@@ -110,6 +208,43 @@ def _build_cards(strips):
             filter(None, [strip.get("access_notes"), strip.get("condition_notes"), strip.get("hazards")])
         )
         notes_preview = html.escape(notes[:220] + ("…" if len(notes) > 220 else "")) if notes else ""
+        notes_full = html.escape(notes) if notes else ""
+
+        slug = _slug_for(strip)
+        keep_slugs.add(slug)
+        detail_url = f"strip/{slug}.html"
+
+        detail_spec_pairs = [
+            ("Identifier", strip.get("identifier")),
+            ("State", strip.get("state")),
+            ("Runway length", _fmt_number(length, " ft") if length else None),
+            ("Runway width", _fmt_number(width, " ft") if width else None),
+            ("Surface", strip.get("runway_surface")),
+            ("Runway", strip.get("runway_orientation")),
+            ("Elevation", _fmt_number(elevation, " ft") if elevation else None),
+            ("Ownership", strip.get("ownership")),
+            ("CTAF", strip.get("ctaf_frequency")),
+            ("Coordinates", f"{lat}, {lon}" if lat is not None and lon is not None else None),
+        ]
+        detail_spec_rows = "".join(
+            f"<tr><th>{html.escape(k)}</th><td>{html.escape(str(v))}</td></tr>"
+            for k, v in detail_spec_pairs
+            if v
+        )
+
+        (STRIP_DIR / f"{slug}.html").write_text(
+            _detail_html(
+                strip,
+                name,
+                subtitle,
+                detail_spec_rows,
+                notes_full,
+                source_label,
+                source_url,
+                attribution,
+            ),
+            encoding="utf-8",
+        )
 
         search_blob = html.escape(
             " ".join(
@@ -132,7 +267,7 @@ def _build_cards(strips):
         lon_attr = f' data-lng="{lon}"' if lon is not None else ""
 
         cards_html.append(
-            f"""<a class="card" href="{source_url}" target="_blank" rel="noopener"
+            f"""<a class="card" href="{detail_url}"
    data-state="{state}" data-surface="{surface_key}" data-source="{html.escape(source_key)}"
    data-length="{length_n}" data-elevation="{elevation_n}"
    data-search="{search_blob}"{lat_attr}{lon_attr}
@@ -152,6 +287,11 @@ def _build_cards(strips):
   </div>
 </a>"""
         )
+
+    # Prune stale detail pages from strips no longer in the dataset.
+    for path in STRIP_DIR.glob("*.html"):
+        if path.stem not in keep_slugs:
+            path.unlink(missing_ok=True)
 
     return cards_html, sorted(states), sorted(surfaces)
 

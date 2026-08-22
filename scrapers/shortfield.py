@@ -17,6 +17,7 @@ no new IDs turn up. This will not be 100% exhaustive, but surfaces a large,
 real set without depending on undocumented/brittle query parameters.
 """
 
+import html
 import re
 
 import requests
@@ -148,6 +149,7 @@ def _clean_description(value):
     if not value:
         return None
     text = re.sub(r"<[^>]+>", " ", value)
+    text = html.unescape(text)
     text = text.replace("\r\n", " ").strip()
     return re.sub(r"\s+", " ", text) or None
 
