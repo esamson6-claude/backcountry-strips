@@ -657,6 +657,67 @@ def render():
     );
   }}
 
+  // Filters live only as DOM state (.active classes, input values), which a
+  // fresh page load can't see -- so clicking Back after filtering used to
+  // land back on an unfiltered grid even though the URL/history entry was
+  // otherwise correct. Mirroring the filter state into the URL query string
+  // (via replaceState, so every keystroke doesn't spam browser history) lets
+  // a reload/back-navigation restore the exact same filtered view.
+  function syncFiltersToUrl() {{
+    const params = new URLSearchParams();
+    if (searchEl.value.trim()) params.set('q', searchEl.value.trim());
+    if (lengthMinEl.value) params.set('lmin', lengthMinEl.value);
+    if (lengthMaxEl.value) params.set('lmax', lengthMaxEl.value);
+    if (elevationMinEl.value) params.set('emin', elevationMinEl.value);
+    if (elevationMaxEl.value) params.set('emax', elevationMaxEl.value);
+    const states = [...activeChips('.state-chip')];
+    if (states.length) params.set('state', states.join(','));
+    const surfaces = [...activeChips('.surface-chip')];
+    if (surfaces.length) params.set('surface', surfaces.join(','));
+    const ownerships = [...activeChips('.ownership-chip')];
+    if (ownerships.length) params.set('ownership', ownerships.join(','));
+    if (document.body.classList.contains('fav-view')) params.set('view', 'favorites');
+    else if (document.body.classList.contains('map-view')) params.set('view', 'map');
+
+    const qs = params.toString();
+    const newUrl = location.pathname + (qs ? '?' + qs : '');
+    if (newUrl !== location.pathname + location.search) {{
+      history.replaceState(null, '', newUrl);
+    }}
+  }}
+
+  function restoreFiltersFromUrl() {{
+    const params = new URLSearchParams(location.search);
+    if (params.has('q')) searchEl.value = params.get('q');
+    if (params.has('lmin')) lengthMinEl.value = params.get('lmin');
+    if (params.has('lmax')) lengthMaxEl.value = params.get('lmax');
+    if (params.has('emin')) elevationMinEl.value = params.get('emin');
+    if (params.has('emax')) elevationMaxEl.value = params.get('emax');
+
+    function activateChips(rowSelector, key) {{
+      const values = params.get(key);
+      if (!values) return;
+      const wanted = new Set(values.split(','));
+      const chips = document.querySelectorAll(rowSelector);
+      let any = false;
+      chips.forEach(c => {{
+        const v = c.dataset.state || c.dataset.surface || c.dataset.ownership;
+        if (wanted.has(v)) {{ c.classList.add('active'); any = true; }}
+      }});
+      if (any) {{
+        const allChip = Array.from(chips).find(c =>
+          (c.dataset.state || c.dataset.surface || c.dataset.ownership) === '__all__'
+        );
+        if (allChip) allChip.classList.remove('active');
+      }}
+    }}
+    activateChips('.state-chip', 'state');
+    activateChips('.surface-chip', 'surface');
+    activateChips('.ownership-chip', 'ownership');
+
+    return params.get('view');  // 'map' | 'favorites' | null, applied by caller
+  }}
+
   function num(v) {{ const n = parseInt(v, 10); return Number.isFinite(n) ? n : null; }}
 
   // Whether any real filter narrows the result set -- used to decide whether
@@ -714,6 +775,7 @@ def render():
       emptyEl.style.display = 'none';
     }}
     if (document.body.classList.contains('map-view') && !suppressMapRefresh) renderMarkers(isFilteredNow());
+    syncFiltersToUrl();
   }}
 
   function wireChipRow(rowSelector) {{
@@ -954,7 +1016,20 @@ def render():
   viewGrid.addEventListener('click', () => setView('grid'));
   viewFav.addEventListener('click', () => setView('favorites'));
   viewMap.addEventListener('click', () => setView('map'));
-  apply();
+
+  // Restore filter/chip state from the URL (set by syncFiltersToUrl on a
+  // previous visit) before the first apply(), so a reload or Back
+  // navigation lands on the same filtered view instead of resetting to
+  // "All". The saved view (grid/map/favorites) is applied after, unless a
+  // more specific sectional/maplink deep link below overrides it.
+  const savedView = restoreFiltersFromUrl();
+  if (savedView === 'map') {{
+    setView('map');
+  }} else if (savedView === 'favorites') {{
+    setView('favorites');
+  }} else {{
+    apply();
+  }}
 
   // Deep links from a detail page's map buttons: ?sectional=lat,lng jumps to
   // Map view on the sectional layer; ?maplink=lat,lng jumps to Map view on
