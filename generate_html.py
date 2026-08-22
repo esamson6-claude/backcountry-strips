@@ -11,7 +11,7 @@ from pathlib import Path
 
 import merge
 from aerial import ensure_aerial_images
-from exclude import remove_helipads_and_balloonports, remove_out_of_scope, remove_permission_required
+from exclude import US_STATES, remove_helipads_and_balloonports, remove_out_of_scope, remove_permission_required
 from fetch_all import fetch_all
 
 PROJECT_ROOT = Path(__file__).resolve().parent
@@ -80,6 +80,27 @@ def _ownership_category(raw_ownership):
 def _source_label(source_key):
     parts = [SOURCE_LABELS.get(p, p) for p in source_key.split("+")]
     return " + ".join(parts)
+
+
+# ICAO prefix by region for a bare 3-letter, all-alphabetic FAA LID. Only
+# applies under that exact condition (3 chars, no digits) -- an LID with a
+# digit (11N, 6Y2) or any other length has no true ICAO equivalent and is
+# displayed as-is. Canadian identifiers (already 4-letter ICAO, e.g. CYXQ)
+# are left untouched since they aren't FAA LIDs at all.
+_ICAO_PREFIX_BY_STATE = {"AK": "PA", "HI": "PH"}
+_ICAO_DEFAULT_PREFIX = "K"
+
+
+def _display_identifier(strip):
+    identifier = (strip.get("identifier") or "").strip()
+    state = (strip.get("state") or "").strip().upper()
+    # Only US FAA LIDs get an ICAO prefix -- a bare 3-letter Canadian
+    # identifier (e.g. "YOI") is already a real Transport Canada domestic
+    # code, not an FAA LID, and must not be mistaken for one.
+    if state in US_STATES and len(identifier) == 3 and identifier.isalpha():
+        prefix = _ICAO_PREFIX_BY_STATE.get(state, _ICAO_DEFAULT_PREFIX)
+        return f"{prefix}{identifier.upper()}"
+    return identifier
 
 
 def _slug_for(strip):
@@ -235,7 +256,7 @@ def _build_cards(strips, have_aerial):
 
     for strip in strips:
         name = html.escape(strip.get("name") or "Unnamed strip")
-        identifier = html.escape(strip.get("identifier") or "")
+        identifier = html.escape(_display_identifier(strip))
         state = html.escape(strip.get("state") or "")
         surface = html.escape((strip.get("runway_surface") or "").strip())
         surface_key = _surface_category(strip.get("runway_surface"))
@@ -290,7 +311,7 @@ def _build_cards(strips, have_aerial):
         detail_url = f"strip/{slug}.html"
 
         detail_spec_pairs = [
-            ("Identifier", strip.get("identifier")),
+            ("Identifier", _display_identifier(strip) or None),
             ("State", strip.get("state")),
             ("Runway length", _fmt_number(length, " ft") if length else None),
             ("Runway width", _fmt_number(width, " ft") if width else None),
@@ -331,6 +352,7 @@ def _build_cards(strips, have_aerial):
                     [
                         strip.get("name"),
                         strip.get("identifier"),
+                        identifier,  # searchable by the displayed ICAO-prefixed form too
                         strip.get("state"),
                         surface,
                         strip.get("access_notes"),
