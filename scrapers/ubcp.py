@@ -42,7 +42,7 @@ def fetch():
             {
                 "identifier": strip.get("faa_id") or strip.get("waypoint_id") or None,
                 "name": strip.get("title"),
-                "state": strip.get("state") or "UT",
+                "state": _clean_state(strip.get("state")),
                 "latitude": _to_float(strip.get("latitude")),
                 "longitude": _to_float(strip.get("longitude")),
                 "elevation_ft": _to_float(strip.get("elevation")),
@@ -74,6 +74,14 @@ def _to_float(value):
         return float(value)
     except (TypeError, ValueError):
         return None
+
+
+def _clean_state(value):
+    """UBCP is scoped to Utah, but its 'state' field is free text and
+    sometimes truncated/malformed (e.g. a single 'U' instead of 'UT') --
+    treat anything that isn't a real 2-letter code as missing/default."""
+    value = (value or "").strip().upper()
+    return value if len(value) == 2 else "UT"
 
 
 def _strip_html(value):
