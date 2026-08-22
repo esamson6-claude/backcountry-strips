@@ -10,6 +10,8 @@ from datetime import date
 from pathlib import Path
 
 import merge
+from aerial import ensure_aerial_images
+from exclude import remove_permission_required
 from fetch_all import fetch_all
 
 PROJECT_ROOT = Path(__file__).resolve().parent
@@ -111,13 +113,24 @@ def _fmt_number(value, suffix=""):
         return str(value)
 
 
-def _detail_html(strip, name, subtitle, spec_rows, notes_full, source_label, source_url, attribution):
+def _detail_html(strip, name, subtitle, spec_rows, notes_full, source_label, source_url, attribution, aerial_url):
     notes_block = (
         f'<div class="description"><h2>Notes</h2><div class="description-text">{notes_full}</div></div>'
         if notes_full
         else ""
     )
     attribution_block = f'<p class="attribution">{attribution}</p>' if attribution else ""
+    aerial_block = (
+        f'<img class="aerial" src="{aerial_url}" alt="Aerial view of {name}" loading="lazy">'
+        if aerial_url
+        else ""
+    )
+    aerial_credit = (
+        '<p class="aerial-credit">Aerial imagery source: Esri, Vantor, Earthstar Geographics, '
+        'and the GIS User Community</p>'
+        if aerial_url
+        else ""
+    )
 
     return f"""<!doctype html>
 <html lang="en">
@@ -158,6 +171,9 @@ def _detail_html(strip, name, subtitle, spec_rows, notes_full, source_label, sou
   footer {{ margin-top:30px; padding-top:12px; border-top:1px solid var(--border);
             font-size:12px; color:var(--muted); }}
   .attribution {{ font-style:italic; }}
+  .aerial {{ width:100%; aspect-ratio: 3/2; object-fit:cover; border-radius:10px;
+             border:1px solid var(--border); margin: 14px 0; background:#0001; }}
+  .aerial-credit {{ font-size:11px; color:var(--muted); margin:-8px 0 20px 0; }}
 </style>
 </head>
 <body>
@@ -167,6 +183,8 @@ def _detail_html(strip, name, subtitle, spec_rows, notes_full, source_label, sou
 <main>
   <h1>{name}</h1>
   <div class="subtitle">{subtitle}</div>
+  {aerial_block}
+  {aerial_credit}
   <p><a class="cta" href="{source_url}" target="_blank" rel="noopener">
     View original source ({source_label}) →
   </a></p>
@@ -181,7 +199,7 @@ def _detail_html(strip, name, subtitle, spec_rows, notes_full, source_label, sou
 """
 
 
-def _build_cards(strips):
+def _build_cards(strips, have_aerial):
     cards_html = []
     states = set()
     surfaces = set()
@@ -262,6 +280,8 @@ def _build_cards(strips):
             if v
         )
 
+        aerial_url = f"../aerial/{slug}.jpg" if slug in have_aerial else None
+
         (STRIP_DIR / f"{slug}.html").write_text(
             _detail_html(
                 strip,
@@ -272,6 +292,7 @@ def _build_cards(strips):
                 source_label,
                 source_url,
                 attribution,
+                aerial_url,
             ),
             encoding="utf-8",
         )
@@ -332,9 +353,15 @@ def render():
     if stale_sources:
         print(f"Using cached data for: {', '.join(stale_sources)}")
     strips = merge.merge(*record_lists)
+    strips, excluded = remove_permission_required(strips)
+    if excluded:
+        print(f"Excluded {len(excluded)} strips flagged permission-required/no-trespassing")
     strips.sort(key=lambda s: s.get("name") or "")
 
-    cards_html, states, surfaces, ownerships = _build_cards(strips)
+    strips_by_slug = {_slug_for(s): s for s in strips}
+    have_aerial = ensure_aerial_images(strips_by_slug)
+
+    cards_html, states, surfaces, ownerships = _build_cards(strips, have_aerial)
 
     state_buttons = "".join(
         f'<button class="chip state-chip" data-state="{html.escape(s, quote=True)}">{html.escape(s)}</button>'
