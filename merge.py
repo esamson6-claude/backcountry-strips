@@ -82,13 +82,14 @@ def _merge_group(records):
     )
     merged["sources"] = sorted({r.get("source") for r in records if r.get("source")})
     merged["source"] = "+".join(merged["sources"])
-    merged["source_url"] = next(
-        (r["source_url"] for r in records if r.get("source_url")), None
-    )
 
-    attributions = sorted(
-        {r["attribution"] for r in records if r.get("attribution")}
-    )
+    # Prefer a source_url from a record that actually carries an attribution,
+    # so the displayed link and credit line refer to the same source.
+    attributed_records = [r for r in records if r.get("attribution")]
+    url_source = attributed_records[0] if attributed_records else records[0]
+    merged["source_url"] = url_source.get("source_url")
+
+    attributions = sorted({r["attribution"] for r in records if r.get("attribution")})
     merged["attribution"] = "; ".join(attributions) if attributions else None
 
     merged["last_updated"] = max(
@@ -112,9 +113,15 @@ def merge(*record_lists):
 
 if __name__ == "__main__":
     import import_faa
-    from scrapers import idaho, montana
+    from scrapers import idaho, montana, shortfield, ubcp
 
-    merged = merge(import_faa.fetch(), idaho.fetch(), montana.fetch())
+    merged = merge(
+        import_faa.fetch(),
+        idaho.fetch(),
+        montana.fetch(),
+        ubcp.fetch(),
+        shortfield.fetch(),
+    )
     print(f"{len(merged)} merged strip records")
 
     multi_source = [r for r in merged if len(r["sources"]) > 1]
