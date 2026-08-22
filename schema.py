@@ -23,7 +23,8 @@ FIELDS = [
     "nearby_amenities", # camping, fuel, water
     "condition_notes",  # free text, most recent known condition
     "trip_reports_url", # link to community discussion/reports, if any
-    "source",           # which module produced this record
+    "source",           # which module produced this record (or "+"-joined after merge)
+    "sources",          # list of source module names, populated by merge.py
     "source_url",       # link back to the source's page for this strip, if any
     "attribution",      # required attribution text for this record's source, if any
     "last_updated",     # date this record was last refreshed
