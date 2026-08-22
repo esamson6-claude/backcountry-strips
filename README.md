@@ -2,7 +2,7 @@
 
 A searchable, filterable database of **backcountry / unimproved airstrips**,
 aggregated from public sources into one self-contained website — updated
-automatically every day.
+automatically every month.
 
 **Live site:** https://esamson6-claude.github.io/backcountry-strips/
 
@@ -70,8 +70,9 @@ Shortfield has no stated license.
    (saved per-browser via `localStorage`), and filters (search, state,
    surface type, runway length, elevation).
 
-The automation lives in `.github/workflows/daily-refresh.yml` — a cron job
-at 14:00 UTC daily, plus a manual "Run workflow" trigger. It regenerates the
+The automation lives in `.github/workflows/monthly-refresh.yml` — a cron
+job at 14:00 UTC on the 1st of each month, plus a manual "Run workflow"
+trigger. It regenerates the
 site and commits `docs/` (and refreshed `data/cache/`) if anything changed.
 GitHub Pages serves `docs/` as the live site.
 
@@ -88,7 +89,7 @@ scrapers/
 fetch_all.py            Fetches every source with graceful degradation/caching
 merge.py                Cross-source dedupe/merge
 generate_html.py        Render the merged dataset into docs/index.html
-.github/workflows/      daily-refresh.yml — the scheduled pipeline run
+.github/workflows/      monthly-refresh.yml — the scheduled pipeline run
 data/cache/             Last-good fetch result per source (fallback on outage)
 docs/                   Published website (GitHub Pages serves this)
 ```
@@ -112,7 +113,7 @@ python merge.py             # fetch all sources + merge, print a summary
 
 MVP complete and live: all five sources are wired up, the merge pipeline
 dedupes ~9,900 strips nationwide, the site (grid/map/favorites/filters) is
-generated and verified working, and the daily GitHub Actions workflow has
+generated and verified working, and the GitHub Actions workflow has
 been run successfully end-to-end.
 
 Possible next steps: marker clustering on the map (currently renders one

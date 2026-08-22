@@ -4,7 +4,7 @@ docs/aerial/<slug>.jpg.
 
 Images are fetched once and reused indefinitely -- a strip's location
 doesn't change, so there's no reason to re-download ~10,000 images on
-every daily run. Only new slugs (new strips) trigger a fetch; existing
+every run. Only new slugs (new strips) trigger a fetch; existing
 files are left alone. Delete a file manually to force a re-fetch.
 """
 

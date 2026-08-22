@@ -1,9 +1,9 @@
-name: Daily strip data refresh
+name: Monthly strip data refresh
 
 on:
   schedule:
-    # 14:00 UTC daily ≈ 10:00 AM ET (9 AM EST / 10 AM EDT)
-    - cron: '0 14 * * *'
+    # 14:00 UTC on the 1st of each month ≈ 10:00 AM ET (9 AM EST / 10 AM EDT)
+    - cron: '0 14 1 * *'
   workflow_dispatch: {}  # allow manual triggering from the Actions tab
 
 jobs:
@@ -33,6 +33,6 @@ jobs:
           if git diff --staged --quiet; then
             echo "No changes to commit."
           else
-            git commit -m "Daily update: $(date -u +%Y-%m-%d)"
+            git commit -m "Monthly update: $(date -u +%Y-%m-%d)"
             git push
           fi
