@@ -112,16 +112,13 @@ def merge(*record_lists):
 
 
 if __name__ == "__main__":
-    import import_faa
-    from scrapers import idaho, montana, shortfield, ubcp
+    from fetch_all import fetch_all
 
-    merged = merge(
-        import_faa.fetch(),
-        idaho.fetch(),
-        montana.fetch(),
-        ubcp.fetch(),
-        shortfield.fetch(),
-    )
+    record_lists, stale_sources = fetch_all()
+    if stale_sources:
+        print(f"Using cached data for: {', '.join(stale_sources)}")
+
+    merged = merge(*record_lists)
     print(f"{len(merged)} merged strip records")
 
     multi_source = [r for r in merged if len(r["sources"]) > 1]

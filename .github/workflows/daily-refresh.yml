@@ -1,0 +1,38 @@
+name: Daily strip data refresh
+
+on:
+  schedule:
+    # 14:00 UTC daily ≈ 10:00 AM ET (9 AM EST / 10 AM EDT)
+    - cron: '0 14 * * *'
+  workflow_dispatch: {}  # allow manual triggering from the Actions tab
+
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install Python dependencies
+        run: pip install -r requirements.txt
+
+      - name: Regenerate site
+        run: python generate_html.py
+
+      - name: Commit and push if there are changes
+        run: |
+          git config user.name  "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add docs/
+          if git diff --staged --quiet; then
+            echo "No changes to commit."
+          else
+            git commit -m "Daily update: $(date -u +%Y-%m-%d)"
+            git push
+          fi

@@ -7,9 +7,8 @@ import html
 from datetime import date
 from pathlib import Path
 
-import import_faa
 import merge
-from scrapers import idaho, montana, shortfield, ubcp
+from fetch_all import fetch_all
 
 PROJECT_ROOT = Path(__file__).resolve().parent
 DOCS_DIR = PROJECT_ROOT / "docs"
@@ -158,13 +157,10 @@ def _build_cards(strips):
 
 
 def render():
-    strips = merge.merge(
-        import_faa.fetch(),
-        idaho.fetch(),
-        montana.fetch(),
-        ubcp.fetch(),
-        shortfield.fetch(),
-    )
+    record_lists, stale_sources = fetch_all()
+    if stale_sources:
+        print(f"Using cached data for: {', '.join(stale_sources)}")
+    strips = merge.merge(*record_lists)
     strips.sort(key=lambda s: s.get("name") or "")
 
     cards_html, states, surfaces = _build_cards(strips)
