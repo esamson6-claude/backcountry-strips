@@ -32,6 +32,11 @@ BROWSER_HEADERS = {
 # as a hyphen-separated component (e.g. "TURF-GRVL", "ASPH-TURF").
 UNPAVED_SURFACE_MARKERS = {"TURF", "DIRT", "GRVL", "GRAVEL", "SAND", "SOD"}
 
+# APT_BASE.SITE_TYPE_CODE facility types to exclude entirely: heliports and
+# balloonports aren't backcountry airstrips regardless of surface. (Other
+# codes: A=airport, C=seaplane base, U=ultralight, G=gliderport -- kept.)
+EXCLUDED_SITE_TYPES = {"H", "B"}
+
 
 def _current_cycle_csv_url():
     """Find the current NASR cycle's APT CSV zip download URL."""
@@ -85,6 +90,8 @@ def fetch():
 
         base = base_by_site.get(rwy["SITE_NO"])
         if base is None:
+            continue
+        if (base.get("SITE_TYPE_CODE") or "").upper() in EXCLUDED_SITE_TYPES:
             continue
 
         record = blank_record()

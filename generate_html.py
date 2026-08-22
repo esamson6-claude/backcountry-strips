@@ -11,7 +11,7 @@ from pathlib import Path
 
 import merge
 from aerial import ensure_aerial_images
-from exclude import remove_out_of_scope, remove_permission_required
+from exclude import remove_helipads_and_balloonports, remove_out_of_scope, remove_permission_required
 from fetch_all import fetch_all
 
 PROJECT_ROOT = Path(__file__).resolve().parent
@@ -396,6 +396,9 @@ def render():
     strips, excluded = remove_permission_required(strips)
     if excluded:
         print(f"Excluded {len(excluded)} strips flagged permission-required/no-trespassing")
+    strips, heli_balloon = remove_helipads_and_balloonports(strips)
+    if heli_balloon:
+        print(f"Excluded {len(heli_balloon)} heliports/balloonports")
     strips.sort(key=lambda s: s.get("name") or "")
 
     strips_by_slug = {_slug_for(s): s for s in strips}
@@ -1017,32 +1020,34 @@ def render():
   viewFav.addEventListener('click', () => setView('favorites'));
   viewMap.addEventListener('click', () => setView('map'));
 
-  // Restore filter/chip state from the URL (set by syncFiltersToUrl on a
-  // previous visit) before the first apply(), so a reload or Back
-  // navigation lands on the same filtered view instead of resetting to
-  // "All". The saved view (grid/map/favorites) is applied after, unless a
-  // more specific sectional/maplink deep link below overrides it.
-  const savedView = restoreFiltersFromUrl();
-  if (savedView === 'map') {{
-    setView('map');
-  }} else if (savedView === 'favorites') {{
-    setView('favorites');
-  }} else {{
-    apply();
-  }}
-
-  // Deep links from a detail page's map buttons: ?sectional=lat,lng jumps to
-  // Map view on the sectional layer; ?maplink=lat,lng jumps to Map view on
-  // the street layer. Both zoom in and drop a focus pin on the strip.
+  // Deep links from a detail page's map buttons take priority over restored
+  // filter state: ?sectional=lat,lng / ?maplink=lat,lng jump straight to Map
+  // view, zoomed/pinned on that one strip. Read these BEFORE anything calls
+  // apply() -- apply() triggers syncFiltersToUrl(), which only knows about
+  // filter/view params and would otherwise silently strip sectional/maplink
+  // off the URL (via replaceState) before this code got a chance to read it.
   const params = new URLSearchParams(location.search);
   const sectionalParam = params.get('sectional');
   const mapLinkParam = params.get('maplink');
+
+  // Restore filter/chip state from the URL (set by syncFiltersToUrl on a
+  // previous visit) before the first apply(), so a reload or Back
+  // navigation lands on the same filtered view instead of resetting to
+  // "All".
+  const savedView = restoreFiltersFromUrl();
+
   if (sectionalParam) {{
     const [lat, lng] = sectionalParam.split(',').map(Number);
     if (Number.isFinite(lat) && Number.isFinite(lng)) showOnSectional(lat, lng);
   }} else if (mapLinkParam) {{
     const [lat, lng] = mapLinkParam.split(',').map(Number);
     if (Number.isFinite(lat) && Number.isFinite(lng)) showOnStreetMap(lat, lng);
+  }} else if (savedView === 'map') {{
+    setView('map');
+  }} else if (savedView === 'favorites') {{
+    setView('favorites');
+  }} else {{
+    apply();
   }}
 </script>
 </body>

@@ -93,3 +93,29 @@ def remove_out_of_scope(strips):
     for strip in strips:
         (kept if _in_scope(strip) else excluded).append(strip)
     return kept, excluded
+
+
+# FAA and OurAirports both filter heliports/balloonports at import time
+# using their own authoritative facility-type fields (SITE_TYPE_CODE and
+# `type` respectively) -- see import_faa.py / import_canada.py. This is a
+# belt-and-suspenders pass for sources without such a field (UBCP,
+# Shortfield, state GIS layers), using signals that survive into the merged
+# record: FAA's "H1"/"H2"-style runway numbering for helipads, or the name
+# itself explicitly saying so.
+_HELIPAD_ORIENTATION = re.compile(r"^H\d*$", re.IGNORECASE)
+_HELI_BALLOON_NAME = re.compile(r"\b(heliport|helipad|helistop|balloonport)\b", re.IGNORECASE)
+
+
+def _is_helipad_or_balloonport(strip):
+    if _HELIPAD_ORIENTATION.match((strip.get("runway_orientation") or "").strip()):
+        return True
+    return bool(_HELI_BALLOON_NAME.search(strip.get("name") or ""))
+
+
+def remove_helipads_and_balloonports(strips):
+    """Return (kept, excluded) -- heliports/helipads/balloonports aren't
+    backcountry airstrips regardless of surface."""
+    kept, excluded = [], []
+    for strip in strips:
+        (excluded if _is_helipad_or_balloonport(strip) else kept).append(strip)
+    return kept, excluded

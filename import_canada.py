@@ -37,6 +37,11 @@ def _is_unpaved(surface):
     return any(p.strip() in UNPAVED_SURFACE_MARKERS for p in parts)
 
 
+# OurAirports' `type` field distinguishes facility kind directly -- heliports
+# and balloonports aren't backcountry airstrips regardless of surface.
+EXCLUDED_AIRPORT_TYPES = {"heliport", "balloonport"}
+
+
 def fetch():
     airports_resp = requests.get(AIRPORTS_URL, timeout=60)
     airports_resp.raise_for_status()
@@ -56,6 +61,8 @@ def fetch():
         if airport is None:
             continue
         if not _is_unpaved(rwy.get("surface")):
+            continue
+        if (airport.get("type") or "").lower() in EXCLUDED_AIRPORT_TYPES:
             continue
 
         record = blank_record()
