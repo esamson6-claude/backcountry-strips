@@ -703,10 +703,32 @@ def render():
   function initMap() {{
     if (map) return;
     map = L.map('map', {{ scrollWheelZoom: true }}).setView([39.8, -98.5], 4);
-    L.tileLayer('https://{{s}}.tile.openstreetmap.org/{{z}}/{{x}}/{{y}}.png', {{
+
+    const streetLayer = L.tileLayer('https://{{s}}.tile.openstreetmap.org/{{z}}/{{x}}/{{y}}.png', {{
       attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',
       maxZoom: 18,
-    }}).addTo(map);
+    }});
+    // FAA's official VFR sectional tile cache only renders zoom 8-12; Leaflet
+    // clamps requests to that range automatically via minZoom/maxZoom, but
+    // panning/zooming past it needs a fallback layer, so this is offered as
+    // an alternate base layer rather than the default.
+    const sectionalLayer = L.tileLayer(
+      'https://tiles.arcgis.com/tiles/ssFJjBXIUyZDrSYZ/arcgis/rest/services/VFR_Sectional/MapServer/tile/{{z}}/{{y}}/{{x}}',
+      {{
+        attribution: 'FAA Aeronautical Information Services (VFR Sectional)',
+        minZoom: 5,
+        maxZoom: 12,
+        maxNativeZoom: 12,
+      }}
+    );
+
+    streetLayer.addTo(map);
+    L.control.layers(
+      {{ 'Street map': streetLayer, 'VFR sectional': sectionalLayer }},
+      null,
+      {{ position: 'topright' }}
+    ).addTo(map);
+
     markerLayer = L.markerClusterGroup({{ maxClusterRadius: 50 }}).addTo(map);
   }}
   function renderMarkers() {{
