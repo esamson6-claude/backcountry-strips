@@ -47,7 +47,7 @@
 </head>
 <body>
 <header>
-  <a class="back" href="../">← All strips</a>
+  <a class="back" href="../" id="back-link">← Back</a>
 </header>
 <main>
   <h1>REDS WALLOWA HORSE RANCH, OR</h1>
@@ -58,7 +58,7 @@
     <a class="cta" href="https://www.shortfield.com/listing/reds-wallowa-horse-ranch-or/" target="_blank" rel="noopener">
       View original source (Shortfield) →
     </a>
-    <a class="cta cta-secondary" href="../?sectional=45.344834,-117.626916">View on VFR sectional →</a>
+    <a class="cta cta-secondary" href="../?sectional=45.344834,-117.626916">View on VFR sectional →</a> <a class="cta cta-secondary" href="../?maplink=45.344834,-117.626916">View on map →</a>
   </div>
   <table class="specs"><tr><th>Identifier</th><td>6OR9</td></tr><tr><th>State</th><td>OR</td></tr><tr><th>Elevation</th><td>3,600 ft</td></tr><tr><th>CTAF</th><td>122.9</td></tr><tr><th>Coordinates</th><td>45.344834, -117.626916</td></tr></table>
   <div class="description"><h2>Notes</h2><div class="description-text">[shortfield] The runway sits along the Minam River in Oregon&#x27;s Eagle Cap Wilderness — a beautiful stretch of water, clear, swift, and cold, with secluded swimming holes waiting to be discovered. Ponderosa pine, Engelmann spruce, and Grand fir surround the strip, and quiet evenings are sometimes rewarded by the silent emergence of deer or elk from the forest fringe, making their way to the meadow to feed. The best camping is at the south end, near the runway threshold. On the east side, a fine spot under the trees offers welcome shade nearly all day, with an outhouse conveniently close. Directly across the runway, a culvert allows taxiing across the ditch to the west side of the meadow for those who prefer open sun throughout the day. Once privately operated for decades, the area now belongs to the USFS, with volunteer caretakers rotating through on roughly one-week stays. A visit to the main Minam Lodge building is well worth the short walk down. Caution : The Minam Lodge runway is directly north. There is a deep, unmarked ditch running the full length of the west side of the runway, completely hidden in the grass. Afternoon winds can be fierce in the heat of the day, making early morning or late afternoon/evening the preferred windows for landings and takeoffs. Though touted as a one-way strip — with the majority of landings upriver and departures downriver — when winds blow hard out of the north, skilled backcountry pilots can execute landings over the trees from the south.</div></div>
@@ -66,5 +66,18 @@
     Aggregated from Shortfield. <p class="attribution">Data courtesy of Shortfield.com</p>
   </footer>
 </main>
+<script>
+  // Prefer returning to whatever page/state the user actually came from
+  // (search results, a filtered view, a specific map position) over always
+  // landing on the plain unfiltered grid -- but only when we got here via
+  // in-site navigation (history.length > 1 alone isn't reliable: a page
+  // opened in a new tab or reloaded directly still has history entries).
+  document.getElementById('back-link').addEventListener('click', (e) => {
+    if (document.referrer && new URL(document.referrer).origin === location.origin) {
+      e.preventDefault();
+      history.back();
+    }
+  });
+</script>
 </body>
 </html>

@@ -47,7 +47,7 @@
 </head>
 <body>
 <header>
-  <a class="back" href="../">← All strips</a>
+  <a class="back" href="../" id="back-link">← Back</a>
 </header>
 <main>
   <h1>GRAHAM USFS</h1>
@@ -58,7 +58,7 @@
     <a class="cta" href="https://www.shortfield.com/listing/graham-usfs-id/" target="_blank" rel="noopener">
       View original source (FAA + Idaho ITD + Shortfield) →
     </a>
-    <a class="cta cta-secondary" href="../?sectional=43.95517833,-115.27259111">View on VFR sectional →</a>
+    <a class="cta cta-secondary" href="../?sectional=43.95517833,-115.27259111">View on VFR sectional →</a> <a class="cta cta-secondary" href="../?maplink=43.95517833,-115.27259111">View on map →</a>
   </div>
   <table class="specs"><tr><th>Identifier</th><td>U45</td></tr><tr><th>State</th><td>ID</td></tr><tr><th>Runway length</th><td>2,900 ft</td></tr><tr><th>Runway width</th><td>50 ft</td></tr><tr><th>Surface</th><td>TURF</td></tr><tr><th>Runway</th><td>18/36</td></tr><tr><th>Elevation</th><td>5,726 ft</td></tr><tr><th>Ownership</th><td>public</td></tr><tr><th>CTAF</th><td>122.9</td></tr><tr><th>Coordinates</th><td>43.95517833, -115.27259111</td></tr></table>
   <div class="description"><h2>Notes</h2><div class="description-text">[idaho_itd] USFS Airfield [shortfield] Graham sits on the edge of the Sawtooth Wilderness area, alongside the North Fork of the Boise River, deep within the Boise National Forest. It lies roughly 53 miles northeast of Idaho City and about 90 miles from Boise, accessible via Idaho Highway 21 and a series of Forest Service roads. The surrounding terrain is quintessential central Idaho backcountry — steep canyon walls, high-elevation ridges, and river bottom meadows. Several trails within a couple of miles of the strip offer opportunities for hiking, horseback riding, and fishing along Johnson Creek and the North Fork. Camping Located on the river, are three campsites with fire pits, tables, and pit toilets. Also, the Graham Bridge Campground is located upstream one half mile, and the Johnson Creek Campground (not the runway) is located downstream one mile. Operations &amp; Warnings The airstrip is generally clear of snow from late May through early October, and pilots should use appropriate backcountry landing precautions throughout that window. The northern third of the strip has seen significant erosion — pilots have noted large rocks in the center and heavy wear at the very north end caused by aircraft applying full power from a standing start. Nose-wheel aircraft should exercise particular caution on the upper end of the runway. There are no fuel services, and help is a long way off, so come well-prepared. Bears are occasionally spotted in the area, and visitors should be aware of the general risk of hantavirus exposure common to remote backcountry cabins. History Graham was the site of an 1880s boom town, and the Forest Service Guard Station nearby is a remnant of that era. The massive Rabbit Creek Fire of 1994 swept through the area, destroying nearly everything in its path — including what remained of the historic Graham mining town on the west side of the river, the old mill, cabins, and tram towers. Remarkably, the Graham Guard Station cabin survived. Vegetation has been slowly returning to the area in the decades since, gradually restoring some of the lush character the valley once held before the fire.</div></div>
@@ -66,5 +66,18 @@
     Aggregated from FAA + Idaho ITD + Shortfield. <p class="attribution">Data courtesy of Shortfield.com</p>
   </footer>
 </main>
+<script>
+  // Prefer returning to whatever page/state the user actually came from
+  // (search results, a filtered view, a specific map position) over always
+  // landing on the plain unfiltered grid -- but only when we got here via
+  // in-site navigation (history.length > 1 alone isn't reliable: a page
+  // opened in a new tab or reloaded directly still has history entries).
+  document.getElementById('back-link').addEventListener('click', (e) => {
+    if (document.referrer && new URL(document.referrer).origin === location.origin) {
+      e.preventDefault();
+      history.back();
+    }
+  });
+</script>
 </body>
 </html>

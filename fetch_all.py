@@ -11,6 +11,7 @@ import json
 import traceback
 from pathlib import Path
 
+import import_canada
 import import_faa
 from scrapers import idaho, montana, shortfield, ubcp
 
@@ -22,6 +23,7 @@ SOURCES = [
     ("montana_mdt", montana.fetch),
     ("ubcp", ubcp.fetch),
     ("shortfield", shortfield.fetch),
+    ("ourairports_ca", import_canada.fetch),
 ]
 
 

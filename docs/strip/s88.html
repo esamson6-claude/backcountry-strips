@@ -47,7 +47,7 @@
 </head>
 <body>
 <header>
-  <a class="back" href="../">← All strips</a>
+  <a class="back" href="../" id="back-link">← Back</a>
 </header>
 <main>
   <h1>SKYKOMISH STATE</h1>
@@ -58,7 +58,7 @@
     <a class="cta" href="https://www.shortfield.com/listing/skykomish-state-wa/" target="_blank" rel="noopener">
       View original source (FAA + Shortfield) →
     </a>
-    <a class="cta cta-secondary" href="../?sectional=47.71093555,-121.33905638">View on VFR sectional →</a>
+    <a class="cta cta-secondary" href="../?sectional=47.71093555,-121.33905638">View on VFR sectional →</a> <a class="cta cta-secondary" href="../?maplink=47.71093555,-121.33905638">View on map →</a>
   </div>
   <table class="specs"><tr><th>Identifier</th><td>S88</td></tr><tr><th>State</th><td>WA</td></tr><tr><th>Runway length</th><td>2,050 ft</td></tr><tr><th>Runway width</th><td>100 ft</td></tr><tr><th>Surface</th><td>TURF</td></tr><tr><th>Runway</th><td>06/24</td></tr><tr><th>Elevation</th><td>1,002 ft</td></tr><tr><th>Ownership</th><td>public</td></tr><tr><th>CTAF</th><td>122.9</td></tr><tr><th>Coordinates</th><td>47.71093555, -121.33905638</td></tr></table>
   <div class="description"><h2>Notes</h2><div class="description-text">[shortfield] Location Overview S88 sits about one mile east of the town of Skykomish, Washington, covering 35 acres with a single runway (06/24) measuring 2,050 feet long and 100 feet wide. The airport sits at approximately 1,002 feet MSL, with mountains surrounding the field on all sides. The town itself is tucked into the Mount Baker-Snoqualmie National Forest, about 49 miles east of Everett, along the South Fork of the Skykomish River. Camping &amp; Recreation The airport offers primitive camping with space for up to 6 tents, 2 fire rings, and an outhouse — though there is no water on site. Picnic tables are available, and the town is just a one-mile walk away for food and lodging. The surrounding area is an outdoor recreation hub: thousands of rafters and kayakers enjoy the Skykomish River, one of the finest whitewater rivers in the country, and Stevens Pass Mountain Resort offers world-class skiing in winter and a downhill mountain bike park in summer. Hiking into the Alpine Lakes Wilderness is also easily accessible from town. Notes &amp; Warnings The turf runway is slightly rough with a gentle uphill slope to the east. It retains water well due to high spring groundwater levels, making it soft when wet with potential potholes. Glider operations and forest firefighting helicopter activity are common in summer — always check NOTAMs and TFRs before arrival. The airport is seasonally closed from October 1 to June 1 due to winter snowpack and lack of maintenance; check NOTAMs for the actual spring opening date, as it may differ from the published June 1 date. There are no instrument procedures at S88 — it is VFR only. History The airport sits beside one of Washington&#x27;s most storied mountain towns. Skykomish got its start in 1892 as &quot;Maloney&#x27;s Siding&quot; during the construction of the Great Northern Railway — after the line was completed in 1893 and a post office established, it became known as Skykomish. At its peak, eight passenger trains a day stopped here, and the town served as the western terminus for electric locomotive operations through the Cascade Tunnel. The airport itself was activated on October 1, 1949, likely to support the growing postwar interest in general aviation and provide access to this otherwise road-isolated community. Today the airport has been adopted by the Washington Pilots Association, Paine Field Chapter, and remains a beloved fly-in destination for Pacific Northwest pilots looking to explore the Cascades.</div></div>
@@ -66,5 +66,18 @@
     Aggregated from FAA + Shortfield. <p class="attribution">Data courtesy of Shortfield.com</p>
   </footer>
 </main>
+<script>
+  // Prefer returning to whatever page/state the user actually came from
+  // (search results, a filtered view, a specific map position) over always
+  // landing on the plain unfiltered grid -- but only when we got here via
+  // in-site navigation (history.length > 1 alone isn't reliable: a page
+  // opened in a new tab or reloaded directly still has history entries).
+  document.getElementById('back-link').addEventListener('click', (e) => {
+    if (document.referrer && new URL(document.referrer).origin === location.origin) {
+      e.preventDefault();
+      history.back();
+    }
+  });
+</script>
 </body>
 </html>

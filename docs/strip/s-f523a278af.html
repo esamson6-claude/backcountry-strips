@@ -47,7 +47,7 @@
 </head>
 <body>
 <header>
-  <a class="back" href="../">← All strips</a>
+  <a class="back" href="../" id="back-link">← Back</a>
 </header>
 <main>
   <h1>AGNESS, OR</h1>
@@ -58,7 +58,7 @@
     <a class="cta" href="https://www.shortfield.com/listing/agness-or/" target="_blank" rel="noopener">
       View original source (Shortfield) →
     </a>
-    <a class="cta cta-secondary" href="../?sectional=42.554772,-124.06605">View on VFR sectional →</a>
+    <a class="cta cta-secondary" href="../?sectional=42.554772,-124.06605">View on VFR sectional →</a> <a class="cta cta-secondary" href="../?maplink=42.554772,-124.06605">View on map →</a>
   </div>
   <table class="specs"><tr><th>State</th><td>OR</td></tr><tr><th>Elevation</th><td>250 ft</td></tr><tr><th>CTAF</th><td>122.9</td></tr><tr><th>Coordinates</th><td>42.554772, -124.06605</td></tr></table>
   <div class="description"><h2>Notes</h2><div class="description-text">[shortfield] The strip is designated as emergency and private and is marked as closed (X on the end of the runway), however after a friend told me about it, I landed my Cessna 172 here and had lunch and nothing was said, and same for my buddy who came in stayed the night. -Correction: Sounds like they did tell my friend that he wasn&#x27;t supposed to land there unless it was an emergency, but it seems like one of thos: &quot;As long as you know it&#x27;s emergency only and it&#x27;s at your own risk,&quot; kind of deals. I&#x27;m always one for bending rules.</div></div>
@@ -66,5 +66,18 @@
     Aggregated from Shortfield. <p class="attribution">Data courtesy of Shortfield.com</p>
   </footer>
 </main>
+<script>
+  // Prefer returning to whatever page/state the user actually came from
+  // (search results, a filtered view, a specific map position) over always
+  // landing on the plain unfiltered grid -- but only when we got here via
+  // in-site navigation (history.length > 1 alone isn't reliable: a page
+  // opened in a new tab or reloaded directly still has history entries).
+  document.getElementById('back-link').addEventListener('click', (e) => {
+    if (document.referrer && new URL(document.referrer).origin === location.origin) {
+      e.preventDefault();
+      history.back();
+    }
+  });
+</script>
 </body>
 </html>

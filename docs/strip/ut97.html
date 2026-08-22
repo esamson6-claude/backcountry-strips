@@ -47,7 +47,7 @@
 </head>
 <body>
 <header>
-  <a class="back" href="../">← All strips</a>
+  <a class="back" href="../" id="back-link">← Back</a>
 </header>
 <main>
   <h1>HAPPY CANYON</h1>
@@ -58,7 +58,7 @@
     <a class="cta" href="https://utahbackcountrypilots.org/airstrips/HAPPYCANYON" target="_blank" rel="noopener">
       View original source (FAA + UBCP) →
     </a>
-    <a class="cta cta-secondary" href="../?sectional=38.15722222,-110.29222222">View on VFR sectional →</a>
+    <a class="cta cta-secondary" href="../?sectional=38.15722222,-110.29222222">View on VFR sectional →</a> <a class="cta cta-secondary" href="../?maplink=38.15722222,-110.29222222">View on map →</a>
   </div>
   <table class="specs"><tr><th>Identifier</th><td>UT97</td></tr><tr><th>State</th><td>UT</td></tr><tr><th>Runway length</th><td>2,065 ft</td></tr><tr><th>Runway width</th><td>50 ft</td></tr><tr><th>Surface</th><td>DIRT</td></tr><tr><th>Runway</th><td>09/27</td></tr><tr><th>Elevation</th><td>4,934 ft</td></tr><tr><th>Ownership</th><td>public</td></tr><tr><th>CTAF</th><td>122.9</td></tr><tr><th>Coordinates</th><td>38.15722222, -110.29222222</td></tr></table>
   <div class="description"><h2>Notes</h2><div class="description-text">[ubcp] Description : Strongly suggest obtaining local knowledge prior to landing for the first time. Landing strip currently leased to Utah Back Country Pilots for non-commercial use only. UBCP requests no man-made artifacts (drill bits, tools, etc.) be removed, and that visitors avoid the shacks as to not damage them. Emergency water and runway grading tools in shack. Runways : RWY 9 is uphill 1.38% and has displaced threshold due to overgrown brush. East end 50 feet higher. Touch down point may be difficult to determine by the first time visitor. Threshold markers should be present. Additional runway 18/36 : 845 feet long x 50 feet wide, very soft dirt. Slightly uphill to the north. Approach Considerations : Unfamiliar pilots should positively identify the touchdown zone as the runway appears to be longer than it is. Recommend land east, depart west. Amenities : Parking areas are at east end and very soft. Windsock : Wind sock west of miner&#x27;s shack.</div></div>
@@ -66,5 +66,18 @@
     Aggregated from FAA + UBCP. <p class="attribution">Data courtesy of the Utah Back Country Pilots Association (utahbackcountrypilots.org)</p>
   </footer>
 </main>
+<script>
+  // Prefer returning to whatever page/state the user actually came from
+  // (search results, a filtered view, a specific map position) over always
+  // landing on the plain unfiltered grid -- but only when we got here via
+  // in-site navigation (history.length > 1 alone isn't reliable: a page
+  // opened in a new tab or reloaded directly still has history entries).
+  document.getElementById('back-link').addEventListener('click', (e) => {
+    if (document.referrer && new URL(document.referrer).origin === location.origin) {
+      e.preventDefault();
+      history.back();
+    }
+  });
+</script>
 </body>
 </html>

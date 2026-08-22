@@ -47,7 +47,7 @@
 </head>
 <body>
 <header>
-  <a class="back" href="../">← All strips</a>
+  <a class="back" href="../" id="back-link">← Back</a>
 </header>
 <main>
   <h1>Calvert Peak, OR</h1>
@@ -58,7 +58,7 @@
     <a class="cta" href="https://www.shortfield.com/listing/calvert-peak-or/" target="_blank" rel="noopener">
       View original source (Shortfield) →
     </a>
-    <a class="cta cta-secondary" href="../?sectional=42.778765,-123.734557">View on VFR sectional →</a>
+    <a class="cta cta-secondary" href="../?sectional=42.778765,-123.734557">View on VFR sectional →</a> <a class="cta cta-secondary" href="../?maplink=42.778765,-123.734557">View on map →</a>
   </div>
   <table class="specs"><tr><th>Identifier</th><td>OR73</td></tr><tr><th>Elevation</th><td>3,808 ft</td></tr><tr><th>CTAF</th><td>122.9</td></tr><tr><th>Coordinates</th><td>42.778765, -123.734557</td></tr></table>
   <div class="description"><h2>Notes</h2><div class="description-text">[shortfield] Location Overview: Calvert Peak Airport (OR73) sits atop a mountain ridge about 14 miles west of Glendale, Oregon, in the Klamath Mountains region of the state&#x27;s southwest. At roughly 3,808 feet in elevation, the strip occupies a narrow, exposed perch with a single paved runway oriented northeast-southwest and only about 1,627 feet long—short, high, and surrounded by steep terrain on most sides. Camping &amp; Recreation: There are no developed camping facilities, lodging, or amenities at the airstrip itself, and no fuel is available on site. The surrounding area is remote national forest land in Oregon&#x27;s Coast Range/Klamath Mountains, offering opportunities for backcountry hiking and dispersed camping nearby, though visitors should be prepared for primitive, undeveloped conditions and should check current land-access status before planning a trip. Notes &amp; Warnings: This is a serious, high-risk airstrip not suited for casual or low-experience pilots. The short runway sits on a ridge top with a cliff drop-off at one end, and the field gained notoriety after a series of fatal accidents involving pilots who landed too long and went off the end of the runway. Historically the strip was restricted to emergency and fire-suppression use, limited to BLM aircraft and private use under VFR daylight-only conditions. The runway has since become overgrown with trees, likely rendering it unusable without significant clearing, and the airport is officially listed as closed, having been removed from FAA records. History: Calvert Peak Airport was activated around July 1969, originally built and maintained as a U.S. Forest Service (USFS) airstrip intended primarily for emergency response and wildfire suppression access in this rugged, remote part of Oregon. Its unusual paved mountaintop-ridge construction made it a distinctive backcountry strip, but the same terrain that made it useful for quick fire-crew access also made it treacherous, and multiple fatal accidents occurred over the years when pilots overshot the short runway and crashed off the cliff at its far end. These repeated tragedies, combined with the airstrip&#x27;s isolation and specialized use, eventually led to its closure—officially marked around 2026—after which the runway began reverting to wilderness, with vegetation reclaiming the pavement.</div></div>
@@ -66,5 +66,18 @@
     Aggregated from Shortfield. <p class="attribution">Data courtesy of Shortfield.com</p>
   </footer>
 </main>
+<script>
+  // Prefer returning to whatever page/state the user actually came from
+  // (search results, a filtered view, a specific map position) over always
+  // landing on the plain unfiltered grid -- but only when we got here via
+  // in-site navigation (history.length > 1 alone isn't reliable: a page
+  // opened in a new tab or reloaded directly still has history entries).
+  document.getElementById('back-link').addEventListener('click', (e) => {
+    if (document.referrer && new URL(document.referrer).origin === location.origin) {
+      e.preventDefault();
+      history.back();
+    }
+  });
+</script>
 </body>
 </html>

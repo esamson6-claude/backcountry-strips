@@ -47,7 +47,7 @@
 </head>
 <body>
 <header>
-  <a class="back" href="../">← All strips</a>
+  <a class="back" href="../" id="back-link">← Back</a>
 </header>
 <main>
   <h1>Angel Point</h1>
@@ -58,7 +58,7 @@
     <a class="cta" href="https://utahbackcountrypilots.org/airstrips/ANGELPOINT" target="_blank" rel="noopener">
       View original source (UBCP) →
     </a>
-    <a class="cta cta-secondary" href="../?sectional=38.3255,-110.4353">View on VFR sectional →</a>
+    <a class="cta cta-secondary" href="../?sectional=38.3255,-110.4353">View on VFR sectional →</a> <a class="cta cta-secondary" href="../?maplink=38.3255,-110.4353">View on map →</a>
   </div>
   <table class="specs"><tr><th>Identifier</th><td>ANGELPOINT</td></tr><tr><th>State</th><td>UT</td></tr><tr><th>Runway length</th><td>3,500 ft</td></tr><tr><th>Runway width</th><td>30 ft</td></tr><tr><th>Surface</th><td>Dirt</td></tr><tr><th>Runway</th><td>11/29</td></tr><tr><th>Elevation</th><td>5,287 ft</td></tr><tr><th>Ownership</th><td>sitla (nw) / blm (se)</td></tr><tr><th>CTAF</th><td>122.9</td></tr><tr><th>Coordinates</th><td>38.3255, -110.4353</td></tr></table>
   <div class="description"><h2>Notes</h2><div class="description-text">[ubcp] Description: Angel Point is a widened county road that&#x27;s hilly surface prevents you from being able to see one end from the other. Angel Point is one of the three back country airstrips included in the State&#x27;s &quot;FLY UTAH Passport Program&quot;. To learn more, head to their website . Rudimentary parking area at south end of north/south runway. Runway: 3500 ft long x 30 ft wide hard dirt runway with rolling hills along the length of the landing surface. Additional Runway: 1800 ft long x 30 ft wide running 03/21. Crosswind runway suitable for high performance STOL aircraft only. Approach Considerations: Due to its nature, recommend pilots be cautious of vehicle traffic. Typically land to the north, depart to the south. Strongly suggest that on arrival an inspection of the landing surface plus a view for any vehicle traffic approaching from the east as sloped runway can hide distant traffic travelling on landing surface. Amenities: No Windsock: Yes</div></div>
@@ -66,5 +66,18 @@
     Aggregated from UBCP. <p class="attribution">Data courtesy of the Utah Back Country Pilots Association (utahbackcountrypilots.org)</p>
   </footer>
 </main>
+<script>
+  // Prefer returning to whatever page/state the user actually came from
+  // (search results, a filtered view, a specific map position) over always
+  // landing on the plain unfiltered grid -- but only when we got here via
+  // in-site navigation (history.length > 1 alone isn't reliable: a page
+  // opened in a new tab or reloaded directly still has history entries).
+  document.getElementById('back-link').addEventListener('click', (e) => {
+    if (document.referrer && new URL(document.referrer).origin === location.origin) {
+      e.preventDefault();
+      history.back();
+    }
+  });
+</script>
 </body>
 </html>

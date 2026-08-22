@@ -47,7 +47,7 @@
 </head>
 <body>
 <header>
-  <a class="back" href="../">← All strips</a>
+  <a class="back" href="../" id="back-link">← Back</a>
 </header>
 <main>
   <h1>FISH LAKE USFS</h1>
@@ -58,7 +58,7 @@
     <a class="cta" href="https://www.shortfield.com/listing/fish-lake-usfs-id/" target="_blank" rel="noopener">
       View original source (FAA + Idaho ITD + Shortfield) →
     </a>
-    <a class="cta cta-secondary" href="../?sectional=46.33019527,-115.06317416">View on VFR sectional →</a>
+    <a class="cta cta-secondary" href="../?sectional=46.33019527,-115.06317416">View on VFR sectional →</a> <a class="cta cta-secondary" href="../?maplink=46.33019527,-115.06317416">View on map →</a>
   </div>
   <table class="specs"><tr><th>Identifier</th><td>S92</td></tr><tr><th>State</th><td>ID</td></tr><tr><th>Runway length</th><td>2,650 ft</td></tr><tr><th>Runway width</th><td>50 ft</td></tr><tr><th>Surface</th><td>TURF</td></tr><tr><th>Runway</th><td>05/23</td></tr><tr><th>Elevation</th><td>5,646 ft</td></tr><tr><th>Ownership</th><td>public</td></tr><tr><th>CTAF</th><td>122.9</td></tr><tr><th>Coordinates</th><td>46.33019527, -115.06317416</td></tr></table>
   <div class="description"><h2>Notes</h2><div class="description-text">[idaho_itd] USFS Airfield [shortfield] Located in Idaho&#x27;s Selway-Bitterroot Wilderness, the Fish Lake airstrip is nestled in a high elevation valley, providing access to fishing, hunting, and camping. The runway approach and departure is directly over the lake. Hazards: The grass surface tends to be soft due to runoff, so stay centered on the runway — boggy patches and standing water hide in the grass along the edges. Watch out for mud and holes while taxiing. There can be a significant downdraft over the lake when departing runway 4, even early in the morning. Special consideration should be given to density altitude, aircraft weight, and wind. The combination of a soft surface, prevailing tailwinds, high density altitude, and lake downdrafts has contributed to many fatal crashes. Camping: Campsites are located at the east end of the runway, near the lake. Hiking There are several nice day hikes out of Fish Lake. The trail heading northwest out of the airstrip from near the guard station goes up the mountain side for about 3 miles to a saddle in the mountains southwest of the airstrip. There are some good views of the airstrip and terrain to the northeast from the saddle (see photo). There is a trail intersection in the saddle. If you follow the trail to the extreme right (north) for about 3 miles, there are some great panoramic views of mountains and lakes (my favorite hike). If you follow the trail to the left (south) at the saddle intersection for about 3 miles, there are also some panoramic views of mountains and lakes. There is another trail coming off the airstrip from the camping area near mid-field that heads southeast across a meadow and then up the mountain side. It levels out in a high meadow at about 2 miles where there is a trail intersection that is hard to find. A pole in the meadow about 100&#x27; to the left of the tail marks where the intersecting trail generally goes (northeast), but is hard to see. If you can find the intersecting trail, it goes up to some good views about 1 mile further. The main trail heading northeast off the departure end of runway 4 skirts the north side of the lake and has a nice view of the runway looking across the lake from the lake&#x27;s lower end. This trail continues in a generally northeast direction through woods and old burn areas and skirts a meadow at about 2 miles and begins to follow a creek at about 3 miles.</div></div>
@@ -66,5 +66,18 @@
     Aggregated from FAA + Idaho ITD + Shortfield. <p class="attribution">Data courtesy of Shortfield.com</p>
   </footer>
 </main>
+<script>
+  // Prefer returning to whatever page/state the user actually came from
+  // (search results, a filtered view, a specific map position) over always
+  // landing on the plain unfiltered grid -- but only when we got here via
+  // in-site navigation (history.length > 1 alone isn't reliable: a page
+  // opened in a new tab or reloaded directly still has history entries).
+  document.getElementById('back-link').addEventListener('click', (e) => {
+    if (document.referrer && new URL(document.referrer).origin === location.origin) {
+      e.preventDefault();
+      history.back();
+    }
+  });
+</script>
 </body>
 </html>

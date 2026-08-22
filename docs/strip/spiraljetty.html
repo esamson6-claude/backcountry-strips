@@ -47,7 +47,7 @@
 </head>
 <body>
 <header>
-  <a class="back" href="../">← All strips</a>
+  <a class="back" href="../" id="back-link">← Back</a>
 </header>
 <main>
   <h1>Spiral Jetty</h1>
@@ -58,7 +58,7 @@
     <a class="cta" href="https://utahbackcountrypilots.org/airstrips/SPIRALJETTY" target="_blank" rel="noopener">
       View original source (UBCP) →
     </a>
-    <a class="cta cta-secondary" href="../?sectional=41.4585,-112.6888">View on VFR sectional →</a>
+    <a class="cta cta-secondary" href="../?sectional=41.4585,-112.6888">View on VFR sectional →</a> <a class="cta cta-secondary" href="../?maplink=41.4585,-112.6888">View on map →</a>
   </div>
   <table class="specs"><tr><th>Identifier</th><td>SPIRALJETTY</td></tr><tr><th>State</th><td>UT</td></tr><tr><th>Runway length</th><td>1,250 ft</td></tr><tr><th>Runway width</th><td>13 ft</td></tr><tr><th>Surface</th><td>Dirt</td></tr><tr><th>Runway</th><td>11/29</td></tr><tr><th>Elevation</th><td>4,256 ft</td></tr><tr><th>Ownership</th><td>state sovereign land / private</td></tr><tr><th>CTAF</th><td>122.9</td></tr><tr><th>Coordinates</th><td>41.4585, -112.6888</td></tr></table>
   <div class="description"><h2>Notes</h2><div class="description-text">[ubcp] Description: The Spiral Jetty airstrip appears more like a rutted two-track road that runs along the shoreline of the Great Salt Lake almost 2 miles north of the famous Spiral Jetty. The airstrip lies on State Sovereign Land to the west and Private Land to the east. Runway: 1250 ft long x 13 ft wide hard rutted two-track road with a slight slope towards the lake. Approach Considerations: Prefer approaching from the west, departing to the west. Out of courtesy to visitors of the Spiral Jetty suggest you keep your approaches and departures over the lake. Amenities: No Windsock: Yes! Just installed!</div></div>
@@ -66,5 +66,18 @@
     Aggregated from UBCP. <p class="attribution">Data courtesy of the Utah Back Country Pilots Association (utahbackcountrypilots.org)</p>
   </footer>
 </main>
+<script>
+  // Prefer returning to whatever page/state the user actually came from
+  // (search results, a filtered view, a specific map position) over always
+  // landing on the plain unfiltered grid -- but only when we got here via
+  // in-site navigation (history.length > 1 alone isn't reliable: a page
+  // opened in a new tab or reloaded directly still has history entries).
+  document.getElementById('back-link').addEventListener('click', (e) => {
+    if (document.referrer && new URL(document.referrer).origin === location.origin) {
+      e.preventDefault();
+      history.back();
+    }
+  });
+</script>
 </body>
 </html>

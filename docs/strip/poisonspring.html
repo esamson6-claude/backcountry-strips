@@ -47,7 +47,7 @@
 </head>
 <body>
 <header>
-  <a class="back" href="../">← All strips</a>
+  <a class="back" href="../" id="back-link">← Back</a>
 </header>
 <main>
   <h1>Poison Spring</h1>
@@ -58,7 +58,7 @@
     <a class="cta" href="https://utahbackcountrypilots.org/airstrips/POISONSPRING" target="_blank" rel="noopener">
       View original source (UBCP) →
     </a>
-    <a class="cta cta-secondary" href="../?sectional=38.0978,-110.3869">View on VFR sectional →</a>
+    <a class="cta cta-secondary" href="../?sectional=38.0978,-110.3869">View on VFR sectional →</a> <a class="cta cta-secondary" href="../?maplink=38.0978,-110.3869">View on map →</a>
   </div>
   <table class="specs"><tr><th>Identifier</th><td>POISONSPRING</td></tr><tr><th>State</th><td>UT</td></tr><tr><th>Runway length</th><td>819 ft</td></tr><tr><th>Runway width</th><td>20 ft</td></tr><tr><th>Surface</th><td>Dirt/Rock</td></tr><tr><th>Runway</th><td>11/29</td></tr><tr><th>Elevation</th><td>4,721 ft</td></tr><tr><th>Ownership</th><td>blm</td></tr><tr><th>CTAF</th><td>122.9</td></tr><tr><th>Coordinates</th><td>38.0978, -110.3869</td></tr></table>
   <div class="description"><h2>Notes</h2><div class="description-text">[ubcp] Description: An extremely hazardous airstrip perched on a cliff ledge above the Dirty Devil River. This airstrip should be only attempted by a skilled pilot with a bush-type aircraft in optimal conditions. The wind normally favors blowing towards the cliff face which is great for landing but a serious problem for takeoff. Few places can offer a view like Poison Springs which makes it such a rewarding place to visit. Runway: Covered in shrubs and rock, this is a rough runway requiring high float tires. A large hill at the north end favors a downhill takeoff towards the cliff; however, the prevailing winds favor this direction and will prohibit a takeoff. Another hump greets you right at the bottom of the hill, so starting downhill and easing into the takeoff roll will help prevent a hard hit at the bottom. You must accomplish an immediate right turn after liftoff to clear the cliff face at the end of the runway. This turn will also remove the aircraft from ground affect as the terrain rapidly drops off flying away from the cliff face. I am unsure if a takeoff can be completed towards the hill as it rises probably more than most aircraft climb performance. Landing requires being able to control your aircraft at landing speeds comfortably in a bank near terrain and complete a precision landing. I normally land after the first hump which lies nearly at the threshold and then roll-out up the hill. You will not be able to see the runway above the hill and caution should be used as large bushes and rocks are located just off the runway. Approach Considerations: Multiple landing surveys and threat assessments should be made before landing. Be careful becoming fixated on the south end of the airstrip flying low and forgetting about the hill rapidly approaching. An early go around should be accomplished, a late go around will be nearly impossible. Find each hump and land according, planing a go around for any unfavorable condition such as wind, bounces, high or fast approach, etc. Parking: Not many places to park here as most of the area is covered in large shrub brush. Turning will probably have to be done manually as no turn around exists. No cell coverage. Camping could be done here, but any un-forecasted weather would leave you unable to take-off.</div></div>
@@ -66,5 +66,18 @@
     Aggregated from UBCP. <p class="attribution">Data courtesy of the Utah Back Country Pilots Association (utahbackcountrypilots.org)</p>
   </footer>
 </main>
+<script>
+  // Prefer returning to whatever page/state the user actually came from
+  // (search results, a filtered view, a specific map position) over always
+  // landing on the plain unfiltered grid -- but only when we got here via
+  // in-site navigation (history.length > 1 alone isn't reliable: a page
+  // opened in a new tab or reloaded directly still has history entries).
+  document.getElementById('back-link').addEventListener('click', (e) => {
+    if (document.referrer && new URL(document.referrer).origin === location.origin) {
+      e.preventDefault();
+      history.back();
+    }
+  });
+</script>
 </body>
 </html>

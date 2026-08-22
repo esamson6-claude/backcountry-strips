@@ -47,7 +47,7 @@
 </head>
 <body>
 <header>
-  <a class="back" href="../">← All strips</a>
+  <a class="back" href="../" id="back-link">← Back</a>
 </header>
 <main>
   <h1>Temple Mountain</h1>
@@ -58,7 +58,7 @@
     <a class="cta" href="https://utahbackcountrypilots.org/airstrips/TEMPLEMOUNTAIN" target="_blank" rel="noopener">
       View original source (UBCP) →
     </a>
-    <a class="cta cta-secondary" href="../?sectional=38.6485,-110.6578">View on VFR sectional →</a>
+    <a class="cta cta-secondary" href="../?sectional=38.6485,-110.6578">View on VFR sectional →</a> <a class="cta cta-secondary" href="../?maplink=38.6485,-110.6578">View on map →</a>
   </div>
   <table class="specs"><tr><th>Identifier</th><td>TEMPLEMOUNTAIN</td></tr><tr><th>State</th><td>UT</td></tr><tr><th>Runway length</th><td>3,500 ft</td></tr><tr><th>Runway width</th><td>30 ft</td></tr><tr><th>Surface</th><td>Dirt, brush</td></tr><tr><th>Runway</th><td>18/36</td></tr><tr><th>Elevation</th><td>5,295 ft</td></tr><tr><th>Ownership</th><td>goblin valley state park</td></tr><tr><th>CTAF</th><td>122.9</td></tr><tr><th>Coordinates</th><td>38.6485, -110.6578</td></tr></table>
   <div class="description"><h2>Notes</h2><div class="description-text">[ubcp] Temple Mountain NOTE: The Temple Mountain Airstrip is now located on State Parks land, specifically an extension of the Goblin Valley State Park. State Parks has allowed us to continue to use the airstrip while the UBCP, State Aeronautics, and State Parks work together on developing a plan for continued access of the airstrip. Please be courteous to any Park Officials that may ask you a few questions when operating in and out of Temple Mountain. And as always, thanks for your exemplary stewardship while we work for establishing the first official airstrip within State Parks land. Description: Temple Mountain is a north/south oriented with sporadic clump grass, small bushes and ant hills. The surface is typical Utah desert, slightly soft with some give that can add to takeoff rolls. Runway: 2,600&#x27; long x 40’. The surface is a little soft but is easily managed with 850 tires or larger and is relatively smooth. Slopes to the north 0.38%. Approximately 500’ from the south end there is a small undulation. Land beyond it. Approach Considerations: The airstrip can be approached from either direction. When landing to the north, use caution for a small undulation approximately 500’ from the south end. Recommend landing beyond it. Amenities: Primitive camping areas are available along the airstrip. BLM campgrounds are nearby. Goblin Valley State Park is 5 miles to the south. Trailheads to Wild Horse Canyon and Wild Horse Window hikes are located across the highway. The Temple Mountain mining site is nearby as well. Windsock: No.</div></div>
@@ -66,5 +66,18 @@
     Aggregated from UBCP. <p class="attribution">Data courtesy of the Utah Back Country Pilots Association (utahbackcountrypilots.org)</p>
   </footer>
 </main>
+<script>
+  // Prefer returning to whatever page/state the user actually came from
+  // (search results, a filtered view, a specific map position) over always
+  // landing on the plain unfiltered grid -- but only when we got here via
+  // in-site navigation (history.length > 1 alone isn't reliable: a page
+  // opened in a new tab or reloaded directly still has history entries).
+  document.getElementById('back-link').addEventListener('click', (e) => {
+    if (document.referrer && new URL(document.referrer).origin === location.origin) {
+      e.preventDefault();
+      history.back();
+    }
+  });
+</script>
 </body>
 </html>

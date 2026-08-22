@@ -47,7 +47,7 @@
 </head>
 <body>
 <header>
-  <a class="back" href="../">← All strips</a>
+  <a class="back" href="../" id="back-link">← Back</a>
 </header>
 <main>
   <h1>Nielson Wash</h1>
@@ -58,7 +58,7 @@
     <a class="cta" href="https://utahbackcountrypilots.org/airstrips/NIELSONWASH" target="_blank" rel="noopener">
       View original source (UBCP) →
     </a>
-    <a class="cta cta-secondary" href="../?sectional=38.3608,-110.8883">View on VFR sectional →</a>
+    <a class="cta cta-secondary" href="../?sectional=38.3608,-110.8883">View on VFR sectional →</a> <a class="cta cta-secondary" href="../?maplink=38.3608,-110.8883">View on map →</a>
   </div>
   <table class="specs"><tr><th>Identifier</th><td>NIELSONWASH</td></tr><tr><th>State</th><td>UT</td></tr><tr><th>Runway length</th><td>2,871 ft</td></tr><tr><th>Runway width</th><td>40 ft</td></tr><tr><th>Surface</th><td>Dirt</td></tr><tr><th>Runway</th><td>7/25</td></tr><tr><th>Elevation</th><td>4,705 ft</td></tr><tr><th>Ownership</th><td>blm</td></tr><tr><th>CTAF</th><td>122.9</td></tr><tr><th>Coordinates</th><td>38.3608, -110.8883</td></tr></table>
   <div class="description"><h2>Notes</h2><div class="description-text">[ubcp] Description: A large airstrip located on the top of a small mesa running between highway 24 and the Fremont river. North of the strip is a very popular OHV area used mainly by Utah locals. Looking south is a great view of the Henry mountains that around 250-400 buffalo inhabit. Most of the surrounding land is BLM with some private land heading into Hanksville. This area offers some unique landscapes due to the banded Morrison formation. The Mars Desert Research Station (a simulated Mars habitat) is located just north of this strip. This airstrip would be great for first timers or aircraft with less than optimal performance. Runway: The east-west runway is extremely long by backcountry standards but has a few areas of scrub brush and small cactus. These can easily be spotting during your survey for landing. There is an antenna building and access road that follows part of the runway on the west side. Near the middle of the runway is another access road that crosses the runway, currently there is no erosion from the crossing road. The surface is more crushed gravel than dirt and is normally firm year-round. Parking: The whole area is completely flat, so parking and camping could be anywhere. This area also has good cell phone coverage. Approach: Landing can be accomplished in either direction; wind over the mesa could create some mechanical turbulence. Landing west the approach is clear. Landing east multiple antennas at the threshold approximately 50ft tall obstruct the approach. Amenities: Hanksville is approximately 10 miles east on highway 24. Throw your thumb out and I’m sure a happy local will take you into town. Duke’s Slickrock Grill has some pretty yummy food and they have a campground with cabins and accommodations.</div></div>
@@ -66,5 +66,18 @@
     Aggregated from UBCP. <p class="attribution">Data courtesy of the Utah Back Country Pilots Association (utahbackcountrypilots.org)</p>
   </footer>
 </main>
+<script>
+  // Prefer returning to whatever page/state the user actually came from
+  // (search results, a filtered view, a specific map position) over always
+  // landing on the plain unfiltered grid -- but only when we got here via
+  // in-site navigation (history.length > 1 alone isn't reliable: a page
+  // opened in a new tab or reloaded directly still has history entries).
+  document.getElementById('back-link').addEventListener('click', (e) => {
+    if (document.referrer && new URL(document.referrer).origin === location.origin) {
+      e.preventDefault();
+      history.back();
+    }
+  });
+</script>
 </body>
 </html>

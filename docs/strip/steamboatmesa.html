@@ -47,7 +47,7 @@
 </head>
 <body>
 <header>
-  <a class="back" href="../">← All strips</a>
+  <a class="back" href="../" id="back-link">← Back</a>
 </header>
 <main>
   <h1>Steamboat Mesa</h1>
@@ -58,7 +58,7 @@
     <a class="cta" href="https://utahbackcountrypilots.org/airstrips/STEAMBOATMESA" target="_blank" rel="noopener">
       View original source (UBCP) →
     </a>
-    <a class="cta cta-secondary" href="../?sectional=38.7712,-109.0917">View on VFR sectional →</a>
+    <a class="cta cta-secondary" href="../?sectional=38.7712,-109.0917">View on VFR sectional →</a> <a class="cta cta-secondary" href="../?maplink=38.7712,-109.0917">View on map →</a>
   </div>
   <table class="specs"><tr><th>Identifier</th><td>STEAMBOATMESA</td></tr><tr><th>State</th><td>UT</td></tr><tr><th>Runway length</th><td>2,635 ft</td></tr><tr><th>Surface</th><td>Dirt</td></tr><tr><th>Runway</th><td>12/30</td></tr><tr><th>Elevation</th><td>6,235 ft</td></tr><tr><th>Ownership</th><td>blm</td></tr><tr><th>CTAF</th><td>122.9</td></tr><tr><th>Coordinates</th><td>38.7712, -109.0917</td></tr></table>
   <div class="description"><h2>Notes</h2><div class="description-text">[ubcp] Description: Currently 1100ft usable . A high altitude mesa covered in animal sign this is a very unique airstrip. The views are a cross between high alpine Colorado and deep canyon Utah. High density altitude, winds, and limited late go around options make this airstrip a hazardous place especially for a beginner. Camping would be spectacular here especially during the warmer months. It might be advisable to consider the possibility of bear and mountain lion activity here. The habitat is well suited for big game and the hungry critters that follow. Runway: Landings should be made towards the east after the road crossing. The ground is rough from clumps of grass and dried animal tracks. Higher float tires are highly suggested. This is a considerable uphill airstrip and the relative wind favors a tailwind on landing. Late go arounds will not be possible! Landing downhill is probably not an option. Survey the runway downhill or at a comfortable altitude being mindful of aircraft performance. Approach Considerations: Winds and density altitude are strong factors that should be considered before landing. Late go arounds will not be possible and landing surveys should be done at altitude or flying downhill. Parking: Plenty of parking and camping opportunities here. The ground is flat towards either end of the airstrip and most of the mesa is covered in grass. Good cell phone coverage.</div></div>
@@ -66,5 +66,18 @@
     Aggregated from UBCP. <p class="attribution">Data courtesy of the Utah Back Country Pilots Association (utahbackcountrypilots.org)</p>
   </footer>
 </main>
+<script>
+  // Prefer returning to whatever page/state the user actually came from
+  // (search results, a filtered view, a specific map position) over always
+  // landing on the plain unfiltered grid -- but only when we got here via
+  // in-site navigation (history.length > 1 alone isn't reliable: a page
+  // opened in a new tab or reloaded directly still has history entries).
+  document.getElementById('back-link').addEventListener('click', (e) => {
+    if (document.referrer && new URL(document.referrer).origin === location.origin) {
+      e.preventDefault();
+      history.back();
+    }
+  });
+</script>
 </body>
 </html>

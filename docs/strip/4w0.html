@@ -47,7 +47,7 @@
 </head>
 <body>
 <header>
-  <a class="back" href="../">← All strips</a>
+  <a class="back" href="../" id="back-link">← Back</a>
 </header>
 <main>
   <h1>BANDERA STATE</h1>
@@ -58,7 +58,7 @@
     <a class="cta" href="https://www.shortfield.com/listing/bandera-state-wa/" target="_blank" rel="noopener">
       View original source (FAA + Shortfield) →
     </a>
-    <a class="cta cta-secondary" href="../?sectional=47.39536888,-121.53647194">View on VFR sectional →</a>
+    <a class="cta cta-secondary" href="../?sectional=47.39536888,-121.53647194">View on VFR sectional →</a> <a class="cta cta-secondary" href="../?maplink=47.39536888,-121.53647194">View on map →</a>
   </div>
   <table class="specs"><tr><th>Identifier</th><td>4W0</td></tr><tr><th>State</th><td>WA</td></tr><tr><th>Runway length</th><td>2,344 ft</td></tr><tr><th>Runway width</th><td>100 ft</td></tr><tr><th>Surface</th><td>TURF</td></tr><tr><th>Runway</th><td>08/26</td></tr><tr><th>Elevation</th><td>1,636 ft</td></tr><tr><th>Ownership</th><td>public</td></tr><tr><th>CTAF</th><td>122.9</td></tr><tr><th>Coordinates</th><td>47.39536888, -121.53647194</td></tr></table>
   <div class="description"><h2>Notes</h2><div class="description-text">[shortfield] Location Overview Bandera State Airport sits in the upper Snoqualmie Valley in King County, Washington, about 14 miles east of North Bend, right alongside Interstate 90 and can be noisy during daylight hours, but quieter at night. Despite being wrapped in surrounding peaks, the valley is wide enough for maneuvering most light aircraft, which is part of why it&#x27;s such a popular spot for backcountry pilots. Camping &amp; Recreation The field offers primitive camping with 4 picnic sites, 2 fire rings, and an outhouse — but no water and no other facilities. It&#x27;s open seasonally, June 1 - Oct. 1 yearly. This scenic airport offers a way to spend an hour on a stopover, or for an overnight camping trip. Anglers can try their luck on the nearby Snoqualmie River for fishing, though the trout generally run only six to eight inches long, and current regulations should be checked before fishing. Notes &amp; Warnings This is a strip that demands respect. The 2,344 foot turf runway which is extremely soft when wet especially during the spring, with potholes, frost heaved rocks, or vehicle ruts possible. Field elevation is 1636 feet MSL, and some density altitude problems can be encountered during warmer summer days. Trees surround the airport and there are trees close to each end of the field in the approaches, and pilots should watch for elk, deer, vehicles, and pedestrians on the field. Overflight to check for surface damage, presence of obstructions, and height of grass is essential before landing. The runway south third is almost always soft, and the runway is generally smoother the farther north you land. It&#x27;s closed from October 1 to June 1 due to winter conditions, with exceptions only for emergency use, and forest firefighting is common at this airport during summer months, so pilots should watch for helicopter activity and check NOTAMs/TFRs. As with all state airports, the use of state airports by all persons shall be solely at the risk of the user. History Bandera has real pedigree as an aviation site — it was built in 1948 as one of the first state airports in Washington. Over the decades it&#x27;s evolved into a beloved training ground, particularly for training students in soft field work and in mountain flying, and glider clubs frequently base out of Bandera. The field has also earned a strong volunteer following — it&#x27;s been informally adopted and maintained by local aviation groups volunteer maintenance support from the Fall City Pilots and the Washington Pilots Association, Seattle Chapter, reflecting the deep community ties pilots have to this rustic little airstrip.</div></div>
@@ -66,5 +66,18 @@
     Aggregated from FAA + Shortfield. <p class="attribution">Data courtesy of Shortfield.com</p>
   </footer>
 </main>
+<script>
+  // Prefer returning to whatever page/state the user actually came from
+  // (search results, a filtered view, a specific map position) over always
+  // landing on the plain unfiltered grid -- but only when we got here via
+  // in-site navigation (history.length > 1 alone isn't reliable: a page
+  // opened in a new tab or reloaded directly still has history entries).
+  document.getElementById('back-link').addEventListener('click', (e) => {
+    if (document.referrer && new URL(document.referrer).origin === location.origin) {
+      e.preventDefault();
+      history.back();
+    }
+  });
+</script>
 </body>
 </html>

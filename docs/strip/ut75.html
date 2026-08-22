@@ -47,7 +47,7 @@
 </head>
 <body>
 <header>
-  <a class="back" href="../">← All strips</a>
+  <a class="back" href="../" id="back-link">← Back</a>
 </header>
 <main>
   <h1>MINERAL CANYON STRIP</h1>
@@ -58,7 +58,7 @@
     <a class="cta" href="https://utahbackcountrypilots.org/airstrips/MINERALCANYON" target="_blank" rel="noopener">
       View original source (FAA + UBCP) →
     </a>
-    <a class="cta cta-secondary" href="../?sectional=38.53333333,-109.98333333">View on VFR sectional →</a>
+    <a class="cta cta-secondary" href="../?sectional=38.53333333,-109.98333333">View on VFR sectional →</a> <a class="cta cta-secondary" href="../?maplink=38.53333333,-109.98333333">View on map →</a>
   </div>
   <table class="specs"><tr><th>Identifier</th><td>UT75</td></tr><tr><th>State</th><td>UT</td></tr><tr><th>Runway length</th><td>2,000 ft</td></tr><tr><th>Runway width</th><td>40 ft</td></tr><tr><th>Surface</th><td>DIRT</td></tr><tr><th>Runway</th><td>14/32</td></tr><tr><th>Elevation</th><td>3,900 ft</td></tr><tr><th>Ownership</th><td>public</td></tr><tr><th>CTAF</th><td>122.9</td></tr><tr><th>Coordinates</th><td>38.53333333, -109.98333333</td></tr></table>
   <div class="description"><h2>Notes</h2><div class="description-text">[ubcp] Description: Mineral Canyon&#x27;s airstrip resides in the Green River canyon just south of the Bowknot Bend. River has a tendency to flood during the summer, so a thorough review of the airstrip prior to landing is imperative. Mineral Canyon is one of the three back country airstrips included in the State&#x27;s &quot;FLY UTAH Passport Program&quot;. To learn more, head to their website . Runway: 2000 ft long x 40 ft wide dirt runway in generally good condition, however can be quite soft due to its propensity to flood. Approach Considerations: Airstrip resides inside a canyon with rapidly rising terrain within 1000 feet of the airstrip rising over 1000 feet above the landing surface. Base jumping and other low-level aircraft operating around and near the airstrip. Please monitor CTAF and make position reports regularly. Amenities: None Windsock: Yes</div></div>
@@ -66,5 +66,18 @@
     Aggregated from FAA + UBCP. <p class="attribution">Data courtesy of the Utah Back Country Pilots Association (utahbackcountrypilots.org)</p>
   </footer>
 </main>
+<script>
+  // Prefer returning to whatever page/state the user actually came from
+  // (search results, a filtered view, a specific map position) over always
+  // landing on the plain unfiltered grid -- but only when we got here via
+  // in-site navigation (history.length > 1 alone isn't reliable: a page
+  // opened in a new tab or reloaded directly still has history entries).
+  document.getElementById('back-link').addEventListener('click', (e) => {
+    if (document.referrer && new URL(document.referrer).origin === location.origin) {
+      e.preventDefault();
+      history.back();
+    }
+  });
+</script>
 </body>
 </html>

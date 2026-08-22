@@ -47,7 +47,7 @@
 </head>
 <body>
 <header>
-  <a class="back" href="../">← All strips</a>
+  <a class="back" href="../" id="back-link">← Back</a>
 </header>
 <main>
   <h1>SMILEY CREEK</h1>
@@ -58,7 +58,7 @@
     <a class="cta" href="https://utahbackcountrypilots.org/airstrips/SMILEYCREEK" target="_blank" rel="noopener">
       View original source (FAA + Idaho ITD + Shortfield + UBCP) →
     </a>
-    <a class="cta cta-secondary" href="../?sectional=43.91213888,-114.79605555">View on VFR sectional →</a>
+    <a class="cta cta-secondary" href="../?sectional=43.91213888,-114.79605555">View on VFR sectional →</a> <a class="cta cta-secondary" href="../?maplink=43.91213888,-114.79605555">View on map →</a>
   </div>
   <table class="specs"><tr><th>Identifier</th><td>U87</td></tr><tr><th>State</th><td>ID</td></tr><tr><th>Runway length</th><td>4,900 ft</td></tr><tr><th>Runway width</th><td>150 ft</td></tr><tr><th>Surface</th><td>TURF</td></tr><tr><th>Runway</th><td>14/32</td></tr><tr><th>Elevation</th><td>7,206 ft</td></tr><tr><th>Ownership</th><td>public</td></tr><tr><th>CTAF</th><td>122.9</td></tr><tr><th>Coordinates</th><td>43.91213888, -114.79605555</td></tr></table>
   <div class="description"><h2>Notes</h2><div class="description-text">[idaho_itd] State Airfield [ubcp] Smiley Creek Procedures Smiley Creek SOP Video (from Idaho DOT) Smiley Creek Weather Smiley Creek Webcam SE Smiley Creek Webcam E Smiley Creek Webcam N | [shortfield] Location Overview Smiley Creek Airstrip sits 40 miles northwest of Ketchum/Sun Valley and 20 miles south of Stanley along Scenic Byway 75, nestled in the Sawtooth National Recreation Area and surrounded by the Sawtooth and White Cloud Mountain ranges. The airstrip occupies 40 acres and is bordered by the main Salmon River. Smiley Creek Lodge sits directly across the street from the airstrip, making it as convenient as backcountry destinations get. Camping &amp; Recreation The airstrip offers a full hook-up RV pad on site. The lodge across the road provides cabins and meals, and the area is known for excellent fishing along the Salmon River. Smiley Creek is a traditional gateway to the Idaho backcountry, with several nearby landing strips offering varying experience levels for day-trip flying. A short flight west puts you in the Sawtooth Mountains, and pilots have been known to hop over to Atlanta, Idaho for breakfast runs. Notes &amp; Warnings The 4,900 × 150-foot turf runway (14/32) sits at approximately 7,200 feet MSL — density altitude is a serious consideration, especially in summer. No winter maintenance is performed, and landing Runway 14 with takeoff on Runway 32 is recommended when wind conditions allow. The runway was found in good condition during its 2025 FAA inspection, with well-maintained turf and no significant undulations. Two windsocks and segmented circles are in place and visible from the air. History Smiley Creek has long served as a beloved gathering point for backcountry aviators across the Mountain West. Over the decades it evolved from a remote high-country strip into an organized caretaker-managed facility under the Idaho Transportation Department&#x27;s Division of Aeronautics. Its fly-in culture attracted generations of pilots flying everything from Cessna 170s and 180s to experimental homebuilts. In 2022, the airstrip received a community-driven improvement when 16-year-old Eagle Scout Carter Hickey of Hailey — working to honor the memory of well-known backcountry pilot Galen Hanselman, who had frequented the strip before passing away from cancer — built a picnic pad and campfire pit for pilots camping at the facility. The project was completed just ahead of the first winter snowfall, carrying on the spirit of stewardship that defines this special place.</div></div>
@@ -66,5 +66,18 @@
     Aggregated from FAA + Idaho ITD + Shortfield + UBCP. <p class="attribution">Data courtesy of Shortfield.com; Data courtesy of the Utah Back Country Pilots Association (utahbackcountrypilots.org)</p>
   </footer>
 </main>
+<script>
+  // Prefer returning to whatever page/state the user actually came from
+  // (search results, a filtered view, a specific map position) over always
+  // landing on the plain unfiltered grid -- but only when we got here via
+  // in-site navigation (history.length > 1 alone isn't reliable: a page
+  // opened in a new tab or reloaded directly still has history entries).
+  document.getElementById('back-link').addEventListener('click', (e) => {
+    if (document.referrer && new URL(document.referrer).origin === location.origin) {
+      e.preventDefault();
+      history.back();
+    }
+  });
+</script>
 </body>
 </html>

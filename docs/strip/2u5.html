@@ -47,7 +47,7 @@
 </head>
 <body>
 <header>
-  <a class="back" href="../">← All strips</a>
+  <a class="back" href="../" id="back-link">← Back</a>
 </header>
 <main>
   <h1>SHEARER /USFS/</h1>
@@ -58,7 +58,7 @@
     <a class="cta" href="https://www.shortfield.com/listing/shearer-id/" target="_blank" rel="noopener">
       View original source (FAA + Idaho ITD + Shortfield) →
     </a>
-    <a class="cta cta-secondary" href="../?sectional=45.9895,-114.84127777">View on VFR sectional →</a>
+    <a class="cta cta-secondary" href="../?sectional=45.9895,-114.84127777">View on VFR sectional →</a> <a class="cta cta-secondary" href="../?maplink=45.9895,-114.84127777">View on map →</a>
   </div>
   <table class="specs"><tr><th>Identifier</th><td>2U5</td></tr><tr><th>State</th><td>ID</td></tr><tr><th>Runway length</th><td>2,000 ft</td></tr><tr><th>Runway width</th><td>15 ft</td></tr><tr><th>Surface</th><td>TURF</td></tr><tr><th>Runway</th><td>18/36</td></tr><tr><th>Elevation</th><td>2,634 ft</td></tr><tr><th>Ownership</th><td>public</td></tr><tr><th>CTAF</th><td>122.9</td></tr><tr><th>Coordinates</th><td>45.9895, -114.84127777</td></tr></table>
   <div class="description"><h2>Notes</h2><div class="description-text">[idaho_itd] USFS Airfield [shortfield] Shearer is a difficult wilderness airstrip located within the Selway Bitterrott Wildernes on the banks of Idaho&#x27;s Selway River. The final approach is obscured by a bend in the river, making the approach difficult and rough terrain make the touch point critical. The runway is sloped on the south end. Camping Tiedowns are located on the south end of the runway. There are no camping amenities, but camping in the wilderness area is allowed. Tread lightly. Fly it in, fly it out.</div></div>
@@ -66,5 +66,18 @@
     Aggregated from FAA + Idaho ITD + Shortfield. <p class="attribution">Data courtesy of Shortfield.com</p>
   </footer>
 </main>
+<script>
+  // Prefer returning to whatever page/state the user actually came from
+  // (search results, a filtered view, a specific map position) over always
+  // landing on the plain unfiltered grid -- but only when we got here via
+  // in-site navigation (history.length > 1 alone isn't reliable: a page
+  // opened in a new tab or reloaded directly still has history entries).
+  document.getElementById('back-link').addEventListener('click', (e) => {
+    if (document.referrer && new URL(document.referrer).origin === location.origin) {
+      e.preventDefault();
+      history.back();
+    }
+  });
+</script>
 </body>
 </html>

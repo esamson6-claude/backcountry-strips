@@ -47,7 +47,7 @@
 </head>
 <body>
 <header>
-  <a class="back" href="../">← All strips</a>
+  <a class="back" href="../" id="back-link">← Back</a>
 </header>
 <main>
   <h1>Wee Hope Mine / Radium King</h1>
@@ -58,7 +58,7 @@
     <a class="cta" href="https://utahbackcountrypilots.org/airstrips/WEEHOPEMINE" target="_blank" rel="noopener">
       View original source (UBCP) →
     </a>
-    <a class="cta cta-secondary" href="../?sectional=37.5715,-110.224">View on VFR sectional →</a>
+    <a class="cta cta-secondary" href="../?sectional=37.5715,-110.224">View on VFR sectional →</a> <a class="cta cta-secondary" href="../?maplink=37.5715,-110.224">View on map →</a>
   </div>
   <table class="specs"><tr><th>Identifier</th><td>WEEHOPEMINE</td></tr><tr><th>State</th><td>UT</td></tr><tr><th>Runway length</th><td>1,908 ft</td></tr><tr><th>Runway width</th><td>40 ft</td></tr><tr><th>Surface</th><td>Dirt</td></tr><tr><th>Runway</th><td>4/22</td></tr><tr><th>Elevation</th><td>5,476 ft</td></tr><tr><th>Ownership</th><td>blm</td></tr><tr><th>CTAF</th><td>122.9</td></tr><tr><th>Coordinates</th><td>37.5715, -110.224</td></tr></table>
   <div class="description"><h2>Notes</h2><div class="description-text">[ubcp] Description : Visit a time capsule when you fly into Wee Hope Mine. The desert has preserved this forgotten mine for us to explore today. It is not hard to imagine the day it closed and the ensuing shenanigans that must have included launching a now collectable sedan off a cliff. Still standing are a bunk house, kitchen, outhouse, animal corral, mining shack, and other scattered antiquities. This airstrip is at the bottom of Red Canyon, a very large bowl with an opening to the south. This can cause significant wind variations. Descending below the canyon rim, the swirling winds and turbulence may force a discontinued approach. Crosswinds are very common here and may have negative consequences due to steep drop-offs on either side of the runway. The best chance of a successful approach and landing likely would be accomplished in the early morning. The mine is located south of the airstrip, about a five-minute walk. The kitchen is visible from the runway with most of the other structures hidden below the hill. As you explore, keep this place an enjoyable museum for everyone and do not to disturb or remove any of the treasures. Runway : This airstrip is open to most aircraft types given favorable density altitude and weight. It is long and smooth by backcountry standards with most of the runway covered in pea size gravel. The east end is more of a dirt/grass mix. Use caution for sharp drop offs on all sides of the runway especially towards the west end. Use caution as the airstrip is accessible by road and on occasion cars, UTVs, or campers may be parked on the runway. Approach considerations : Landing west requires a dogleg to clear an overburden hill left from mining. Landing east is clear with a sharp drop off at the threshold. Takeoff and landing can be accomplished in either direction. Parking : Not adequate room for parking multiple aircraft unless at the east end of the airstrip. Plenty of flat ground for camping. Cell Phone Coverage : For the most part there isn&#x27;t any coverage. However, if you walk a hundred yards or so east off the end of the airstrip, just to the left of the ridge (not in top of the ridge and not in the bottom of the wash), you&#x27;ll find me bar with Verizon that is enough to get/send text messages and make a phone call. Camping : On the east end there is enough room to pull planes mostly off the strip and throw a tent next to your plane. There is a fire ring next to some flat rocks that make for an awesome place to sit and have dinner overlooking stunning vistas.</div></div>
@@ -66,5 +66,18 @@
     Aggregated from UBCP. <p class="attribution">Data courtesy of the Utah Back Country Pilots Association (utahbackcountrypilots.org)</p>
   </footer>
 </main>
+<script>
+  // Prefer returning to whatever page/state the user actually came from
+  // (search results, a filtered view, a specific map position) over always
+  // landing on the plain unfiltered grid -- but only when we got here via
+  // in-site navigation (history.length > 1 alone isn't reliable: a page
+  // opened in a new tab or reloaded directly still has history entries).
+  document.getElementById('back-link').addEventListener('click', (e) => {
+    if (document.referrer && new URL(document.referrer).origin === location.origin) {
+      e.preventDefault();
+      history.back();
+    }
+  });
+</script>
 </body>
 </html>

@@ -47,7 +47,7 @@
 </head>
 <body>
 <header>
-  <a class="back" href="../">← All strips</a>
+  <a class="back" href="../" id="back-link">← Back</a>
 </header>
 <main>
   <h1>Bridge Glacier, BC</h1>
@@ -58,7 +58,7 @@
     <a class="cta" href="https://www.shortfield.com/listing/bridge-glacier-bc/" target="_blank" rel="noopener">
       View original source (Shortfield) →
     </a>
-    <a class="cta cta-secondary" href="../?sectional=50.852006,-123.480163">View on VFR sectional →</a>
+    <a class="cta cta-secondary" href="../?sectional=50.852006,-123.480163">View on VFR sectional →</a> <a class="cta cta-secondary" href="../?maplink=50.852006,-123.480163">View on map →</a>
   </div>
   <table class="specs"><tr><th>Elevation</th><td>4,593 ft</td></tr><tr><th>CTAF</th><td>122.9</td></tr><tr><th>Coordinates</th><td>50.852006, -123.480163</td></tr></table>
   <div class="description"><h2>Notes</h2><div class="description-text">[shortfield] Location Overview Bridge Glacier sits in the Pacific Ranges of the southern Coast Mountains in southwestern British Columbia, on the eastern flank of the Lillooet Icefield, roughly a six-hour drive (much of it dirt road) north of Vancouver near Gold Bridge and the Bridge River valley. The Lillooet Icefield is one of the largest icefields in the Pacific Ranges, among the largest temperate-latitude glacial fields in the world. Bridge Glacier itself stretches about 17 kilometers, flowing eastward and terminating in a proglacial body known informally as Bridge Lake, which the glacier now calves into as it retreats. The surrounding landscape is one of dramatic lateral moraines, exposed forefield terrain, and alpine wilderness typical of BC&#x27;s Coast Mountains. There appears to be several off-airport locations to land in this area - always inspect the landing site carefully before committing: 50.8497455971954, -123.45338853553449 50.86043329879875, -123.47055467231837 Camping &amp; Recreation There are no developed campgrounds directly at the glacier; access is remote and typically arranged through backcountry lodges and air-charter operators rather than road access. Visitors commonly fly into the lake near the glacier with local operators such as Tyax Air/Adventures, based out of the Tyax Lodge near Gold Bridge, which serves as the main jumping-off point for excursions into the area. A hike-in route is possible for the more adventurous, overland from Salal Creek near the top of the Lillooet Valley, though it involves off-trail travel and is considerably more arduous than flying in. The area appeals to backcountry hikers, glacier photographers, and those interested in wilderness lake camping near the ice, but conditions are rugged and facilities are essentially nonexistent — this is true backcountry travel. Notes &amp; Warnings Floatplane access to the lake at the glacier&#x27;s terminus is the primary means of reaching the site, making local air charter services (such as Tyax Air) essential for most visitors. Pilots and visitors should be aware that the glacier is an active calving glacier — its terminus floats and periodically sheds large chunks of ice into the lake, which can create sudden waves and hazardous water conditions near the ice face. The lake itself has expanded substantially in recent decades as the glacier retreats, altering shorelines and approach routes from what older maps or imagery may show, so current local knowledge is important for safe landings and approaches. Weather in the Coast Mountains can change rapidly, and the remote, mountainous terrain means limited options for emergency landing or evacuation. History Bridge Glacier has a long record of advance and retreat stretching back through the Holocene. Tree-ring and radiocarbon studies of wood exposed by the retreating ice show the glacier experienced at least four major advances in the late Holocene, including a Tiedemann-aged advance around 3,000 years ago and further advances roughly 1,900 years ago and into the first millennium. Its most extensive Little Ice Age advance left prominent lateral moraines still visible today. Since then, the glacier&#x27;s story has become one of accelerating retreat: historical aerial photographs show it retreating at about 6 meters per year before 1975, then averaging around 41 meters per year after 1979. Until the late 1980s, the lake at its terminus was small and shallow, but since 1991 the glacier&#x27;s retreat has allowed the lake to roughly triple in size. Retreat rates accelerated further still, jumping from about 30 meters per year between 1981 and 2005 to over 200 meters per year between 2005 and 2010. Beyond its scientific significance as one of the best-studied lake-calving glaciers in North America, Bridge Glacier holds practical importance too: it is the source of the Bridge River and feeds the Bridge River Hydroelectric Project, which supplies roughly 6 to 8 percent of British Columbia&#x27;s electricity, earning it the nickname of a giant &quot;melting battery.&quot; The glacier lies within the unceded traditional territories of the Lil&#x27;wat and St&#x27;át&#x27;imc peoples.</div></div>
@@ -66,5 +66,18 @@
     Aggregated from Shortfield. <p class="attribution">Data courtesy of Shortfield.com</p>
   </footer>
 </main>
+<script>
+  // Prefer returning to whatever page/state the user actually came from
+  // (search results, a filtered view, a specific map position) over always
+  // landing on the plain unfiltered grid -- but only when we got here via
+  // in-site navigation (history.length > 1 alone isn't reliable: a page
+  // opened in a new tab or reloaded directly still has history entries).
+  document.getElementById('back-link').addEventListener('click', (e) => {
+    if (document.referrer && new URL(document.referrer).origin === location.origin) {
+      e.preventDefault();
+      history.back();
+    }
+  });
+</script>
 </body>
 </html>

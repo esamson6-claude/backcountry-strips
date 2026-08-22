@@ -47,7 +47,7 @@
 </head>
 <body>
 <header>
-  <a class="back" href="../">← All strips</a>
+  <a class="back" href="../" id="back-link">← Back</a>
 </header>
 <main>
   <h1>TIETON STATE</h1>
@@ -58,7 +58,7 @@
     <a class="cta" href="https://www.shortfield.com/listing/tieton-state-wa/" target="_blank" rel="noopener">
       View original source (FAA + Shortfield) →
     </a>
-    <a class="cta cta-secondary" href="../?sectional=46.63755138,-121.12397888">View on VFR sectional →</a>
+    <a class="cta cta-secondary" href="../?sectional=46.63755138,-121.12397888">View on VFR sectional →</a> <a class="cta cta-secondary" href="../?maplink=46.63755138,-121.12397888">View on map →</a>
   </div>
   <table class="specs"><tr><th>Identifier</th><td>4S6</td></tr><tr><th>State</th><td>WA</td></tr><tr><th>Runway length</th><td>2,509 ft</td></tr><tr><th>Runway width</th><td>100 ft</td></tr><tr><th>Surface</th><td>TURF</td></tr><tr><th>Runway</th><td>02/20</td></tr><tr><th>Elevation</th><td>2,964 ft</td></tr><tr><th>Ownership</th><td>public</td></tr><tr><th>CTAF</th><td>122.9</td></tr><tr><th>Coordinates</th><td>46.63755138, -121.12397888</td></tr></table>
   <div class="description"><h2>Notes</h2><div class="description-text">[shortfield] Overlooking Rimrock Lake, on the east side of White Pass, is the beautiful Tieton Airport. In 1980, it was naturally resurfaced with six inches of ash from Mount St. Helen&#x27;s, and the surface is rough. There is a large Forest Service campground adjacent, and a boat launching area only a few hundred feet away. Fishing is excellent, there are many hiking trails, and the scenery is superb. Tieton is such a nice place to go that some of the flying clubs have made the field their summer campground. The west end of the 2,471 foot turf runway is right at the edge of the lake. The approach from the west is long and clear. In addition, the runway slopes uphill to the east for easy deceleration. The parking area is small, but has a tiedown cable. The 2,961 foot field elevation does cause some summertime density altitude problems. The approach from the east is difficult. There is a mountain right on the east end, the runway drops rapidly away to the west, and there are trees in the approach path. Most folks seem to prefer to ignore the wind and land uphill to the east, and depart downhill to the west. It is recommended to overfly the field to check conditions, look for obstructions, and plan your approach. The field is generally open from June 1st to October 1st. Landing east to west is generally preferred when winds allow. This is a downhill landing and the approach is more difficult as indicated above, but it does allow for the ability to go around if the need arises. The runway becomes horizontal about midway.</div></div>
@@ -66,5 +66,18 @@
     Aggregated from FAA + Shortfield. <p class="attribution">Data courtesy of Shortfield.com</p>
   </footer>
 </main>
+<script>
+  // Prefer returning to whatever page/state the user actually came from
+  // (search results, a filtered view, a specific map position) over always
+  // landing on the plain unfiltered grid -- but only when we got here via
+  // in-site navigation (history.length > 1 alone isn't reliable: a page
+  // opened in a new tab or reloaded directly still has history entries).
+  document.getElementById('back-link').addEventListener('click', (e) => {
+    if (document.referrer && new URL(document.referrer).origin === location.origin) {
+      e.preventDefault();
+      history.back();
+    }
+  });
+</script>
 </body>
 </html>

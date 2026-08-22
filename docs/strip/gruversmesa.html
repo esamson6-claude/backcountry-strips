@@ -47,7 +47,7 @@
 </head>
 <body>
 <header>
-  <a class="back" href="../">← All strips</a>
+  <a class="back" href="../" id="back-link">← Back</a>
 </header>
 <main>
   <h1>Gruver&#x27;s Mesa</h1>
@@ -58,7 +58,7 @@
     <a class="cta" href="https://utahbackcountrypilots.org/airstrips/GRUVERSMESA" target="_blank" rel="noopener">
       View original source (UBCP) →
     </a>
-    <a class="cta cta-secondary" href="../?sectional=38.7161,-110.2056">View on VFR sectional →</a>
+    <a class="cta cta-secondary" href="../?sectional=38.7161,-110.2056">View on VFR sectional →</a> <a class="cta cta-secondary" href="../?maplink=38.7161,-110.2056">View on map →</a>
   </div>
   <table class="specs"><tr><th>Identifier</th><td>GRUVERSMESA</td></tr><tr><th>State</th><td>UT</td></tr><tr><th>Runway length</th><td>1,370 ft</td></tr><tr><th>Runway width</th><td>30 ft</td></tr><tr><th>Surface</th><td>Dirt</td></tr><tr><th>Runway</th><td>9/27</td></tr><tr><th>Elevation</th><td>4,836 ft</td></tr><tr><th>Ownership</th><td>blm</td></tr><tr><th>CTAF</th><td>122.9</td></tr><tr><th>Coordinates</th><td>38.7161, -110.2056</td></tr></table>
   <div class="description"><h2>Notes</h2><div class="description-text">[ubcp] Gruver’s Mesa : Description : The airstrip sits atop Gruver&#x27;s Mesa just south of the San Rafael River. Runway : Runway 9/27 consists of a 1370’x30’ cleared section on the western end of a two-track road (the full runway length is 3500&#x27;, including the uncleared portion). Runway 5/23 is 2200&#x27; and is overgrown and not recommended. Approach Considerations : The airstrip sits atop a mesa and approaches from any direction are unobstructed. Amenities : Primitive camping is available on the strip. No formal amenities. The location offers good access to several slot canyons nearby. Moonshine Wash and Three Finger Canyon are two of them. Via the slot canyons, the Green and San Rafael Rivers should be accessible as well. Windsock : No</div></div>
@@ -66,5 +66,18 @@
     Aggregated from UBCP. <p class="attribution">Data courtesy of the Utah Back Country Pilots Association (utahbackcountrypilots.org)</p>
   </footer>
 </main>
+<script>
+  // Prefer returning to whatever page/state the user actually came from
+  // (search results, a filtered view, a specific map position) over always
+  // landing on the plain unfiltered grid -- but only when we got here via
+  // in-site navigation (history.length > 1 alone isn't reliable: a page
+  // opened in a new tab or reloaded directly still has history entries).
+  document.getElementById('back-link').addEventListener('click', (e) => {
+    if (document.referrer && new URL(document.referrer).origin === location.origin) {
+      e.preventDefault();
+      history.back();
+    }
+  });
+</script>
 </body>
 </html>

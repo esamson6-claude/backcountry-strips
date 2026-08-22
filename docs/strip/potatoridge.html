@@ -47,7 +47,7 @@
 </head>
 <body>
 <header>
-  <a class="back" href="../">← All strips</a>
+  <a class="back" href="../" id="back-link">← Back</a>
 </header>
 <main>
   <h1>Potato Ridge</h1>
@@ -58,7 +58,7 @@
     <a class="cta" href="https://utahbackcountrypilots.org/airstrips/POTATORIDGE" target="_blank" rel="noopener">
       View original source (UBCP) →
     </a>
-    <a class="cta cta-secondary" href="../?sectional=39.225373,-109.267252">View on VFR sectional →</a>
+    <a class="cta cta-secondary" href="../?sectional=39.225373,-109.267252">View on VFR sectional →</a> <a class="cta cta-secondary" href="../?maplink=39.225373,-109.267252">View on map →</a>
   </div>
   <table class="specs"><tr><th>Identifier</th><td>POTATORIDGE</td></tr><tr><th>State</th><td>UT</td></tr><tr><th>Runway length</th><td>2,000 ft</td></tr><tr><th>Runway width</th><td>20 ft</td></tr><tr><th>Surface</th><td>Dirt</td></tr><tr><th>Elevation</th><td>5,050 ft</td></tr><tr><th>Ownership</th><td>blm</td></tr><tr><th>CTAF</th><td>122.9</td></tr><tr><th>Coordinates</th><td>39.225373, -109.267252</td></tr></table>
   <div class="description"><h2>Notes</h2><div class="description-text">[ubcp] POTATO RIDGE AIRSTRIP IS SEASONALLY CLOSED FROM MARCH 1 TO JULY 31 . Old airstrip with some nice canyon hiking &amp; exploring nearby. Short and rough, but nice spot to get away to. Caution for Ferruginous hawks, which are federally protected raptors. Ferruginous hawks are the largest hawks in North America, with a wing span of up to 5 feet. The hawks are ground-nesting birds which are known to breed and inhabit the open, arid scrub environment in the Potato Ridge Airstrip area. Please avoid disturbing these beautiful birds.</div></div>
@@ -66,5 +66,18 @@
     Aggregated from UBCP. <p class="attribution">Data courtesy of the Utah Back Country Pilots Association (utahbackcountrypilots.org)</p>
   </footer>
 </main>
+<script>
+  // Prefer returning to whatever page/state the user actually came from
+  // (search results, a filtered view, a specific map position) over always
+  // landing on the plain unfiltered grid -- but only when we got here via
+  // in-site navigation (history.length > 1 alone isn't reliable: a page
+  // opened in a new tab or reloaded directly still has history entries).
+  document.getElementById('back-link').addEventListener('click', (e) => {
+    if (document.referrer && new URL(document.referrer).origin === location.origin) {
+      e.preventDefault();
+      history.back();
+    }
+  });
+</script>
 </body>
 </html>

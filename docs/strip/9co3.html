@@ -47,7 +47,7 @@
 </head>
 <body>
 <header>
-  <a class="back" href="../">← All strips</a>
+  <a class="back" href="../" id="back-link">← Back</a>
 </header>
 <main>
   <h1>HUBBARD</h1>
@@ -58,7 +58,7 @@
     <a class="cta" href="https://utahbackcountrypilots.org/airstrips/HUBBARD" target="_blank" rel="noopener">
       View original source (FAA + UBCP) →
     </a>
-    <a class="cta cta-secondary" href="../?sectional=38.675,-108.98833333">View on VFR sectional →</a>
+    <a class="cta cta-secondary" href="../?sectional=38.675,-108.98833333">View on VFR sectional →</a> <a class="cta cta-secondary" href="../?maplink=38.675,-108.98833333">View on map →</a>
   </div>
   <table class="specs"><tr><th>Identifier</th><td>9CO3</td></tr><tr><th>State</th><td>CO</td></tr><tr><th>Runway length</th><td>2,600 ft</td></tr><tr><th>Runway width</th><td>75 ft</td></tr><tr><th>Surface</th><td>TURF-DIRT</td></tr><tr><th>Runway</th><td>18/36</td></tr><tr><th>Elevation</th><td>4,670 ft</td></tr><tr><th>Ownership</th><td>private</td></tr><tr><th>CTAF</th><td>122.9</td></tr><tr><th>Coordinates</th><td>38.675, -108.98833333</td></tr></table>
   <div class="description"><h2>Notes</h2><div class="description-text">[ubcp] Description: This is a public BLM airstrip with service to the adjacent resort at Gateway. Use this to stay at their resort! Uphill to the south and tucked into the junction of a canyon, this strip, while long and in good condition, should be still given caution. Runway: The centerline of the runway is mostly small gravel and hard pack dirt. Towards the edges larger rocks and clumps of grass may cause a problem for smaller tire aircraft. Sloping considerably uphill to the south the runway ends nearly at the canyon wall. With a tailwind on final a late go around may not be possible. Downhill landings into the wind are possible but will require a modified final to avoid higher terrain just off the end of the runway. Approach Considerations: Strong swirling canyon winds are possible here. The prevailing winds favor a tailwind in the uphill direction. This can be quite hazardous for go arounds and landing surveys. Early go arounds and downhill landing surveys should be accomplished. Landing downhill will require terrain avoidance with low altitude maneuvering. Be cautious landing uphill as the sloping uphill terrain may create a visual illusion producing a lower than normal approach path. Parking: Use the south end.</div></div>
@@ -66,5 +66,18 @@
     Aggregated from FAA + UBCP. <p class="attribution">Data courtesy of the Utah Back Country Pilots Association (utahbackcountrypilots.org)</p>
   </footer>
 </main>
+<script>
+  // Prefer returning to whatever page/state the user actually came from
+  // (search results, a filtered view, a specific map position) over always
+  // landing on the plain unfiltered grid -- but only when we got here via
+  // in-site navigation (history.length > 1 alone isn't reliable: a page
+  // opened in a new tab or reloaded directly still has history entries).
+  document.getElementById('back-link').addEventListener('click', (e) => {
+    if (document.referrer && new URL(document.referrer).origin === location.origin) {
+      e.preventDefault();
+      history.back();
+    }
+  });
+</script>
 </body>
 </html>

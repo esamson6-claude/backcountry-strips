@@ -47,7 +47,7 @@
 </head>
 <body>
 <header>
-  <a class="back" href="../">← All strips</a>
+  <a class="back" href="../" id="back-link">← Back</a>
 </header>
 <main>
   <h1>Flat Top</h1>
@@ -58,7 +58,7 @@
     <a class="cta" href="https://utahbackcountrypilots.org/airstrips/FLATTOP" target="_blank" rel="noopener">
       View original source (UBCP) →
     </a>
-    <a class="cta cta-secondary" href="../?sectional=38.593295,-108.914531">View on VFR sectional →</a>
+    <a class="cta cta-secondary" href="../?sectional=38.593295,-108.914531">View on VFR sectional →</a> <a class="cta cta-secondary" href="../?maplink=38.593295,-108.914531">View on map →</a>
   </div>
   <table class="specs"><tr><th>Identifier</th><td>FLATTOP</td></tr><tr><th>State</th><td>CO</td></tr><tr><th>Runway length</th><td>1,061 ft</td></tr><tr><th>Runway width</th><td>50 ft</td></tr><tr><th>Surface</th><td>dirt</td></tr><tr><th>Runway</th><td>12/30</td></tr><tr><th>Elevation</th><td>6,300 ft</td></tr><tr><th>Ownership</th><td>blm</td></tr><tr><th>CTAF</th><td>122.9</td></tr><tr><th>Coordinates</th><td>38.593295, -108.914531</td></tr></table>
   <div class="description"><h2>Notes</h2><div class="description-text">[ubcp] Flat Top Mesa: Runway: 12/30 Length:1061x50&#x27; usable Runway 30 uphill (first 734&#x27; unusable due to washout and erosion-threshold marked with a pile of white logs on left side) landing short has dire consequences. Runway 12 downhill ( approach end sits atop a 650&#x27; vertical cliff face-extreme caution required). Extreme caution required-this is a very challenging airstrip due to high altitude and hot temps (DA comes into effect), concave landing surface from old washout, turbulence, and typical late day crosswinds that swirl on the airstrip. Runway 12 approach end usually has intense thermal activity from daytime heating of the cliff face and wind activity. Active wildlife area (bears, cats, etc).</div></div>
@@ -66,5 +66,18 @@
     Aggregated from UBCP. <p class="attribution">Data courtesy of the Utah Back Country Pilots Association (utahbackcountrypilots.org)</p>
   </footer>
 </main>
+<script>
+  // Prefer returning to whatever page/state the user actually came from
+  // (search results, a filtered view, a specific map position) over always
+  // landing on the plain unfiltered grid -- but only when we got here via
+  // in-site navigation (history.length > 1 alone isn't reliable: a page
+  // opened in a new tab or reloaded directly still has history entries).
+  document.getElementById('back-link').addEventListener('click', (e) => {
+    if (document.referrer && new URL(document.referrer).origin === location.origin) {
+      e.preventDefault();
+      history.back();
+    }
+  });
+</script>
 </body>
 </html>

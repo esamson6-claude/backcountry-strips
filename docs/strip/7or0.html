@@ -47,7 +47,7 @@
 </head>
 <body>
 <header>
-  <a class="back" href="../">← All strips</a>
+  <a class="back" href="../" id="back-link">← Back</a>
 </header>
 <main>
   <h1>MINAM LODGE</h1>
@@ -58,7 +58,7 @@
     <a class="cta" href="https://www.shortfield.com/listing/minam-lodge-or/" target="_blank" rel="noopener">
       View original source (FAA + Shortfield) →
     </a>
-    <a class="cta cta-secondary" href="../?sectional=45.3581975,-117.63436805">View on VFR sectional →</a>
+    <a class="cta cta-secondary" href="../?sectional=45.3581975,-117.63436805">View on VFR sectional →</a> <a class="cta cta-secondary" href="../?maplink=45.3581975,-117.63436805">View on map →</a>
   </div>
   <table class="specs"><tr><th>Identifier</th><td>7OR0</td></tr><tr><th>State</th><td>OR</td></tr><tr><th>Runway length</th><td>2,000 ft</td></tr><tr><th>Runway width</th><td>40 ft</td></tr><tr><th>Surface</th><td>TURF</td></tr><tr><th>Runway</th><td>N/S</td></tr><tr><th>Elevation</th><td>3,589 ft</td></tr><tr><th>Ownership</th><td>private</td></tr><tr><th>CTAF</th><td>122.9</td></tr><tr><th>Coordinates</th><td>45.3581975, -117.63436805</td></tr></table>
   <div class="description"><h2>Notes</h2><div class="description-text">[shortfield] Minam River Lodge is an oasis in the wilderness. Adjacent to the historic Reds Horse Ranch, the lodge is accessible only by horseback, foot, or small bush plane. Situated outside of La Grande, Oregon, in the midst of the Eagle Cap Wilderness, it is a true escape from the everyday world. The wild and scenic Minam River flows a short distance away, offering guests a chance to get away from urban activities and slow down the pace. Time can be spent fishing, hiking, swimming, horseback riding, hunting, or simply relaxing and wildlife watching. A wide range of accommodations is available, from rustic wall tents to a luxurious deluxe suite in the Lodge. Guests can experience fresh air, beautiful scenery, pristine water, great food, and warm, friendly company while enjoying the large rock fireplaces in the lodge or relaxing outside on the deck. Animals regularly seen around Minam Lodge include elk, mountain goat, raccoon, deer, and the occasional bear. Grouse, turkey, several species of raptors, hummingbirds, and innumerable resident and migratory songbirds also frequent the area.</div></div>
@@ -66,5 +66,18 @@
     Aggregated from FAA + Shortfield. <p class="attribution">Data courtesy of Shortfield.com</p>
   </footer>
 </main>
+<script>
+  // Prefer returning to whatever page/state the user actually came from
+  // (search results, a filtered view, a specific map position) over always
+  // landing on the plain unfiltered grid -- but only when we got here via
+  // in-site navigation (history.length > 1 alone isn't reliable: a page
+  // opened in a new tab or reloaded directly still has history entries).
+  document.getElementById('back-link').addEventListener('click', (e) => {
+    if (document.referrer && new URL(document.referrer).origin === location.origin) {
+      e.preventDefault();
+      history.back();
+    }
+  });
+</script>
 </body>
 </html>

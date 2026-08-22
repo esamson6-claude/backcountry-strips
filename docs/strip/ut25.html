@@ -47,7 +47,7 @@
 </head>
 <body>
 <header>
-  <a class="back" href="../">← All strips</a>
+  <a class="back" href="../" id="back-link">← Back</a>
 </header>
 <main>
   <h1>Monument Valley</h1>
@@ -58,7 +58,7 @@
     <a class="cta" href="https://utahbackcountrypilots.org/airstrips/MONUMENTVALLEY" target="_blank" rel="noopener">
       View original source (UBCP) →
     </a>
-    <a class="cta cta-secondary" href="../?sectional=37.0116,-110.2017">View on VFR sectional →</a>
+    <a class="cta cta-secondary" href="../?sectional=37.0116,-110.2017">View on VFR sectional →</a> <a class="cta cta-secondary" href="../?maplink=37.0116,-110.2017">View on map →</a>
   </div>
   <table class="specs"><tr><th>Identifier</th><td>UT25</td></tr><tr><th>State</th><td>UT</td></tr><tr><th>Runway length</th><td>3,800 ft</td></tr><tr><th>Runway width</th><td>45 ft</td></tr><tr><th>Surface</th><td>Asphalt</td></tr><tr><th>Runway</th><td>16/34</td></tr><tr><th>Elevation</th><td>5,208 ft</td></tr><tr><th>Ownership</th><td>private</td></tr><tr><th>CTAF</th><td>122.9</td></tr><tr><th>Coordinates</th><td>37.0116, -110.2017</td></tr></table>
   <div class="description"><h2>Notes</h2><div class="description-text">[ubcp] Description : Airstrip sits on private land surrounded by Navajo tribal lands and provides a gateway to the scenic Monument Valley. Permission is required prior to landing by calling 435-727-3225. Additional information can be found at https://gouldings.com/amenities/airstrip/ . Runway : The runway is 3800&#x27; x 45&#x27;, asphalt. Approach Considerations : A 2640&#x27; AGL cliff immediately south of the airstrip makes a go-around unlikely in most aircraft. Recommend landing runway 16 (left traffic) and depart runway 34. Amenities : Historic Gouldings Lodge is a short walk from the airstrip with food, lodging, convenience/grocery store, gas station, and museum. They also provide a variety of tours of Monument Valley. Windsock : Yes</div></div>
@@ -66,5 +66,18 @@
     Aggregated from UBCP. <p class="attribution">Data courtesy of the Utah Back Country Pilots Association (utahbackcountrypilots.org)</p>
   </footer>
 </main>
+<script>
+  // Prefer returning to whatever page/state the user actually came from
+  // (search results, a filtered view, a specific map position) over always
+  // landing on the plain unfiltered grid -- but only when we got here via
+  // in-site navigation (history.length > 1 alone isn't reliable: a page
+  // opened in a new tab or reloaded directly still has history entries).
+  document.getElementById('back-link').addEventListener('click', (e) => {
+    if (document.referrer && new URL(document.referrer).origin === location.origin) {
+      e.preventDefault();
+      history.back();
+    }
+  });
+</script>
 </body>
 </html>

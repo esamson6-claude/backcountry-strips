@@ -47,7 +47,7 @@
 </head>
 <body>
 <header>
-  <a class="back" href="../">← All strips</a>
+  <a class="back" href="../" id="back-link">← Back</a>
 </header>
 <main>
   <h1>FRY CANYON FLD</h1>
@@ -58,7 +58,7 @@
     <a class="cta" href="https://utahbackcountrypilots.org/airstrips/FRYCANYON" target="_blank" rel="noopener">
       View original source (FAA + UBCP) →
     </a>
-    <a class="cta cta-secondary" href="../?sectional=37.64833333,-110.16694444">View on VFR sectional →</a>
+    <a class="cta cta-secondary" href="../?sectional=37.64833333,-110.16694444">View on VFR sectional →</a> <a class="cta cta-secondary" href="../?maplink=37.64833333,-110.16694444">View on map →</a>
   </div>
   <table class="specs"><tr><th>Identifier</th><td>UT74</td></tr><tr><th>State</th><td>UT</td></tr><tr><th>Runway length</th><td>3,160 ft</td></tr><tr><th>Runway width</th><td>120 ft</td></tr><tr><th>Surface</th><td>DIRT</td></tr><tr><th>Runway</th><td>12/30</td></tr><tr><th>Elevation</th><td>5,372 ft</td></tr><tr><th>Ownership</th><td>public</td></tr><tr><th>CTAF</th><td>122.9</td></tr><tr><th>Coordinates</th><td>37.64833333, -110.16694444</td></tr></table>
   <div class="description"><h2>Notes</h2><div class="description-text">[ubcp] Description: Fry Canyon would be a great start to your Utah backcountry flying adventures. As one of the longer and wider airstrips in the collection it still offers a great opportunity to explore slot canyons, cliff dwellings, and camp with relative ease. Runway: This runway tends to be soft in the spring and late fall as the frost heaves up the ground. A bit of wind erosion near the base of the grass has made the runway more rough than normal. A little more use and this may correct itself. A important note is an access road crossing the airstrip near the first third landing north but a nice 2,382 feet of airstrip remain after the road. This road has seen increasing activity as the camping and cliff dwellings have grown in popularity and could become more hazardous as ruts deepen. The runway is sloped uphill 1.7% headed to the north. Landings and takeoffs can be accomplished in both directions. If taking off uphill into the wind it may appear your aircraft has reduced performance as the slope of the runway will create this illusion. Approach Considerations: If you have never landed on a upslope runway I can almost guarantee you’ll find yourself low on approach here. A downhill landing is possible but the prevailing winds tend to favor an uphill landing. Plan your touchdown after the access road unless your aircraft performance and skill level allows for short landing distances. Before the road the runway has a few larger shrubs and rocks that need to be considered. There is also a large washout near the west side of the runway running the length of this section. Parking: Large enough for a small fly-in there is no shortage of parking on the south end of the strip. Multiple fire rings can be found here with flat and smooth ground for camping. Some of the ground here is dirt covered rock so plan your tent stakes and tie downs according. No cell phone coverage.</div></div>
@@ -66,5 +66,18 @@
     Aggregated from FAA + UBCP. <p class="attribution">Data courtesy of the Utah Back Country Pilots Association (utahbackcountrypilots.org)</p>
   </footer>
 </main>
+<script>
+  // Prefer returning to whatever page/state the user actually came from
+  // (search results, a filtered view, a specific map position) over always
+  // landing on the plain unfiltered grid -- but only when we got here via
+  // in-site navigation (history.length > 1 alone isn't reliable: a page
+  // opened in a new tab or reloaded directly still has history entries).
+  document.getElementById('back-link').addEventListener('click', (e) => {
+    if (document.referrer && new URL(document.referrer).origin === location.origin) {
+      e.preventDefault();
+      history.back();
+    }
+  });
+</script>
 </body>
 </html>

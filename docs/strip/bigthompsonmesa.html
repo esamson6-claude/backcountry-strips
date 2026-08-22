@@ -47,7 +47,7 @@
 </head>
 <body>
 <header>
-  <a class="back" href="../">← All strips</a>
+  <a class="back" href="../" id="back-link">← Back</a>
 </header>
 <main>
   <h1>Big Thompson Mesa</h1>
@@ -58,7 +58,7 @@
     <a class="cta" href="https://utahbackcountrypilots.org/airstrips/BIGTHOMPSONMESA" target="_blank" rel="noopener">
       View original source (UBCP) →
     </a>
-    <a class="cta cta-secondary" href="../?sectional=37.6888,-110.9138">View on VFR sectional →</a>
+    <a class="cta cta-secondary" href="../?sectional=37.6888,-110.9138">View on VFR sectional →</a> <a class="cta cta-secondary" href="../?maplink=37.6888,-110.9138">View on map →</a>
   </div>
   <table class="specs"><tr><th>Identifier</th><td>BIGTHOMPSONMESA</td></tr><tr><th>State</th><td>UT</td></tr><tr><th>Runway length</th><td>705 ft</td></tr><tr><th>Runway width</th><td>30 ft</td></tr><tr><th>Surface</th><td>Dirt</td></tr><tr><th>Runway</th><td>15/33</td></tr><tr><th>Elevation</th><td>5,002 ft</td></tr><tr><th>Ownership</th><td>blm</td></tr><tr><th>CTAF</th><td>122.9</td></tr><tr><th>Coordinates</th><td>37.6888, -110.9138</td></tr></table>
   <div class="description"><h2>Notes</h2><div class="description-text">[ubcp] Description : Once I read a comment about this being a good emergency landing spot. I would tend to agree as this once was a massive airstrip surrounded by flat mesa. In the distant past DC3’s where probably flown here to resupply smaller aircraft and trucks to support the mining operations. This airstrip is also as close to Capital Reef National Park as you can get. A short five minute walk and you will be overlooking the ridge formation to the west. Recently I took a very talkative family member here and he was left speechless for a least an hour. An amazing place you won’t forget. No cell coverage. Runway : A two-track road runs along the runway itself. The runway is split near the north end by the road headed to the overlook. Normally the runway is smooth enough for most aircraft types, however you may have to pick your line around some smaller shrubs that are scattered in the grassy areas especially towards the north. Since the recent designation of the airstrip in the Henry Mountains and Fremont Gorge TMP, the actual runway surface is the part of the north/south road that begins south of the southern connector from the Big Thompson Mesa road. Approach Considerations : Wide open approaches for landing north or south. It is advisable to alter patterns to avoid flight into Capital Reef National Park immediately to the west. Parking : Room for a full-size fly-in as there is no shortage of space. Same goes for camping, be aware that camping inside of the National Park requires a permit. The park boundary line is well marked on the road leading to the overlook.</div></div>
@@ -66,5 +66,18 @@
     Aggregated from UBCP. <p class="attribution">Data courtesy of the Utah Back Country Pilots Association (utahbackcountrypilots.org)</p>
   </footer>
 </main>
+<script>
+  // Prefer returning to whatever page/state the user actually came from
+  // (search results, a filtered view, a specific map position) over always
+  // landing on the plain unfiltered grid -- but only when we got here via
+  // in-site navigation (history.length > 1 alone isn't reliable: a page
+  // opened in a new tab or reloaded directly still has history entries).
+  document.getElementById('back-link').addEventListener('click', (e) => {
+    if (document.referrer && new URL(document.referrer).origin === location.origin) {
+      e.preventDefault();
+      history.back();
+    }
+  });
+</script>
 </body>
 </html>

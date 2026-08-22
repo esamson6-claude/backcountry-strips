@@ -47,7 +47,7 @@
 </head>
 <body>
 <header>
-  <a class="back" href="../">← All strips</a>
+  <a class="back" href="../" id="back-link">← Back</a>
 </header>
 <main>
   <h1>Sipapu Bridge</h1>
@@ -58,7 +58,7 @@
     <a class="cta" href="https://utahbackcountrypilots.org/airstrips/SIPAPUBRIDGE" target="_blank" rel="noopener">
       View original source (UBCP) →
     </a>
-    <a class="cta cta-secondary" href="../?sectional=37.6255,-110.0337">View on VFR sectional →</a>
+    <a class="cta cta-secondary" href="../?sectional=37.6255,-110.0337">View on VFR sectional →</a> <a class="cta cta-secondary" href="../?maplink=37.6255,-110.0337">View on map →</a>
   </div>
   <table class="specs"><tr><th>Identifier</th><td>SIPAPUBRIDGE</td></tr><tr><th>State</th><td>UT</td></tr><tr><th>Runway length</th><td>2,200 ft</td></tr><tr><th>Runway width</th><td>20 ft</td></tr><tr><th>Surface</th><td>Dirt</td></tr><tr><th>Runway</th><td>14/32</td></tr><tr><th>Ownership</th><td>blm nm</td></tr><tr><th>CTAF</th><td>122.9</td></tr><tr><th>Coordinates</th><td>37.6255, -110.0337</td></tr></table>
   <div class="description"><h2>Notes</h2><div class="description-text">[ubcp] Sipapu Bridge Airstrip is TEMPORARILY CLOSED . The airstrip is within the Bears Ears National Monument and the airstrip use is not allowed until the BLM has completed a NEPA review of the airstrip. A more ruggeed airstrip that may have considerable erosion on the west end.</div></div>
@@ -66,5 +66,18 @@
     Aggregated from UBCP. <p class="attribution">Data courtesy of the Utah Back Country Pilots Association (utahbackcountrypilots.org)</p>
   </footer>
 </main>
+<script>
+  // Prefer returning to whatever page/state the user actually came from
+  // (search results, a filtered view, a specific map position) over always
+  // landing on the plain unfiltered grid -- but only when we got here via
+  // in-site navigation (history.length > 1 alone isn't reliable: a page
+  // opened in a new tab or reloaded directly still has history entries).
+  document.getElementById('back-link').addEventListener('click', (e) => {
+    if (document.referrer && new URL(document.referrer).origin === location.origin) {
+      e.preventDefault();
+      history.back();
+    }
+  });
+</script>
 </body>
 </html>

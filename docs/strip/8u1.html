@@ -47,7 +47,7 @@
 </head>
 <body>
 <header>
-  <a class="back" href="../">← All strips</a>
+  <a class="back" href="../" id="back-link">← Back</a>
 </header>
 <main>
   <h1>SAND SPRINGS STRIP</h1>
@@ -58,7 +58,7 @@
     <a class="cta" href="#" target="_blank" rel="noopener">
       View original source (FAA + Montana MDT) →
     </a>
-    <a class="cta cta-secondary" href="../?sectional=47.10413888,-107.50291666">View on VFR sectional →</a>
+    <a class="cta cta-secondary" href="../?sectional=47.10413888,-107.50291666">View on VFR sectional →</a> <a class="cta cta-secondary" href="../?maplink=47.10413888,-107.50291666">View on map →</a>
   </div>
   <table class="specs"><tr><th>Identifier</th><td>8U1</td></tr><tr><th>State</th><td>MT</td></tr><tr><th>Runway length</th><td>2,400 ft</td></tr><tr><th>Runway width</th><td>60 ft</td></tr><tr><th>Surface</th><td>TURF</td></tr><tr><th>Runway</th><td>10/28</td></tr><tr><th>Elevation</th><td>3,180 ft</td></tr><tr><th>Ownership</th><td>private</td></tr><tr><th>Coordinates</th><td>47.10413888, -107.50291666</td></tr></table>
   <div class="description"><h2>Notes</h2><div class="description-text">[montana_mdt] General Aviation Non-NPIAS Airport [montana_mdt] Non-NPIAS (Not part of the National Plan of Integrated Airport Systems). Airports that are public use and not in NPIAS.</div></div>
@@ -66,5 +66,18 @@
     Aggregated from FAA + Montana MDT. 
   </footer>
 </main>
+<script>
+  // Prefer returning to whatever page/state the user actually came from
+  // (search results, a filtered view, a specific map position) over always
+  // landing on the plain unfiltered grid -- but only when we got here via
+  // in-site navigation (history.length > 1 alone isn't reliable: a page
+  // opened in a new tab or reloaded directly still has history entries).
+  document.getElementById('back-link').addEventListener('click', (e) => {
+    if (document.referrer && new URL(document.referrer).origin === location.origin) {
+      e.preventDefault();
+      history.back();
+    }
+  });
+</script>
 </body>
 </html>

@@ -47,7 +47,7 @@
 </head>
 <body>
 <header>
-  <a class="back" href="../">← All strips</a>
+  <a class="back" href="../" id="back-link">← Back</a>
 </header>
 <main>
   <h1>RUNNING CREEK RANCH</h1>
@@ -58,7 +58,7 @@
     <a class="cta" href="https://www.shortfield.com/listing/running-creek-ranch-id/" target="_blank" rel="noopener">
       View original source (FAA + Shortfield) →
     </a>
-    <a class="cta cta-secondary" href="../?sectional=45.91408361,-114.83566055">View on VFR sectional →</a>
+    <a class="cta cta-secondary" href="../?sectional=45.91408361,-114.83566055">View on VFR sectional →</a> <a class="cta cta-secondary" href="../?maplink=45.91408361,-114.83566055">View on map →</a>
   </div>
   <table class="specs"><tr><th>Identifier</th><td>05ID</td></tr><tr><th>State</th><td>ID</td></tr><tr><th>Runway length</th><td>2,000 ft</td></tr><tr><th>Runway width</th><td>70 ft</td></tr><tr><th>Surface</th><td>TURF-GRVL</td></tr><tr><th>Runway</th><td>03/21</td></tr><tr><th>Elevation</th><td>2,969 ft</td></tr><tr><th>Ownership</th><td>private</td></tr><tr><th>CTAF</th><td>122.9</td></tr><tr><th>Coordinates</th><td>45.91408361, -114.83566055</td></tr></table>
   <div class="description"><h2>Notes</h2><div class="description-text">[shortfield] Private ranch. Obtain permission before landing. More information: http://selwaywildernessoutfitters.org</div></div>
@@ -66,5 +66,18 @@
     Aggregated from FAA + Shortfield. <p class="attribution">Data courtesy of Shortfield.com</p>
   </footer>
 </main>
+<script>
+  // Prefer returning to whatever page/state the user actually came from
+  // (search results, a filtered view, a specific map position) over always
+  // landing on the plain unfiltered grid -- but only when we got here via
+  // in-site navigation (history.length > 1 alone isn't reliable: a page
+  // opened in a new tab or reloaded directly still has history entries).
+  document.getElementById('back-link').addEventListener('click', (e) => {
+    if (document.referrer && new URL(document.referrer).origin === location.origin) {
+      e.preventDefault();
+      history.back();
+    }
+  });
+</script>
 </body>
 </html>

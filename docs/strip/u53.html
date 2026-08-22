@@ -47,7 +47,7 @@
 </head>
 <body>
 <header>
-  <a class="back" href="../">← All strips</a>
+  <a class="back" href="../" id="back-link">← Back</a>
 </header>
 <main>
   <h1>HENRYS LAKE</h1>
@@ -58,7 +58,7 @@
     <a class="cta" href="https://www.shortfield.com/listing/henrys-lake-id/" target="_blank" rel="noopener">
       View original source (FAA + Idaho ITD + Shortfield) →
     </a>
-    <a class="cta cta-secondary" href="../?sectional=44.63475,-111.34269444">View on VFR sectional →</a>
+    <a class="cta cta-secondary" href="../?sectional=44.63475,-111.34269444">View on VFR sectional →</a> <a class="cta cta-secondary" href="../?maplink=44.63475,-111.34269444">View on map →</a>
   </div>
   <table class="specs"><tr><th>Identifier</th><td>U53</td></tr><tr><th>State</th><td>ID</td></tr><tr><th>Runway length</th><td>4,600 ft</td></tr><tr><th>Runway width</th><td>170 ft</td></tr><tr><th>Surface</th><td>TURF</td></tr><tr><th>Runway</th><td>06/24</td></tr><tr><th>Elevation</th><td>6,596 ft</td></tr><tr><th>Ownership</th><td>public</td></tr><tr><th>CTAF</th><td>122.9</td></tr><tr><th>Coordinates</th><td>44.63475, -111.34269444</td></tr></table>
   <div class="description"><h2>Notes</h2><div class="description-text">[idaho_itd] State Airfield [shortfield] Location Overview Henry&#x27;s Lake Airport (U53) sits about three miles southeast of Island Park in Fremont County, Idaho, tucked into the high country near the Montana border and just outside Yellowstone National Park&#x27;s west entrance corridor. The state-owned, high-elevation turf airstrip is usually kept in very good condition and lies near the renowned Henry&#x27;s Lake fishery, though it isn&#x27;t quite close enough to the lake itself to walk a float tube and fly rod down to the water&#x27;s edge. The surrounding terrain is classic Island Park high country — open sagebrush flats ringed by forested mountains, with the Henry&#x27;s Lake Mountains and Centennial Range nearby. Camping &amp; Recreation The airstrip itself is a bare-bones backcountry facility with no services, but it opens the door to some of Idaho&#x27;s best outdoor recreation. Henry&#x27;s Lake is famous among anglers for cutthroat, cutbow, and brook trout fishing, and the broader area offers hiking, wildlife viewing, and boating. Nearby Henry&#x27;s Lake State Park offers developed camping, cabins, and a boat ramp on the lake&#x27;s south shore, and the small community of Island Park has additional lodging, campgrounds, and supply stops for pilots flying in for a fishing trip or backcountry getaway. Notes &amp; Warnings This is a genuine backcountry strip and should be treated with the respect that implies. Pilots should plan to land on Runway 06 and take off on Runway 24 when wind conditions allow, and there is no winter maintenance, so the field is best considered a warm-season strip. Perhaps most importantly, livestock and big game animals have access to the runway during fall, winter, and spring, so aircraft should never be left unattended on the field during those seasons. Pilots should also be alert to the surrounding mountainous terrain, which can produce challenging wind patterns and turbulence, and summer afternoons in this part of Idaho are prone to building thunderstorms, so a close eye on weather is warranted. With a field elevation around 6,596 feet, density altitude is a real consideration for performance planning, especially on warm days. History Henry&#x27;s Lake Airport has served the Island Park area since the mid-20th century. The airfield was activated on July 1, 1945, making it one of the older backcountry airstrips in Idaho&#x27;s aviation network. It&#x27;s recognized today as a historic Idaho airstrip in Fremont County, part of a broader era when Idaho built out a web of small backcountry fields to serve remote ranches, forest service outposts, and recreational access in the years following World War II. The airstrip is now managed by the Idaho Transportation Department&#x27;s Aeronautics Division, which maintains over 30 backcountry airstrips across the state as part of its mission to preserve backcountry flying access and promote aviation safety — a legacy that keeps strips like Henry&#x27;s Lake open to the pilots and anglers who still fly in for the fishing eight decades later.</div></div>
@@ -66,5 +66,18 @@
     Aggregated from FAA + Idaho ITD + Shortfield. <p class="attribution">Data courtesy of Shortfield.com</p>
   </footer>
 </main>
+<script>
+  // Prefer returning to whatever page/state the user actually came from
+  // (search results, a filtered view, a specific map position) over always
+  // landing on the plain unfiltered grid -- but only when we got here via
+  // in-site navigation (history.length > 1 alone isn't reliable: a page
+  // opened in a new tab or reloaded directly still has history entries).
+  document.getElementById('back-link').addEventListener('click', (e) => {
+    if (document.referrer && new URL(document.referrer).origin === location.origin) {
+      e.preventDefault();
+      history.back();
+    }
+  });
+</script>
 </body>
 </html>

@@ -47,7 +47,7 @@
 </head>
 <body>
 <header>
-  <a class="back" href="../">← All strips</a>
+  <a class="back" href="../" id="back-link">← Back</a>
 </header>
 <main>
   <h1>Gold Creek / Shootering</h1>
@@ -58,7 +58,7 @@
     <a class="cta" href="https://utahbackcountrypilots.org/airstrips/GOLDCREEK" target="_blank" rel="noopener">
       View original source (UBCP) →
     </a>
-    <a class="cta cta-secondary" href="../?sectional=37.8717,-110.6199">View on VFR sectional →</a>
+    <a class="cta cta-secondary" href="../?sectional=37.8717,-110.6199">View on VFR sectional →</a> <a class="cta cta-secondary" href="../?maplink=37.8717,-110.6199">View on map →</a>
   </div>
   <table class="specs"><tr><th>Identifier</th><td>GOLDCREEK</td></tr><tr><th>State</th><td>UT</td></tr><tr><th>Runway length</th><td>3,440 ft</td></tr><tr><th>Runway width</th><td>40 ft</td></tr><tr><th>Surface</th><td>Dirt</td></tr><tr><th>Runway</th><td>12/30</td></tr><tr><th>Elevation</th><td>5,880 ft</td></tr><tr><th>Ownership</th><td>blm</td></tr><tr><th>CTAF</th><td>122.9</td></tr><tr><th>Coordinates</th><td>37.8717, -110.6199</td></tr></table>
   <div class="description"><h2>Notes</h2><div class="description-text">[ubcp] Description : A high altitude get away for the hotter days, Gold Creek overlooks Glen Canyon, Canyonlands, and the Lake Powell area. This is a spectacular camping spot nearly at the base of Mt. Hillers known for its abundant wildlife and gold deposits. This airstrip allows access to the Wilderness Study Area that encompasses most of the mountain area. The location of this strip is subject to significant winds created from the venturi effect of Mt. Hiller and the smaller Mt Holmes just to the south. Also, the upsloping and down sloping winds between day and night here are nearly textbook in nature. It would be wise during your initial landing survey to keep a comfortable pattern altitude to determine if any adverse wind phenomena might be present. Runway : The runway has a major washout near the top third, easily spotted where the road crosses the airstrip. There’s adequate distance before the washout for most type aircraft, after the washout has about 850ft of usable runway. Passage through the washout to the camping area is possible with most bush type aircraft however it would be better to land above the wash if your aircraft type allows. If not, a mostly flat area on the south end of the strip would also make for excellent camping. The usable portions of the runway are in great condition and mostly rock/gravel in nature. The airstrip slopes uphill about 4% (guess) toward the north, landing downhill will require a significant amount of wind to overcome the slope of the runway. Be cognizant of the winds. A late go around with a large tailwind component may result in the inability to outclimb the rising terrain. Parking : A large parking area to the north can accommodate multiple aircraft. Two fire circles and a mostly flat camping surface can be found here too. Good cell phone coverage is also available. Approach Considerations : The tendency to become low on final may be a threat as the upslope of the runway can create that visual illusion. Again, be careful with adverse winds and late go arounds.</div></div>
@@ -66,5 +66,18 @@
     Aggregated from UBCP. <p class="attribution">Data courtesy of the Utah Back Country Pilots Association (utahbackcountrypilots.org)</p>
   </footer>
 </main>
+<script>
+  // Prefer returning to whatever page/state the user actually came from
+  // (search results, a filtered view, a specific map position) over always
+  // landing on the plain unfiltered grid -- but only when we got here via
+  // in-site navigation (history.length > 1 alone isn't reliable: a page
+  // opened in a new tab or reloaded directly still has history entries).
+  document.getElementById('back-link').addEventListener('click', (e) => {
+    if (document.referrer && new URL(document.referrer).origin === location.origin) {
+      e.preventDefault();
+      history.back();
+    }
+  });
+</script>
 </body>
 </html>

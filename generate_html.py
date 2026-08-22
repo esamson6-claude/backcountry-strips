@@ -11,7 +11,7 @@ from pathlib import Path
 
 import merge
 from aerial import ensure_aerial_images
-from exclude import remove_permission_required
+from exclude import remove_out_of_scope, remove_permission_required
 from fetch_all import fetch_all
 
 PROJECT_ROOT = Path(__file__).resolve().parent
@@ -27,6 +27,7 @@ SOURCE_LABELS = {
     "montana_mdt": "Montana MDT",
     "ubcp": "UBCP",
     "shortfield": "Shortfield",
+    "ourairports_ca": "OurAirports",
 }
 
 # Broad surface categories for the filter chips -- individual sources use
@@ -132,11 +133,12 @@ def _detail_html(strip, name, subtitle, spec_rows, notes_full, source_label, sou
         else ""
     )
     lat, lon = strip.get("latitude"), strip.get("longitude")
-    sectional_cta = (
-        f'<a class="cta cta-secondary" href="../?sectional={lat},{lon}">View on VFR sectional →</a>'
-        if lat is not None and lon is not None
-        else ""
-    )
+    sectional_cta = ""
+    if lat is not None and lon is not None:
+        sectional_cta = (
+            f'<a class="cta cta-secondary" href="../?sectional={lat},{lon}">View on VFR sectional →</a>'
+            f' <a class="cta cta-secondary" href="../?maplink={lat},{lon}">View on map →</a>'
+        )
 
     return f"""<!doctype html>
 <html lang="en">
@@ -187,7 +189,7 @@ def _detail_html(strip, name, subtitle, spec_rows, notes_full, source_label, sou
 </head>
 <body>
 <header>
-  <a class="back" href="../">← All strips</a>
+  <a class="back" href="../" id="back-link">← Back</a>
 </header>
 <main>
   <h1>{name}</h1>
@@ -206,6 +208,19 @@ def _detail_html(strip, name, subtitle, spec_rows, notes_full, source_label, sou
     Aggregated from {source_label}. {attribution_block}
   </footer>
 </main>
+<script>
+  // Prefer returning to whatever page/state the user actually came from
+  // (search results, a filtered view, a specific map position) over always
+  // landing on the plain unfiltered grid -- but only when we got here via
+  // in-site navigation (history.length > 1 alone isn't reliable: a page
+  // opened in a new tab or reloaded directly still has history entries).
+  document.getElementById('back-link').addEventListener('click', (e) => {{
+    if (document.referrer && new URL(document.referrer).origin === location.origin) {{
+      e.preventDefault();
+      history.back();
+    }}
+  }});
+</script>
 </body>
 </html>
 """
@@ -329,9 +344,11 @@ def _build_cards(strips, have_aerial):
         lat_attr = f' data-lat="{lat}"' if lat is not None else ""
         lon_attr = f' data-lng="{lon}"' if lon is not None else ""
 
-        sectional_link = (
+        map_links = (
             f'<span class="sectional-link" role="button" tabindex="0" '
-            f'data-lat="{lat}" data-lng="{lon}">View on VFR sectional →</span>'
+            f'data-lat="{lat}" data-lng="{lon}" data-name="{name}">View on VFR sectional →</span>'
+            f' <span class="map-link" role="button" tabindex="0" '
+            f'data-lat="{lat}" data-lng="{lon}" data-name="{name}">View on map →</span>'
             if lat is not None and lon is not None
             else ""
         )
@@ -351,7 +368,7 @@ def _build_cards(strips, have_aerial):
     <div class="subtitle">{subtitle}</div>
     <div class="specs">{''.join(spec_rows)}</div>
     {'<div class="notes">' + notes_preview + '</div>' if notes_preview else ''}
-    {sectional_link}
+    {map_links}
     <div class="footer">
       <span class="source">{source_label}</span>
       {'<span class="attribution">' + attribution + '</span>' if attribution else ''}
@@ -373,6 +390,9 @@ def render():
     if stale_sources:
         print(f"Using cached data for: {', '.join(stale_sources)}")
     strips = merge.merge(*record_lists)
+    strips, out_of_scope = remove_out_of_scope(strips)
+    if out_of_scope:
+        print(f"Excluded {len(out_of_scope)} strips outside the US(+territories excluded)/Canada scope")
     strips, excluded = remove_permission_required(strips)
     if excluded:
         print(f"Excluded {len(excluded)} strips flagged permission-required/no-trespassing")
@@ -422,22 +442,8 @@ def render():
             position:sticky; top:0; z-index:30; }}
   h1 {{ margin:0 0 4px 0; font-size:18px; font-weight:600; }}
   .subhead {{ color:var(--muted); font-size:12px; margin-bottom:10px; }}
-  .filter-toggle {{ display:none; padding:6px 14px; border:1px solid var(--border);
-                    border-radius:6px; background:var(--bg); color:var(--fg); font:inherit;
-                    cursor:pointer; }}
-  #filter-panel {{ display:block; }}
   @media (max-width: 759px) {{
     header {{ position:static; padding:10px 14px; }}
-    .filter-toggle {{ display:inline-flex; align-items:center; gap:6px; }}
-    #filter-panel {{ display:none; margin-top:10px; }}
-    #filter-panel.open {{ display:block; }}
-    #floating-filter {{ position:fixed; right:14px; bottom:14px; z-index:5;
-                        background:var(--accent); color:#fff; border:0; padding:10px 16px;
-                        border-radius:999px; font:inherit; font-weight:600;
-                        box-shadow:0 4px 12px rgba(0,0,0,0.25); cursor:pointer; }}
-  }}
-  @media (min-width: 760px) {{
-    #floating-filter {{ display:none; }}
   }}
   .controls {{ display:grid; gap:10px; grid-template-columns: 1fr; }}
   @media (min-width: 760px) {{
@@ -505,8 +511,8 @@ def render():
   .sectional-notice {{ background:rgba(20,20,22,0.85); color:#fff; padding:8px 14px;
                        border-radius:6px; font-size:12px; max-width:280px; margin:0 0 10px 10px;
                        box-shadow:0 2px 8px rgba(0,0,0,0.3); }}
-  .sectional-link {{ font-size:11px; color:var(--accent); text-decoration:none; cursor:pointer; }}
-  .sectional-link:hover {{ text-decoration:underline; }}
+  .sectional-link, .map-link {{ font-size:11px; color:var(--accent); text-decoration:none; cursor:pointer; }}
+  .sectional-link:hover, .map-link:hover {{ text-decoration:underline; }}
 </style>
 </head>
 <body>
@@ -517,7 +523,6 @@ def render():
       <div class="subhead">Updated {date.today().isoformat()} · click any card to open the source page</div>
     </div>
     <div style="display:flex; gap:8px; align-items:center;">
-      <button class="filter-toggle" id="filter-toggle" aria-expanded="false">Filters ▾</button>
       <div class="view-toggle">
         <button id="view-grid" class="active">Grid</button>
         <button id="view-favorites">♥ Favorites<span id="fav-badge">0</span></button>
@@ -563,7 +568,6 @@ def render():
   </div>
   </div><!-- /#filter-panel -->
 </header>
-<button id="floating-filter" type="button">☰ Filters</button>
 <main id="grid">
   {''.join(cards_html)}
 </main>
@@ -620,32 +624,24 @@ def render():
   document.addEventListener('click', heartHandler);
   document.addEventListener('keydown', heartHandler);
 
-  function sectionalLinkHandler(e) {{
-    const link = e.target.closest('.sectional-link');
+  function mapLinkHandler(e) {{
+    const link = e.target.closest('.sectional-link, .map-link');
     if (!link) return;
     if (e.type === 'keydown' && e.key !== 'Enter' && e.key !== ' ') return;
     e.preventDefault();
     e.stopPropagation();
     const lat = parseFloat(link.dataset.lat);
     const lng = parseFloat(link.dataset.lng);
-    if (Number.isFinite(lat) && Number.isFinite(lng)) showOnSectional(lat, lng);
+    const name = link.dataset.name || null;
+    if (!Number.isFinite(lat) || !Number.isFinite(lng)) return;
+    if (link.classList.contains('sectional-link')) {{
+      showOnSectional(lat, lng, name);
+    }} else {{
+      showOnStreetMap(lat, lng, name);
+    }}
   }}
-  document.addEventListener('click', sectionalLinkHandler);
-  document.addEventListener('keydown', sectionalLinkHandler);
-
-  // Mobile filter-panel toggle
-  const filterPanel = document.getElementById('filter-panel');
-  const filterToggle = document.getElementById('filter-toggle');
-  const floatingFilter = document.getElementById('floating-filter');
-  function toggleFilters() {{
-    const open = !filterPanel.classList.contains('open');
-    filterPanel.classList.toggle('open', open);
-    filterToggle.setAttribute('aria-expanded', String(open));
-    filterToggle.textContent = open ? 'Filters ▴' : 'Filters ▾';
-    if (open) filterPanel.scrollIntoView({{behavior: 'smooth', block: 'start'}});
-  }}
-  filterToggle.addEventListener('click', toggleFilters);
-  floatingFilter.addEventListener('click', toggleFilters);
+  document.addEventListener('click', mapLinkHandler);
+  document.addEventListener('keydown', mapLinkHandler);
 
   const searchEl = document.getElementById('search');
   const lengthMinEl = document.getElementById('length-min');
@@ -766,6 +762,18 @@ def render():
   let streetLayer = null;
   let sectionalLayer = null;
   let sectionalNotice = null;
+  let focusMarker = null;
+
+  // Distinct single-strip pin, shown whenever the map jumps to focus on one
+  // strip (from a card/detail-page link) -- separate from the clustered
+  // markerLayer so the target strip is unmistakable even on the street map,
+  // where it might otherwise sit inside a cluster bubble.
+  function setFocusMarker(lat, lng, name) {{
+    if (focusMarker) map.removeLayer(focusMarker);
+    focusMarker = L.marker([lat, lng], {{ zIndexOffset: 1000 }});
+    if (name) focusMarker.bindPopup('<div class="popup-title">' + name + '</div>').openPopup();
+    focusMarker.addTo(map);
+  }}
 
   function updateSectionalNoticeRef() {{
     if (!sectionalNotice) return;
@@ -846,7 +854,7 @@ def render():
 
   // Switch to Map view showing the VFR sectional, zoomed in on one strip.
   // Used by each card/detail page's "View on sectional" control.
-  function showOnSectional(lat, lng) {{
+  function showOnSectional(lat, lng, name) {{
     setView('map', /* focusStrip */ true);
     initMap();
     // setView('map', true) already scheduled its own invalidateSize() +
@@ -859,7 +867,27 @@ def render():
         sectionalLayer.addTo(map);
       }}
       forceView([lat, lng], SECTIONAL_DEFAULT_ZOOM);
+      setFocusMarker(lat, lng, name);
       updateSectionalNoticeRef();
+    }}, 60);
+  }}
+
+  // Switch to Map view on the street layer, zoomed/pinned on one strip.
+  // Used by each card's "View on map" control -- unlike showOnSectional,
+  // this doesn't force the sectional layer, so a strip you're inspecting
+  // stays visible as a distinct pin instead of just being wherever it falls
+  // inside a cluster bubble.
+  function showOnStreetMap(lat, lng, name) {{
+    setView('map', /* focusStrip */ true);
+    initMap();
+    setTimeout(() => {{
+      map.invalidateSize();
+      if (map.hasLayer(sectionalLayer)) {{
+        map.removeLayer(sectionalLayer);
+        streetLayer.addTo(map);
+      }}
+      forceView([lat, lng], SECTIONAL_DEFAULT_ZOOM);
+      setFocusMarker(lat, lng, name);
     }}, 60);
   }}
   function renderMarkers(fitToBounds) {{
@@ -928,12 +956,18 @@ def render():
   viewMap.addEventListener('click', () => setView('map'));
   apply();
 
-  // Deep link from a detail page's "View on VFR sectional" button:
-  // ?sectional=lat,lng jumps straight to Map view, sectional layer, zoomed in.
-  const sectionalParam = new URLSearchParams(location.search).get('sectional');
+  // Deep links from a detail page's map buttons: ?sectional=lat,lng jumps to
+  // Map view on the sectional layer; ?maplink=lat,lng jumps to Map view on
+  // the street layer. Both zoom in and drop a focus pin on the strip.
+  const params = new URLSearchParams(location.search);
+  const sectionalParam = params.get('sectional');
+  const mapLinkParam = params.get('maplink');
   if (sectionalParam) {{
     const [lat, lng] = sectionalParam.split(',').map(Number);
     if (Number.isFinite(lat) && Number.isFinite(lng)) showOnSectional(lat, lng);
+  }} else if (mapLinkParam) {{
+    const [lat, lng] = mapLinkParam.split(',').map(Number);
+    if (Number.isFinite(lat) && Number.isFinite(lng)) showOnStreetMap(lat, lng);
   }}
 </script>
 </body>

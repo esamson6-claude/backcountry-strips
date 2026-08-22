@@ -47,7 +47,7 @@
 </head>
 <body>
 <header>
-  <a class="back" href="../">← All strips</a>
+  <a class="back" href="../" id="back-link">← Back</a>
 </header>
 <main>
   <h1>Nokai Dome</h1>
@@ -58,7 +58,7 @@
     <a class="cta" href="https://utahbackcountrypilots.org/airstrips/NOKAIDOME" target="_blank" rel="noopener">
       View original source (UBCP) →
     </a>
-    <a class="cta cta-secondary" href="../?sectional=37.2787,-110.5721">View on VFR sectional →</a>
+    <a class="cta cta-secondary" href="../?sectional=37.2787,-110.5721">View on VFR sectional →</a> <a class="cta cta-secondary" href="../?maplink=37.2787,-110.5721">View on map →</a>
   </div>
   <table class="specs"><tr><th>Identifier</th><td>NOKAIDOME</td></tr><tr><th>State</th><td>UT</td></tr><tr><th>Runway length</th><td>2,100 ft</td></tr><tr><th>Runway width</th><td>10 ft</td></tr><tr><th>Surface</th><td>Dirt/Gravel</td></tr><tr><th>Runway</th><td>07/25</td></tr><tr><th>Elevation</th><td>5,946 ft</td></tr><tr><th>Ownership</th><td>blm</td></tr><tr><th>CTAF</th><td>122.9</td></tr><tr><th>Coordinates</th><td>37.2787, -110.5721</td></tr></table>
   <div class="description"><h2>Notes</h2><div class="description-text">[ubcp] Description : Add Nokai Dome to your camping bucket list immediately. Located high on a plateau, a steep cliff to the east overlooks Monument Valley and to the west, Lake Powell. A jeep trail that follows the ridge offers some easy hiking. On two occasions we have seen a desert tarantula near the large rocks on the east side. He offered only a quick photo opportunity before finding cover under a rock. His name is Jumper, and still suffers from stage fright. We happened to notice on another camping trip an abundance of mountain lion tracks around our tent in the morning. So, let&#x27;s zip up our tents at night and put away any curious cardboard boxes that might attract play time! Runway : A soft layer of dirt covers the runway and is normally very smooth. A higher float tire may be required under certain conditions. The strip is narrow with shrub trees relatively close for larger wingspan aircraft. It slopes uphill considerably to the east but is still manageable for a takeoff and landing in both directions. OHV traffic is common here so a close landing survey for any surface defects or large rocks tossed on the runway should be accomplished. Approach Considerations : Crosswinds are very common and may have negative consequences due to the narrow runway and proximity to shrub trees. The cliff to the east and Nokai Dome itself will create significant mechanical turbulence. The tendency to become low on final may be a threat as the upslope of the runway can create that visual illusion. Parking : Several airplanes can be parked here but will block some of the runway. Multiple flat camping areas and fire rings are found on the south side of the runway. Excellent cell phone service here. Amenities : Cal Black airport, which has some basic services, is only a short flight from here. Based on past experiences, a phone call to Cal Black Airport to ensure adequate fuel would be prudent. A restroom, water, picnic table, and indoor lounge area is available.</div></div>
@@ -66,5 +66,18 @@
     Aggregated from UBCP. <p class="attribution">Data courtesy of the Utah Back Country Pilots Association (utahbackcountrypilots.org)</p>
   </footer>
 </main>
+<script>
+  // Prefer returning to whatever page/state the user actually came from
+  // (search results, a filtered view, a specific map position) over always
+  // landing on the plain unfiltered grid -- but only when we got here via
+  // in-site navigation (history.length > 1 alone isn't reliable: a page
+  // opened in a new tab or reloaded directly still has history entries).
+  document.getElementById('back-link').addEventListener('click', (e) => {
+    if (document.referrer && new URL(document.referrer).origin === location.origin) {
+      e.preventDefault();
+      history.back();
+    }
+  });
+</script>
 </body>
 </html>

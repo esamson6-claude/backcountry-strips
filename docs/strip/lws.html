@@ -47,7 +47,7 @@
 </head>
 <body>
 <header>
-  <a class="back" href="../">← All strips</a>
+  <a class="back" href="../" id="back-link">← Back</a>
 </header>
 <main>
   <h1>Lewiston-Nez Perce County Airport</h1>
@@ -58,7 +58,7 @@
     <a class="cta" href="https://itd.idaho.gov/aero/backcountry-airports/" target="_blank" rel="noopener">
       View original source (Idaho ITD) →
     </a>
-    <a class="cta cta-secondary" href="../?sectional=46.374504155177675,-117.01540952509546">View on VFR sectional →</a>
+    <a class="cta cta-secondary" href="../?sectional=46.374504155177675,-117.01540952509546">View on VFR sectional →</a> <a class="cta cta-secondary" href="../?maplink=46.374504155177675,-117.01540952509546">View on map →</a>
   </div>
   <table class="specs"><tr><th>Identifier</th><td>LWS</td></tr><tr><th>State</th><td>ID</td></tr><tr><th>Runway length</th><td>5,003 ft</td></tr><tr><th>Runway width</th><td>75 ft</td></tr><tr><th>Surface</th><td>Paved</td></tr><tr><th>Runway</th><td>12/30, 08/26</td></tr><tr><th>Elevation</th><td>1,442 ft</td></tr><tr><th>CTAF</th><td>119.4</td></tr><tr><th>Coordinates</th><td>46.374504155177675, -117.01540952509546</td></tr></table>
   <div class="description"><h2>Notes</h2><div class="description-text">[idaho_itd] County Airfield</div></div>
@@ -66,5 +66,18 @@
     Aggregated from Idaho ITD. 
   </footer>
 </main>
+<script>
+  // Prefer returning to whatever page/state the user actually came from
+  // (search results, a filtered view, a specific map position) over always
+  // landing on the plain unfiltered grid -- but only when we got here via
+  // in-site navigation (history.length > 1 alone isn't reliable: a page
+  // opened in a new tab or reloaded directly still has history entries).
+  document.getElementById('back-link').addEventListener('click', (e) => {
+    if (document.referrer && new URL(document.referrer).origin === location.origin) {
+      e.preventDefault();
+      history.back();
+    }
+  });
+</script>
 </body>
 </html>

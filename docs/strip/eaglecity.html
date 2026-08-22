@@ -47,7 +47,7 @@
 </head>
 <body>
 <header>
-  <a class="back" href="../">← All strips</a>
+  <a class="back" href="../" id="back-link">← Back</a>
 </header>
 <main>
   <h1>Eagle City (Eagle Benches South)</h1>
@@ -58,7 +58,7 @@
     <a class="cta" href="https://utahbackcountrypilots.org/airstrips/EAGLECITY" target="_blank" rel="noopener">
       View original source (UBCP) →
     </a>
-    <a class="cta cta-secondary" href="../?sectional=38.08306,-110.69611">View on VFR sectional →</a>
+    <a class="cta cta-secondary" href="../?sectional=38.08306,-110.69611">View on VFR sectional →</a> <a class="cta cta-secondary" href="../?maplink=38.08306,-110.69611">View on map →</a>
   </div>
   <table class="specs"><tr><th>Identifier</th><td>EAGLECITY</td></tr><tr><th>State</th><td>UT</td></tr><tr><th>Runway length</th><td>1,973 ft</td></tr><tr><th>Runway width</th><td>30 ft</td></tr><tr><th>Surface</th><td>Dirt</td></tr><tr><th>Runway</th><td>9/27</td></tr><tr><th>Elevation</th><td>6,260 ft</td></tr><tr><th>Ownership</th><td>blm</td></tr><tr><th>CTAF</th><td>122.9</td></tr><tr><th>Coordinates</th><td>38.08306, -110.69611</td></tr></table>
   <div class="description"><h2>Notes</h2><div class="description-text">[ubcp] Description: Eagle City&#x27;s runway is orientated east/west on the east face of the Henry Mountains. The east 500&#x27; is more rough and has a more rocky surface. Some errosion exists in the middle of the runway not quite halfway down from the east end. Larger rocks have been removed in recent years from users of the strip. Land west, depart east. Downdrafts on final can be common. Large rocks exist on the shoulders of the runway, so use caution when taxiing off of the runway surface. Runway: 1973&#x27; long x 30&#x27; wide dirt/clumpy grass strip in good condition. The strip has a 5.8% grade from the east to the west with a 115&#x27; gain in elevation over the length of the runway. Some errosion exists near midfield in the middle of the runway. The first 500&#x27; is a little more rocky and rougher. Large rocks and other hazards exist off the shoulders of the runway. Use caution when taxiing off of the runway. Approach Considerations: Land west, depart east. Uneven terrain in the area can cause irregurlar winds and downdrafts. Use caution on final. Use caution for density altitude, especially in the event of a go around. Amenities: Camping is available on the south side of the runway abeam the information sign. At least one rock fire ring was present. Windsock: Yes. One located on the south side of the approach end of runway 9, the other on the northside of the approach end of runway 27.</div></div>
@@ -66,5 +66,18 @@
     Aggregated from UBCP. <p class="attribution">Data courtesy of the Utah Back Country Pilots Association (utahbackcountrypilots.org)</p>
   </footer>
 </main>
+<script>
+  // Prefer returning to whatever page/state the user actually came from
+  // (search results, a filtered view, a specific map position) over always
+  // landing on the plain unfiltered grid -- but only when we got here via
+  // in-site navigation (history.length > 1 alone isn't reliable: a page
+  // opened in a new tab or reloaded directly still has history entries).
+  document.getElementById('back-link').addEventListener('click', (e) => {
+    if (document.referrer && new URL(document.referrer).origin === location.origin) {
+      e.preventDefault();
+      history.back();
+    }
+  });
+</script>
 </body>
 </html>
