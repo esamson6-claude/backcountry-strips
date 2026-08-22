@@ -50,6 +50,30 @@ def _surface_category(raw_surface):
     return "OTHER"
 
 
+# Broad ownership categories for the filter chips -- FAA's field is a clean
+# public/private binary, but UBCP's is free text with government land
+# agencies (BLM/USFS/NPS/tribal/state) and mixed-boundary strips like
+# "BLM/private" or "SITLA (NW) / BLM (SE)".
+GOVERNMENT_LAND_MARKERS = [
+    "BLM", "TRIBAL", "SITLA", "NPS", "USFS", "USFWS", "STATE",
+]
+
+
+def _ownership_category(raw_ownership):
+    if not raw_ownership:
+        return ""
+    value = raw_ownership.strip().upper()
+    if value == "PUBLIC" or value == "PUBLIC AIRPORT":
+        return "PUBLIC"
+    if value == "PRIVATE":
+        return "PRIVATE"
+    if "/" in value or "(" in value:
+        return "MIXED"
+    if any(marker in value for marker in GOVERNMENT_LAND_MARKERS):
+        return "GOVERNMENT LAND"
+    return "MIXED"
+
+
 def _source_label(source_key):
     parts = [SOURCE_LABELS.get(p, p) for p in source_key.split("+")]
     return " + ".join(parts)
@@ -161,6 +185,7 @@ def _build_cards(strips):
     cards_html = []
     states = set()
     surfaces = set()
+    ownerships = set()
     keep_slugs = set()
 
     for strip in strips:
@@ -169,6 +194,7 @@ def _build_cards(strips):
         state = html.escape(strip.get("state") or "")
         surface = html.escape((strip.get("runway_surface") or "").strip())
         surface_key = _surface_category(strip.get("runway_surface"))
+        ownership_key = _ownership_category(strip.get("ownership"))
         source_key = strip.get("source") or ""
         source_label = html.escape(_source_label(source_key))
         source_url = html.escape(strip.get("source_url") or "#", quote=True)
@@ -183,6 +209,8 @@ def _build_cards(strips):
             states.add(strip["state"])
         if surface_key:
             surfaces.add(surface_key)
+        if ownership_key:
+            ownerships.add(ownership_key)
 
         length_n = int(length) if length else 0
         elevation_n = int(elevation) if elevation else 0
@@ -203,6 +231,8 @@ def _build_cards(strips):
             spec_rows.append(f'<div class="spec"><span>Runway</span><span>{html.escape(strip["runway_orientation"])}</span></div>')
         if strip.get("ctaf_frequency"):
             spec_rows.append(f'<div class="spec"><span>CTAF</span><span>{strip["ctaf_frequency"]}</span></div>')
+        if ownership_key:
+            spec_rows.append(f'<div class="spec"><span>Ownership</span><span>{ownership_key.title()}</span></div>')
 
         notes = " ".join(
             filter(None, [strip.get("access_notes"), strip.get("condition_notes"), strip.get("hazards")])
@@ -268,7 +298,8 @@ def _build_cards(strips):
 
         cards_html.append(
             f"""<a class="card" href="{detail_url}"
-   data-state="{state}" data-surface="{surface_key}" data-source="{html.escape(source_key)}"
+   data-state="{state}" data-surface="{surface_key}" data-ownership="{html.escape(ownership_key, quote=True)}"
+   data-source="{html.escape(source_key)}"
    data-length="{length_n}" data-elevation="{elevation_n}"
    data-search="{search_blob}"{lat_attr}{lon_attr}
    data-name="{name}" data-subtitle="{html.escape(subtitle)}">
@@ -293,7 +324,7 @@ def _build_cards(strips):
         if path.stem not in keep_slugs:
             path.unlink(missing_ok=True)
 
-    return cards_html, sorted(states), sorted(surfaces)
+    return cards_html, sorted(states), sorted(surfaces), sorted(ownerships)
 
 
 def render():
@@ -303,7 +334,7 @@ def render():
     strips = merge.merge(*record_lists)
     strips.sort(key=lambda s: s.get("name") or "")
 
-    cards_html, states, surfaces = _build_cards(strips)
+    cards_html, states, surfaces, ownerships = _build_cards(strips)
 
     state_buttons = "".join(
         f'<button class="chip state-chip" data-state="{html.escape(s, quote=True)}">{html.escape(s)}</button>'
@@ -312,6 +343,10 @@ def render():
     surface_buttons = "".join(
         f'<button class="chip surface-chip" data-surface="{html.escape(s, quote=True)}">{html.escape(s)}</button>'
         for s in surfaces
+    )
+    ownership_buttons = "".join(
+        f'<button class="chip ownership-chip" data-ownership="{html.escape(o, quote=True)}">{html.escape(o.title())}</button>'
+        for o in ownerships
     )
 
     page = f"""<!doctype html>
@@ -469,6 +504,11 @@ def render():
     <button class="chip surface-chip active" data-surface="__all__">All</button>
     {surface_buttons}
   </div>
+  <div class="chips">
+    <span class="chip-row-label">Ownership:</span>
+    <button class="chip ownership-chip active" data-ownership="__all__">All</button>
+    {ownership_buttons}
+  </div>
   </div><!-- /#filter-panel -->
 </header>
 <button id="floating-filter" type="button">☰ Filters</button>
@@ -551,7 +591,7 @@ def render():
   function activeChips(selector) {{
     return new Set(
       Array.from(document.querySelectorAll(selector + '.active'))
-        .map(c => c.dataset.state || c.dataset.surface)
+        .map(c => c.dataset.state || c.dataset.surface || c.dataset.ownership)
         .filter(v => v && v !== '__all__')
     );
   }}
@@ -564,12 +604,14 @@ def render():
     const eMin = num(elevationMinEl.value), eMax = num(elevationMaxEl.value);
     const activeStates = activeChips('.state-chip');
     const activeSurfaces = activeChips('.surface-chip');
+    const activeOwnerships = activeChips('.ownership-chip');
     const favView = document.body.classList.contains('fav-view');
 
     let visible = [];
     for (const c of cards) {{
       const state = c.dataset.state;
       const surface = c.dataset.surface;
+      const ownership = c.dataset.ownership;
       const length = parseInt(c.dataset.length, 10) || 0;
       const elevation = parseInt(c.dataset.elevation, 10) || 0;
       const search = c.dataset.search;
@@ -577,6 +619,7 @@ def render():
       let show = true;
       if (activeStates.size > 0 && !activeStates.has(state)) show = false;
       if (activeSurfaces.size > 0 && !activeSurfaces.has(surface)) show = false;
+      if (activeOwnerships.size > 0 && !activeOwnerships.has(ownership)) show = false;
       if (q && !search.includes(q)) show = false;
       if (lMin !== null && (length === 0 || length < lMin)) show = false;
       if (lMax !== null && length > lMax) show = false;
@@ -602,18 +645,17 @@ def render():
 
   function wireChipRow(rowSelector) {{
     const chips = document.querySelectorAll(rowSelector);
-    const allChip = Array.from(chips).find(c =>
-      (c.dataset.state || c.dataset.surface) === '__all__'
-    );
+    const chipKey = c => c.dataset.state || c.dataset.surface || c.dataset.ownership;
+    const allChip = Array.from(chips).find(c => chipKey(c) === '__all__');
     chips.forEach(b => b.addEventListener('click', () => {{
-      const key = b.dataset.state || b.dataset.surface;
+      const key = chipKey(b);
       if (key === '__all__') {{
         chips.forEach(x => x.classList.remove('active'));
         b.classList.add('active');
       }} else {{
         b.classList.toggle('active');
         const others = Array.from(chips).filter(c =>
-          (c.dataset.state || c.dataset.surface) !== '__all__' && c.classList.contains('active')
+          chipKey(c) !== '__all__' && c.classList.contains('active')
         );
         if (allChip) allChip.classList.toggle('active', others.length === 0);
       }}
@@ -622,6 +664,7 @@ def render():
   }}
   wireChipRow('.state-chip');
   wireChipRow('.surface-chip');
+  wireChipRow('.ownership-chip');
   for (const el of [searchEl, lengthMinEl, lengthMaxEl, elevationMinEl, elevationMaxEl]) {{
     el.addEventListener('input', apply);
     el.addEventListener('change', apply);
